@@ -1,0 +1,156 @@
+@import "../lib/project.styl"
+
+.box-deals-list 
+	background-color: #fff;
+	padding: 10px 0px;
+	border: solid 1px #CCC;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	.info-message
+		text-align: right;
+		padding-right: 15px;
+		padding-bottom: 6px;
+
+	.country
+		color: $red
+
+		.country-header
+			cursor: pointer
+			position: relative
+			&:hover
+				background-color #eeeeee
+				.arrow-icon
+					display block
+					position: absolute
+					top: 3px;
+					right: 12px;
+			&>*
+				display inline-block
+				vertical-align middle
+
+
+			.country-name
+				font-weight: bold;
+				text-align: right
+				width: 180px;
+				margin-right: 8px;
+
+			.arrow-icon
+				display none
+
+		.cities
+			overflow hidden
+
+			.city
+				color: #222
+
+		&.opened
+			.country-header
+				background-color #eeeeee
+			.cities
+				margin-bottom: 20px;
+				margin-top: 10px;
+				.bar-horizontal-wrap .bar-horizontal
+					background-color #58cdf8
+
+	.city
+		cursor: pointer
+		display block
+		&:hover
+			background-color #eeeeee
+
+		&>*
+			display inline-block
+			vertical-align middle
+
+		.city-name
+			text-align: right
+			width: 210px;
+			margin-right: 8px;
+
+
+	.formated-price
+		margin-left: 12px;
+		margin-top: 5px;
+		font-weight bold
+		font-size 11px
+		position: absolute
+		z-index: 1000;
+		color: #FFF;
+		text-shadow: 1px 1px 0px #09afeb, 1px -1px 0px #09afeb, -1px 1px 0px #09afeb, -1px -1px 0px #09afeb;
+
+	.bar-horizontal-wrap
+		padding: 4px
+		width: 465px
+		position: relative
+		display: inline-block
+
+		.bar-horizontal
+			background-color #09afeb
+			height: 20px
+			width: 0px
+			transition width 0.5s
+
+	.cities .bar-horizontal-wrap
+		width: 430px
+
+	.footer
+		.btn
+			margin-left: 192px
+			margin-top: 5px
+
+	.message
+		width: 100%
+		padding-top: 200px;
+		padding-bottom: 200px;
+		text-align center
+
+
+	.tabs
+		margin-left: -1px
+		margin-top: -46px;
+		position: absolute;
+		&>a
+			display block
+			line-height 34px
+			border solid #CCC
+			border-width 1px 1px 1px 0px
+			padding 0 20px
+			color $color
+			text-decoration none
+			background-color #EAEAEA
+			float: left;
+			&.active
+				border-bottom solid 1px #ffffff;
+			&.active
+			&:hover
+				background-color #FFFFFF
+		&>a:first-child
+			border-left: solid 1px #CCC;
+
+
+	@media(max-width:699px)
+		.country .country-header .country-name
+		.city .city-name
+			margin-left: 10px
+			text-align: left;
+			width: auto;
+		.bar-horizontal-wrap
+		.cities .bar-horizontal-wrap
+			padding-top: 1px;
+			padding-bottom: 5px;
+			padding-left: 10px
+			padding-right: 10px
+			width: 100%;
+			box-sizing: border-box;
+		.formated-price
+			margin: 0
+			color: #000;
+			text-shadow: none
+			position: relative
+			font-size: inherit
+		.footer
+			text-align: center;
+			.btn
+				margin-left: 0px;
+				margin-right: 0px;

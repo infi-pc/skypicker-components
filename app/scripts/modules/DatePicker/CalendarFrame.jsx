@@ -1,0 +1,144 @@
+/** @jsx React.DOM */
+
+//Using global, TODO make it somehow importable from another bundle
+var React = window.React;
+//var React = require('react');
+
+var moment = require('moment');
+
+var CalendarDay = require("./CalendarDay.jsx");
+var Calendar = require("./../Calendar.jsx");
+
+var CalendarFrame = React.createClass({
+
+  getInitialState: function() {
+    return {
+      dateOver: null,
+      viewDate: moment(this.props.value.from) || moment()
+    };
+  },
+
+  getDefaultProps: function() {
+    return {
+      value: null,
+      calendarsNumber: 1,
+      selectionMode: "single"
+    };
+  },
+
+  onOver: function (date) {
+    this.setState({
+      dateOver: date
+    });
+  },
+
+  //TODO chech if it is good to have this state here, or i should put it to DatePicke
+  next: function() {
+    this.setState({
+      viewDate: this.state.viewDate.add(1, 'months')
+    });
+  },
+
+  prev: function() {
+    this.setState({
+      viewDate: this.state.viewDate.subtract(1, 'months')
+    });
+  },
+
+  setValue: function (value) {
+    this.props.onChange(value)
+  },
+
+  onSelect: function (date) {
+    if (this.props.selectionMode == "single") {
+      //if single just select
+      this.setValue({mode: "single", from: date, to: date});
+    } else if (this.props.selectionMode == "interval") {
+      //if interval decide on mode
+      if (!this.props.value.from) {
+        this.setValue({mode: "interval", from: date, to: null});
+      } else if (!this.props.value.to) {
+        //if is before, just put start date again
+        if (date < this.props.value.from) {
+          this.setValue({mode: "interval", from: date, to: null});
+        } else {
+          this.setValue({mode: "interval", from: moment(this.props.value.from), to: date});
+        }
+
+      } else {
+        // if i have chosen both i start to pick new one
+        this.setValue({mode: "interval", from: date, to: null});
+      }
+    }
+  },
+
+  isSelected: function (date) {
+    if (!this.props.value.from) {
+      return false
+    }
+    if (this.props.selectionMode == "single") {
+      return date.format("YYYYMMDD") == moment(this.props.value.from).format("YYYYMMDD");
+    } else if (this.props.selectionMode == "interval") {
+      if (this.props.value.to) {
+        return date >= this.props.value.from && date <= this.props.value.to;
+      } else {
+        return date.format("YYYYMMDD") == moment(this.props.value.from).format("YYYYMMDD");
+      }
+    }
+  },
+
+  isOver: function (date) {
+    if (!this.state.dateOver) {
+      return false
+    }
+    if (this.props.selectionMode == "interval") {
+      if (this.props.value.from && !this.props.value.to) {
+        return date >= this.props.value.from && date <= this.state.dateOver;
+      } else {
+        return this.state.dateOver.format("YYYYMMDD") == date.format("YYYYMMDD");
+      }
+    } else {
+      return this.state.dateOver.format("YYYYMMDD") == date.format("YYYYMMDD");
+    }
+  },
+
+  getDay: function (date, otherMonth) {
+    return (
+      <CalendarDay
+        date={date}
+        otherMonth={otherMonth}
+        onOver={this.onOver}
+        onSelect={this.onSelect}
+        selected={this.isSelected(date)}
+        over={this.isOver(date)}
+        />
+    );
+  },
+
+  render: function () {
+    var self = this;
+    var calendarDates = [];
+    var initialDate = moment(this.state.viewDate);
+    for (var i = 0; i < this.props.calendarsNumber; ++i) {
+      calendarDates.push( moment(initialDate) );
+      initialDate.add(1,"month")
+    }
+    var calendars = calendarDates.map(function (date) {
+      return (
+        <div className="calendar-view">
+          <Calendar date={date} getDay={self.getDay} />
+        </div>
+      );
+    });
+    return (
+      <div>
+        <div className="prev" onClick={this.prev}><div></div></div>
+        { calendars }
+        <div className="next" onClick={this.next}><div></div></div>
+        <div className='clear-both'></div>
+      </ div>
+    )
+  }
+});
+
+module.exports = CalendarFrame;

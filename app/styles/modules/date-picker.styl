@@ -1,0 +1,212 @@
+@import "../lib/project.styl"
+
+$calendarWidth= 220px
+$height = 274px
+$modeSelectorWidth = 170px
+
+.wa-date-picker-modal
+	position: absolute
+	top: 0px
+	left: 0px
+	width: 100%
+	padding 0px
+	margin 0px
+	padding-top 10px
+
+.wa-date-picker
+
+	text-transform uppercase
+	font-weight bold
+	color: #666;
+	font-family: 'Open Sans',Arial,Helvetica,sans-serif;
+	overflow: hidden;
+	background-color #fff
+	z-index: 10000
+	box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	height: $height
+	position relative
+	transition: width 0.5s, margin-left 0.3s
+	& *
+		box-sizing border-box
+
+	.mode-selector
+		width: $modeSelectorWidth
+		height: 100%
+		&>div
+			cursor: pointer
+			width: 100%
+
+			padding: 10px
+			&:hover
+				background-color: #A1E5FF
+			&.active
+				color: #FFFFFF
+				background-color: $blue
+
+	.content
+		background-color $blue
+		padding: 6px
+		padding-bottom: 25px;
+		float: left;
+		height: 100%
+		width: 800px
+		position absolute
+		top: 0px
+		left: $modeSelectorWidth
+		-webkit-user-select: none
+		-moz-user-select: none
+		-ms-user-select: none
+		-o-user-select: none
+		user-select: none
+		.content-headline
+			font-weight bold
+			font-size 18px
+			color: #FFFFFF
+			margin-top: 5px
+			margin-bottom 10px
+		.calendar-view
+			float: left
+			margin-right: 6px
+			&.main-calendar-view
+				margin-left: 6px
+
+		.prev, .next
+			color: #FFFFFF
+			width: 20px
+			margin-top: 58px;
+			height: 180px;
+			line-height 180px;
+			float: left
+			cursor pointer
+			&:hover
+				background-color #6cc6e9
+			div
+				vertical-align: middle;
+				display inline-block
+				width: 15px
+				height: 68px
+				margin-left: 3px;
+				margin-top: -6px;
+
+		.prev div
+			background: url("../../../images/icons/calendar-prev.png") no-repeat
+		.next div
+			background: url("../../../images/icons/calendar-next.png") no-repeat
+
+	.clear-both {
+		clear: both;
+	}
+
+.month-matrix
+	width: 370px;
+	padding-left: 25px;
+	padding-top: 13px
+	.month-option
+		cursor pointer
+		margin-bottom: 10px;
+		margin-right: 10px;
+		width: 100px;
+		height: 50px;
+		float: left
+		background-color: #30aada;
+		color: #FFF;
+		/*box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.55);*/
+		text-align center
+		&:hover
+			background-color #5ac3ff
+		.month-name
+		.month-year
+			font-weight bold
+			display inline-block
+		.month-year
+			font-size 12px
+		.month-name
+			padding-top 8px
+
+.clndr
+	width: $calendarWidth;
+	margin: 0 auto;
+	.clndr-month
+		font-size 19px
+		width: 100%
+		height: 37px;
+		background-color $blue
+		padding-left 7px
+		padding-top 15px
+		color: #FFFFFF
+		font-weight bold
+
+	.clndr-grid
+		text-align: center
+		background: yellow
+
+		.day-names div, .days div
+			float: left;
+			width: ( $calendarWidth / 7 );
+
+			background: #fff;
+
+		.day-names > div
+			font-size 12px
+			height: 21px
+			color: #FFFFFF
+			font-weight bold
+			line-height: 17px;
+			background-color $blue
+			span
+				line-height 1em
+				vertical-align bottom
+
+		.days > div
+			cursor: pointer
+			height: 30px;
+			line-height: 30px;
+
+			&.prev-month, &.next-month
+				color: #DFDFDF;
+
+			&.selected
+				background-color $blue
+
+			&.over
+				background-color #A1E5FF
+				&.selected
+					background-color $blue
+
+			&.prev-month.selected
+			&.next-month.selected
+				background-color: #F5FCFF
+			&.prev-month.over
+			&.next-month.over
+				background-color: #F5FCFF;
+
+.time-to-stay
+	padding 25px
+	padding-top 13px
+	min-height: 230px
+	.slider
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		user-select: none;
+
+		width: 320px;
+		height: 25px;
+		&.sliderMax
+			margin-top: -25px
+		.handle
+			text-align: center;
+			background-color: #FFFFFF;
+			cursor: pointer;
+			box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.75);
+			position: relative;
+			top: 1px;
+			width: 30px;
+			line-height: 23px;
+	.slider-axe
+		height: 3px
+		background-color #bbe2f2
+		width: 320px
+		margin-top -13px
+		border-radius: 3px;
