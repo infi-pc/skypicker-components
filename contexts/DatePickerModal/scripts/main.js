@@ -1,15 +1,4 @@
-/** @jsx React.DOM */
-
-//Using global, TODO make it somehow importable from another bundle
-var React = window.React;
-//var React = require('react');
-
-var DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
-var SearchDate = require('./../../modules/containers/SearchDate.js');
-
-
 var dateModel = new SearchDate();
-
 
 var element = document.getElementById("date-picker")
 
@@ -21,7 +10,6 @@ var modes = {
   "anytime": true,
   "noReturn": true
 };
-
 
 $(element).focus(function() {
   DatePickerModal.show(element, dateModel, modes, function(newDate) {

@@ -307,7 +307,7 @@ module.exports = function (grunt) {
         }
       },
       modules: {
-        src: './contexts/'+grunt.option('context')+'/main.jsx',
+        src: './contexts/'+grunt.option('context')+'/root.jsx',
         dest: '.tmp/scripts/bundle.js'
       },
       libs: {
