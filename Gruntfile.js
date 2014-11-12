@@ -18,10 +18,12 @@ module.exports = function (grunt) {
 
   // Configurable paths
   var config = {
-    app: 'app',
+    app: 'contexts/'+grunt.option('context'),
     dist: 'dist'
   };
 
+  console.log(config);
+  
   var reactify = require('reactify');
 
   grunt.loadNpmTasks('grunt-contrib-coffee');
@@ -53,13 +55,6 @@ module.exports = function (grunt) {
         files: ['<%= config.app %>/styles/{,*/}*.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
-      //coffee: {
-      //  options: {
-      //    spawn: false
-      //  },
-      //  'files': ['app/scripts/**/*.coffee'],
-      //  'tasks': ['coffee']
-      //},
       livereload: {
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -88,8 +83,9 @@ module.exports = function (grunt) {
             return [
               connect.static('.tmp'),
               // connect().use('/bower_components', connect.static('./bower_components')),
+
               connect.static(config.app),
-              connect.static("../document_root")
+              connect.static("shared"),
             ];
           }
         }
@@ -311,8 +307,8 @@ module.exports = function (grunt) {
         }
       },
       modules: {
-        src: './app/scripts/modules/mainDevelopment.jsx',
-        dest: 'app/scripts/developmentBundle.js'
+        src: './contexts/'+grunt.option('context')+'/main.jsx',
+        dest: '.tmp/scripts/bundle.js'
       },
       libs: {
         options: {
@@ -322,8 +318,8 @@ module.exports = function (grunt) {
             return b;
           }
         },
-        src: './app/scripts/modules/mainLibs.js',
-        dest: 'app/scripts/bundleLibs.js'
+        src: './modules/mainLibs.js',
+        dest: '.tmp/scripts/bundleLibs.js'
       }
     },
 
@@ -411,7 +407,6 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      // 'wiredep',
       'watchify',
       'concurrent:server',
       'autoprefixer',
