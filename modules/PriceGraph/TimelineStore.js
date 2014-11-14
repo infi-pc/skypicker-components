@@ -32,7 +32,7 @@ TimelineStore.prototype.preload = function (dateFrom, dateTo, callback) {
     if (!err) {
       for (var i = 0; i < data.length; ++i) {
         var flight = data[i];
-        var date = moment.unix(flight.dTime * 1);
+        var date = moment.unix(flight.dTime * 1); //TODO check if it's not necessary use moment.utc
         //var dayData = new DayData(date);
         var dayData = self.getDay(date);
         dayData.addFlight(flight);

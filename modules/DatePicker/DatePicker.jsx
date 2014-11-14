@@ -41,7 +41,7 @@ var DatePicker = React.createClass({
 
   getInitialState: function() {
     return {
-      viewDate: this.props.value.from || moment(), //TODO decide if it will be here or in CalendarFrame
+      viewDate: this.props.value.from || moment.utc(), //TODO decide if it will be here or in CalendarFrame
       viewMode: this.props.value.mode
     };
   },
@@ -105,8 +105,8 @@ var DatePicker = React.createClass({
   setMonth: function (date) {
     this.changeValue({
       mode: "month",
-      from: moment(date).startOf('month'),
-      to: moment(date).endOf('month')
+      from: moment.utc(date).startOf('month'),
+      to: moment.utc(date).endOf('month')
     });
   },
 

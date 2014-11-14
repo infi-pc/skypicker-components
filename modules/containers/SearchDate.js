@@ -14,8 +14,8 @@ SearchDate = function (input) {
     plain = input;
   }
   this.mode = plain.mode || "single";
-  this.from = plain.from || moment();
-  this.to = plain.to || moment();
+  this.from = plain.from || moment.utc();
+  this.to = plain.to || moment.utc();
   this.minStayDays = plain.minStayDays || 2;
   this.maxStayDays = plain.maxStayDays || 10;
 };
@@ -32,14 +32,14 @@ SearchDate.prototype.parseUrlString = function(stringDate) {
     var split = stringDate.split("_");
     return {
       mode: split[0],
-      from: moment(split[1], urlDateFormat),
-      to: moment(split[2], urlDateFormat)
+      from: moment.utc(split[1], urlDateFormat),
+      to: moment.utc(split[2], urlDateFormat)
     };
   } else {
     return {
       mode: "single",
-      from: moment(stringDate, urlDateFormat),
-      to: moment(stringDate, urlDateFormat)
+      from: moment.utc(stringDate, urlDateFormat),
+      to: moment.utc(stringDate, urlDateFormat)
     };
   }
 };

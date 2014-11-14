@@ -26,7 +26,7 @@ var Calendar = React.createClass({
     if (diff < 0) diff += 7;
 
     for (var i = 0; i < 7; i++) {
-      var day = moment([this.props.date.year(), this.props.date.month(), i-diff+1+7]);
+      var day = moment.utc([this.props.date.year(), this.props.date.month(), i-diff+1+7]);
       dayNames.push(day.format("dd"));
     }
     return dayNames;
@@ -40,27 +40,27 @@ var Calendar = React.createClass({
 
     var i;
     for (var i = 0; i < diff; i++) {
-      var date = moment([this.props.date.year(), this.props.date.month(), 1]).subtract((diff-i), 'days');
+      var date = moment.utc([this.props.date.year(), this.props.date.month(), 1]).subtract((diff-i), 'days');
       days.push({date: date, otherMonth: 'prev-month'});
     }
 
     var numberOfDays = beginDate.daysInMonth();
     for (i = 1; i <= numberOfDays; i++) {
-      var date = moment([this.props.date.year(), this.props.date.month(), i]);
+      var date = moment.utc([this.props.date.year(), this.props.date.month(), i]);
       days.push({date: date});
     }
 
     i = 1;
     while (days.length % 7 !== 0) {
-      var date = moment([this.props.date.year(), this.props.date.month(), numberOfDays]).add(i, "days");
+      var date = moment.utc([this.props.date.year(), this.props.date.month(), numberOfDays]).add(i, "days");
       days.push({date: date, otherMonth: 'next-month'});
       i++;
     }
 
     if (this.props.forceSixRows && days.length !== 42) {
-      var start = moment(days[days.length-1].date).add(1, 'days');
+      var start = moment.utc(days[days.length-1].date).add(1, 'days');
       while (days.length < 42) {
-        days.push({date: moment(start), otherMonth: 'next-month'});
+        days.push({date: moment.utc(start), otherMonth: 'next-month'});
         start.add(1, 'days');
       }
     }

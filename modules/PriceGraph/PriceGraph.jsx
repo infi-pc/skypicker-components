@@ -17,7 +17,7 @@ var PriceGraph = React.createClass({
 
   getInitialState: function() {
     return {
-      startDate: moment(),
+      startDate: moment.utc(),
       numOfdays: 32,
       loading: false
     };

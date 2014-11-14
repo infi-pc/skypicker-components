@@ -17,9 +17,9 @@ var MonthMatrix = React.createClass({
   render: function() {
     var self = this;
     var months = [];
-    var iMonth = moment();
+    var iMonth = moment.utc();
     for (var i = 0; i < 9; i++) {
-      months.push( moment(iMonth) );
+      months.push( moment.utc(iMonth) );
       iMonth.add(1, "months");
     }
     var monthsElements = months.map(function (month) {

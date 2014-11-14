@@ -14,7 +14,7 @@ var CalendarFrame = React.createClass({
   getInitialState: function() {
     return {
       dateOver: null,
-      viewDate: moment(this.props.value.from) || moment()
+      viewDate: moment.utc(this.props.value.from) || moment.utc()
     };
   },
 
@@ -62,7 +62,7 @@ var CalendarFrame = React.createClass({
         if (date < this.props.value.from) {
           this.setValue({mode: "interval", from: date, to: null});
         } else {
-          this.setValue({mode: "interval", from: moment(this.props.value.from), to: date});
+          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date});
         }
 
       } else {
@@ -77,12 +77,12 @@ var CalendarFrame = React.createClass({
       return false
     }
     if (this.props.selectionMode == "single") {
-      return date.format("YYYYMMDD") == moment(this.props.value.from).format("YYYYMMDD");
+      return date.format("YYYYMMDD") == moment.utc(this.props.value.from).format("YYYYMMDD");
     } else if (this.props.selectionMode == "interval") {
       if (this.props.value.to) {
         return date >= this.props.value.from && date <= this.props.value.to;
       } else {
-        return date.format("YYYYMMDD") == moment(this.props.value.from).format("YYYYMMDD");
+        return date.format("YYYYMMDD") == moment.utc(this.props.value.from).format("YYYYMMDD");
       }
     }
   },
@@ -118,9 +118,9 @@ var CalendarFrame = React.createClass({
   render: function () {
     var self = this;
     var calendarDates = [];
-    var initialDate = moment(this.state.viewDate);
+    var initialDate = moment.utc(this.state.viewDate);
     for (var i = 0; i < this.props.calendarsNumber; ++i) {
-      calendarDates.push( moment(initialDate) );
+      calendarDates.push( moment.utc(initialDate) );
       initialDate.add(1,"month")
     }
     var calendars = calendarDates.map(function (date) {
