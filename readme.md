@@ -3,16 +3,17 @@
 
 	npm install
 
-	grunt serve --context=<context> #available contexts are in contexts folder 
+	grunt serve -c <context> #available contexts are in contexts folder 
 
+	grunt build -c <context>
 
 ## DatePickerModal
 
 Show running example
 
-	grunt serve --context=DatePickerModal 
+	grunt serve -c=DatePickerModal 
 
-Builded bundle will be in '.tmp/scripts/bundle.js'
+Builded bundle will be in 'builds/scripts/bundle.js'
 
 
 

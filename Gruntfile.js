@@ -24,7 +24,7 @@ module.exports = function (grunt) {
 
   console.log(config);
 
-  var reactify = require('reactify');
+  //var reactify = require('reactify');
 
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-newer');
@@ -257,79 +257,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care
-    // of minification. These next options are pre-configured if you do not
-    // wish to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css',
-    //         '<%= config.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/scripts/scripts.js': [
-    //         '<%= config.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
-
-    watchify: {
-      options: {
-        //// defaults options used in b.bundle(opts)
-        //detectGlobals: true,
-        //insertGlobals: false,
-        //ignoreMissing: false,
-        debug: true,
-        //standalone: false,
-        //
-        //keepalive: false,
-        callback: function(b) {
-          // configure the browserify instance here
-          //b.add();
-          //b.require();
-          //b.external();
-
-          //b.ignore();
-          b.transform(reactify);
-
-          // return it
-          return b;
-        }
-      },
-      modules: {
-        src: './contexts/'+grunt.option('context')+'/root.jsx',
-        options: {
-          callback: function(b) {
-            b.transform(reactify);
-            b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
-            return b;
-          }
-        },
-        dest: '.tmp/scripts/bundle.js'
-      },
-      libs: {
-        options: {
-          callback: function(b) {
-            //bundle.require("react");
-            //b.require("./../frontend-development/app/scripts/modules/react.js", {expose: 'react'});
-            return b;
-          }
-        },
-        src: './modules/mainLibs.js',
-        dest: '.tmp/scripts/bundleLibs.js'
-      }
-    },
-
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
@@ -396,9 +323,9 @@ module.exports = function (grunt) {
         'copy:styles'
       ],
       dist: [
-        'copy:styles',
-        'imagemin',
-        'svgmin'
+        'copy:styles'
+        //'imagemin',
+        //'svgmin'
       ]
     }
   });
@@ -414,7 +341,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'watchify',
+      //'watchify',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
@@ -449,12 +376,12 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'cssmin',
+    //'cssmin',
     'uglify',
     'copy:dist',
     'rev',
     'usemin',
-    'htmlmin'
+    //'htmlmin'
   ]);
 
   grunt.registerTask('default', [

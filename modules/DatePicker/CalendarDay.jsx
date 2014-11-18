@@ -28,13 +28,7 @@ var CalendarDay = React.createClass({
     }
     if (this.props.disabled) {
       classes += " disabled";
-      return (
-        <div className={ classes }>
-          <span className='day-number'>{this.props.date.date()}</span>
-        </div>
-      )
     }
-
     if (this.props.over) {
       classes += " over"
     }

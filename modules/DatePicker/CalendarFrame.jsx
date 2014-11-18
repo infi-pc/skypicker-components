@@ -106,7 +106,6 @@ var CalendarFrame = React.createClass({
     var disabled = false;
     if (this.props.minValue && date.format("YYYYMMDD") <= this.props.minValue.format("YYYYMMDD")) {
       disabled = true;
-      console.log("disabled")
     }
     return (
       <CalendarDay

@@ -1,3 +1,1 @@
-/**
- * Created by Michael on 18/11/2014.
- */
+// Object that have info about inbound and outbound date and makes validations on them together
