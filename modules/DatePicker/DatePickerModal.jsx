@@ -7,15 +7,15 @@ var SearchDate = require('./../containers/SearchDate.js');
  * show modal datepicker
  * it hides itself and take care that it is only one on page
  * @param{string} element - plain html element to bind, it takes boundaries of that object
- * @param{SearchDate} defaultValue
+ * @param{SearchDate} value
  * @param{SearchDate} modesEnabled (example and default value is below)
  * @param{function(SearchDate)} onChange
  */
 
 exports.show = function (options, onChange) {
   var element = options.element;
-  var defaultValue = options.defaultValue;
-  var modesEnabled = options.modesEnabled;
+  var value = options.value;
+  var modesEnabled = options.modes;
 
   var rect = element.getBoundingClientRect();
 
@@ -71,11 +71,11 @@ exports.show = function (options, onChange) {
     },
 
     getInitialState: function() {
-      if (!defaultValue) {
-        defaultValue = new SearchDate();
+      if (!value) {
+        value = new SearchDate();
       }
       return {
-        value: defaultValue,
+        value: value,
         shown: true
       };
     },

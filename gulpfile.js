@@ -49,7 +49,7 @@ gulp.task('stylus', function () {
 
 
 gulp.task('browserify', function(){
-  browserifyfunc(false, 'build/scripts');
+  browserifyfunc(false, 'builds/'+contextName+'/scripts');
 });
 gulp.task('watchify', function () {
   browserifyfunc(true, '.tmp/scripts');
@@ -75,11 +75,14 @@ function browserifyfunc(watch, dir){
     b.on('update', function() {
       rebundle(b)
     });
-  }else{
-    b = browserify(path);
+  } else {
+    b = browserify(path, {
+      basedir: "."
+    });
   }
 
   b.transform(reactify);
+  //b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
 
   return rebundle(b);
 }
