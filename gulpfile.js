@@ -7,9 +7,9 @@ var livereload = require('gulp-livereload');
 
 
 gulp.task('stylus', function () {
-  watch('./app/styles/modules/*.styl')
+  watch('./shared/styles/modules/*.styl')
     .pipe(stylus())
-    .pipe(gulp.dest('./app/styles/modules/'));
+    .pipe(gulp.dest('./.tmp/styles/modules/'));
 });
 
 

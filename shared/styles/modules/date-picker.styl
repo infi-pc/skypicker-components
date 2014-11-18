@@ -1,4 +1,4 @@
-@import "../lib/project.styl"
+@import "./project.styl"
 
 $calendarWidth= 220px
 $height = 274px
@@ -161,8 +161,10 @@ $modeSelectorWidth = 170px
 			cursor: pointer
 			height: 30px;
 			line-height: 30px;
+			&.disabled
+				cursor default
 
-			&.prev-month, &.next-month
+			&.prev-month, &.next-month, &.disabled
 				color: #DFDFDF;
 
 			&.selected

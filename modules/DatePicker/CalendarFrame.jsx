@@ -103,6 +103,11 @@ var CalendarFrame = React.createClass({
   },
 
   getDay: function (date, otherMonth) {
+    var disabled = false;
+    if (this.props.minValue && date.format("YYYYMMDD") <= this.props.minValue.format("YYYYMMDD")) {
+      disabled = true;
+      console.log("disabled")
+    }
     return (
       <CalendarDay
         date={date}
@@ -111,6 +116,7 @@ var CalendarFrame = React.createClass({
         onSelect={this.onSelect}
         selected={this.isSelected(date)}
         over={this.isOver(date)}
+        disabled={disabled}
         />
     );
   },

@@ -23,7 +23,7 @@ module.exports = function (grunt) {
   };
 
   console.log(config);
-  
+
   var reactify = require('reactify');
 
   grunt.loadNpmTasks('grunt-contrib-coffee');
@@ -308,6 +308,13 @@ module.exports = function (grunt) {
       },
       modules: {
         src: './contexts/'+grunt.option('context')+'/root.jsx',
+        options: {
+          callback: function(b) {
+            b.transform(reactify);
+            b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
+            return b;
+          }
+        },
         dest: '.tmp/scripts/bundle.js'
       },
       libs: {

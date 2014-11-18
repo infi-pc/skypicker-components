@@ -50,7 +50,8 @@ var DatePicker = React.createClass({
     return {
       value: null,
       defaultMode: "single",
-      lang: 'en'
+      lang: 'en',
+      minValue: null
     };
   },
 
@@ -185,16 +186,16 @@ var DatePicker = React.createClass({
 
   renderSingle: function () {
     return (
-      <CalendarFrame onChange={this.changeValue} value={this.props.value} selectionMode="single" calendarsNumber={1} />
+      <CalendarFrame onChange={this.changeValue} value={this.props.value} minValue={this.props.minValue} selectionMode="single" calendarsNumber={1} />
     )
   },
   renderInterval: function () {
     return (
-      <CalendarFrame onChange={this.changeValue} value={this.props.value} selectionMode="interval" calendarsNumber={3}  />
+      <CalendarFrame onChange={this.changeValue} value={this.props.value} minValue={this.props.minValue} selectionMode="interval" calendarsNumber={3}  />
     )
   },
   renderMonth: function () {
-    return (<MonthMatrix onSet={this.setMonth} />);
+    return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} />);
   },
   renderTimeToStay: function () {
     return (

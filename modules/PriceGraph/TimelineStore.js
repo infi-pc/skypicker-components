@@ -37,7 +37,6 @@ TimelineStore.prototype.preload = function (dateFrom, dateTo, callback) {
         var dayData = self.getDay(date);
         dayData.addFlight(flight);
       }
-      debugger;
     } else {
       log("TimelineStore - error", "error", err);
     }

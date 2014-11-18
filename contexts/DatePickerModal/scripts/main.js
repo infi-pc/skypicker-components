@@ -12,7 +12,13 @@ var modes = {
 };
 
 $(element).focus(function() {
-  DatePickerModal.show(element, dateModel, modes, function(newDate) {
+  var options = {
+    element: element,
+    defaultValue: dateModel,
+    modes: modes,
+    minValue: moment().add(5,"days")
+  };
+  DatePickerModal.show(options, function(newDate) {
 
     if (newDate.mode == "single") {
       $(element).val(newDate.from.format("DD.MM.YYYY"))

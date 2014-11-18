@@ -12,7 +12,11 @@ var SearchDate = require('./../containers/SearchDate.js');
  * @param{function(SearchDate)} onChange
  */
 
-exports.show = function (element, defaultValue, modesEnabled, onChange) {
+exports.show = function (options, onChange) {
+  var element = options.element;
+  var defaultValue = options.defaultValue;
+  var modesEnabled = options.modesEnabled;
+
   var rect = element.getBoundingClientRect();
 
   var jqElement = $("#wa-date-picker-container");
@@ -22,7 +26,7 @@ exports.show = function (element, defaultValue, modesEnabled, onChange) {
     jqElement = $("#wa-date-picker-container");
   }
 
-  
+
   if (!modesEnabled) {
     modesEnabled = {
       "single": true,
@@ -83,7 +87,9 @@ exports.show = function (element, defaultValue, modesEnabled, onChange) {
     },
     render: function() {
       if (!this.state.shown) {
-        return (<div></div>);
+        return (
+          <div></div>
+        );
       }
       var styles = {
         top: position.top
@@ -94,6 +100,7 @@ exports.show = function (element, defaultValue, modesEnabled, onChange) {
             ref="datePicker"
             weekOffset={1}
             value={this.state.value}
+            minValue={options.minValue}
             onChange={this.onChange}
             leftOffset={position.left}
             maxWidth={pageWidth}
