@@ -110,6 +110,7 @@ $modeSelectorWidth = 170px
 		float: left
 		background-color: #30aada;
 		color: #FFF;
+		line-height: 1em;
 		/*box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.55);*/
 		text-align center
 		&:hover
@@ -120,8 +121,9 @@ $modeSelectorWidth = 170px
 			display inline-block
 		.month-year
 			font-size 12px
+			padding-top 3px
 		.month-name
-			padding-top 8px
+			padding-top 10px
 
 .clndr
 	width: $calendarWidth;
@@ -161,10 +163,13 @@ $modeSelectorWidth = 170px
 			cursor: pointer
 			height: 30px;
 			line-height: 30px;
-			&.disabled
-				color: #DFDFDF;
+			&.other
+				color: #b0b0b0;
 
-			&.prev-month, &.next-month
+			&.disabled
+				cursor: default
+
+			&.prev-month, &.next-month, &.disabled
 				color: #DFDFDF;
 
 			&.selected

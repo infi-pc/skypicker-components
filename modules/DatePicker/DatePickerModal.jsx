@@ -17,6 +17,8 @@ exports.show = function (options, onChange) {
   var value = options.value;
   var modesEnabled = options.modes;
 
+  var goToPast = false;
+
   var rect = element.getBoundingClientRect();
 
   var jqElement = $("#wa-date-picker-container");
