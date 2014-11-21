@@ -13,28 +13,25 @@ var getPlacesUrlString = function(places) {
   return encodeURIComponent(names.join(";"));
 };
 
-var SkypickerTools = (function() {
-  function SkypickerTools(settings) {
-    this.settings = settings;
+
+function SkypickerTools(settings) {
+  this.settings = settings;
+}
+
+SkypickerTools.prototype.makeSearchUrl = function(outboundDate, inboundDate, origin, destination) {
+  var targetUrl;
+  targetUrl = this.settings.searchResultsUrl;
+  targetUrl = targetUrl.replace("originsSubstitution", getPlacesUrlString(origin));
+  targetUrl = targetUrl.replace("destinationsSubstitution", getPlacesUrlString(destination));
+  targetUrl = targetUrl.replace("outboundDateSubstitution", dateTools.formatWADate(outboundDate));
+  if (inboundDate) {
+    targetUrl = targetUrl.replace("inboundDateSubstitution", dateTools.formatWADate(inboundDate));
+  } else {
+    targetUrl = targetUrl.replace("&inboundDate=inboundDateSubstitution", "");
   }
+  return targetUrl;
+};
 
-  SkypickerTools.prototype.makeSearchUrl = function(outboundDate, inboundDate, origin, destination) {
-    var targetUrl;
-    targetUrl = this.settings.searchResultsUrl;
-    targetUrl = targetUrl.replace("originsSubstitution", getPlacesUrlString(origin));
-    targetUrl = targetUrl.replace("destinationsSubstitution", getPlacesUrlString(destination));
-    targetUrl = targetUrl.replace("outboundDateSubstitution", dateTools.formatWADate(outboundDate));
-    if (inboundDate) {
-      targetUrl = targetUrl.replace("inboundDateSubstitution", dateTools.formatWADate(inboundDate));
-    } else {
-      targetUrl = targetUrl.replace("&inboundDate=inboundDateSubstitution", "");
-    }
-    return targetUrl;
-  };
-
-  return SkypickerTools;
-
-})();
 
 module.exports = SkypickerTools;
 

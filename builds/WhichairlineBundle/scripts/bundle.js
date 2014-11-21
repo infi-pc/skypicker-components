@@ -1,10 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /** @jsx React.DOM */window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
 window.SearchDate = require('./../../modules/containers/SearchDate.js');
+window.DealsList = require('./../../modules/DealsList.jsx');
+window.SkypickerAPIv1 = require('./../../modules/SkypickerAPIv1.js');
+window.SkypickerTools = require('./../../modules/SkypickerTools.js');
 
-
-
-},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":9}],2:[function(require,module,exports){
+},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/DealsList.jsx":10,"./../../modules/SkypickerAPIv1.js":11,"./../../modules/SkypickerTools.js":12,"./../../modules/containers/SearchDate.js":13}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
@@ -104,7 +105,7 @@ var Calendar = React.createClass({displayName: 'Calendar',
 module.exports = Calendar;
 
 
-},{"moment":10}],3:[function(require,module,exports){
+},{"moment":14}],3:[function(require,module,exports){
 /** @jsx React.DOM */
 
 //Using global, TODO make it somehow importable from another bundle
@@ -316,7 +317,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
 
 module.exports = CalendarFrame;
 
-},{"./../Calendar.jsx":2,"./CalendarDay.jsx":3,"moment":10}],5:[function(require,module,exports){
+},{"./../Calendar.jsx":2,"./CalendarDay.jsx":3,"moment":14}],5:[function(require,module,exports){
 /** @jsx React.DOM */
 
 //Using global, TODO make it somehow importable from another bundle
@@ -564,7 +565,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
 module.exports = DatePicker;
 
-},{"./../containers/SearchDate.js":9,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8,"moment":10}],6:[function(require,module,exports){
+},{"./../containers/SearchDate.js":13,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8,"moment":14}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var DatePicker = require("./DatePicker.jsx");
@@ -687,7 +688,7 @@ exports.show = function (options, onChange) {
 
 
 
-},{"./../containers/SearchDate.js":9,"./DatePicker.jsx":5}],7:[function(require,module,exports){
+},{"./../containers/SearchDate.js":13,"./DatePicker.jsx":5}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 
 //Using global, TODO make it somehow importable from another bundle
@@ -739,7 +740,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
 module.exports = MonthMatrix;
 
-},{"moment":10}],8:[function(require,module,exports){
+},{"moment":14}],8:[function(require,module,exports){
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['react'], factory);
@@ -904,6 +905,513 @@ module.exports = MonthMatrix;
 }));
 
 },{}],9:[function(require,module,exports){
+var pad = function(num, size) {
+  var s = num + "";
+  while (s.length < size) {
+    s = "0" + s;
+  }
+  return s;
+};
+
+var DateTools = {
+  today: function() {
+    return new Date();
+  },
+  inHalfAnYear: function() {
+    return new Date((new Date()).setMonth(new Date().getMonth() + 6));
+  },
+  firstDay: function(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  },
+  lastDay: function(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  },
+  formatSPApiDate: function(date) {
+    return pad(date.getDate(), 2) + "/" + pad(date.getMonth() + 1, 2) + "/" + date.getFullYear();
+  },
+  formatWADate: function(date) {
+    return date.getFullYear() + "-" + pad(date.getMonth() + 1, 2) + "-" + pad(date.getDate(), 2);
+  }
+};
+
+module.exports = DateTools;
+
+},{}],10:[function(require,module,exports){
+/** @jsx React.DOM */
+
+//var Button = React.createClass({
+//	render: function() {
+//		var style = {
+//			width: this.props.value * 100 + "%"
+//		};
+//		return (
+//			<div className="btn">
+//				<span></span>
+//			</div>
+//		);
+//	}
+//});
+var Tran = React.createClass({displayName: 'Tran',
+	render: function() {
+		var translates = window.globalTranslates;
+		var original = this.props.children;
+
+		if (translates && translates[original]) {
+			translated = translates[original]
+		} else {
+			if (!window.toTranslate) {
+				window.toTranslate = {};
+			}
+			window.toTranslate[original] = original;
+			translated = original;
+		}
+		return (
+			React.DOM.span(null, 
+				translated 
+			)
+		);
+	}
+});
+
+var FormatedPrice = React.createClass({displayName: 'FormatedPrice',
+	getInitialState: function() {
+		return {
+			currentCurrency: currencyManager.current,
+			subscribeToken: null
+		};
+	},
+	handleCurrencyChanged: function (newCurrency) {
+		this.setState({
+			currentCurrency: newCurrency
+		});
+	},
+	componentDidMount: function() {
+		var token = PubSub.subscribe( 'currencyChanged', this.handleCurrencyChanged );
+		this.setState({
+			subscribeToken: token
+		});
+	},
+	componentWillUnmount: function() {
+		if (this.state.subscribeToken) {
+			PubSub.unsubscribe( this.state.subscribeToken );
+		}
+	},
+	render: function() {
+		return (
+			React.DOM.span({className: "formated-price"},  currencyManager.toCurrentFormat(currencyManager.toCurrentCurrency(this.props.price, this.props.currency)) )
+		);
+	}
+});
+
+var BarHorizontal = React.createClass({displayName: 'BarHorizontal',
+	render: function() {
+		var style = {
+			width: this.props.value * 100 + "%"
+		};
+		return (
+			React.DOM.div({className: "bar-horizontal-wrap"}, 
+				React.DOM.div({className: "bar-horizontal", style: style }
+				)
+			)
+		);
+	}
+});
+
+var DealsCityRow = React.createClass({displayName: 'DealsCityRow',
+	render: function() {
+		var relativePrice = this.props.flight.price / this.props.maxPrice;
+		return (
+			React.DOM.a({className: "city", href:  this.props.flight.url}, 
+				React.DOM.div({className: "city-name"},  this.props.flight.cityName, " - ",  this.props.flight.airportCode), 
+				FormatedPrice({price:  this.props.flight.price, currency:  this.props.flight.currency}), 
+				BarHorizontal({value: relativePrice })
+			)
+		);
+	}
+});
+
+var DealsCountryRow = React.createClass({displayName: 'DealsCountryRow',
+	getInitialState: function() {
+		return {
+			openCountries: false
+		};
+	},
+	toggleCountries: function () {
+		this.setState({
+			openCountries: !this.state.openCountries
+		})
+	},
+	calculateMaxPrice: function () {
+		var maxPrice = 0;
+		this.props.country.cities.forEach(function (city) {
+			if (city.price > maxPrice) {
+				maxPrice = city.price;
+			}
+		});
+		return maxPrice
+	},
+	render: function() {
+		var self = this;
+		var opened = false;
+		var cityMaxPrice = this.calculateMaxPrice();
+		var relativePrice = this.props.country.price / this.props.maxPrice;
+		if (this.state.openCountries) {
+			var cities = this.props.country.cities.map(function(flight) {
+				return DealsCityRow({maxPrice: cityMaxPrice, flight: flight })
+			});
+			opened = true
+		}
+		return (
+			React.DOM.div({className:  React.addons.classSet( {country: true, opened: opened}) }, 
+				React.DOM.div({className: "country-header", onClick:  this.toggleCountries}, 
+					React.DOM.div({className: "country-name"},  this.props.country.name), 
+					FormatedPrice({price:  this.props.country.price, currency:  this.props.country.currency}), 
+					BarHorizontal({value: relativePrice }), 
+					React.DOM.i({className:  React.addons.classSet( {'arrow-icon': true, 'icon-arrow_down': !opened, 'icon-arrow_up': opened})})
+				), 
+
+				React.DOM.div({className: "cities"}, 
+					cities 
+				)
+			)
+		);
+	}
+});
+
+var DealsList = React.createClass({displayName: 'DealsList',
+	getInitialState: function() {
+		return {
+			data: [],
+			limit: 20,
+			dataState: "loading",
+			roundtrip: false
+		};
+	},
+	getData: function (roundtrip) {
+		var self = this;
+		self.setState({
+			dataState: "loading"
+		});
+		this.props.service.getData(roundtrip, function(err, data) {
+			var dataState = "";
+			if (err) {
+				dataState = "error"
+			} else if (data.length > 0) {
+				dataState = "done"
+			} else if (data.length === 0) {
+				dataState = "noResults"
+			} else {
+				dataState = "error"
+			}
+
+			self.setState({
+				data: data,
+				dataState: dataState,
+				roundtrip: roundtrip
+			});
+		});
+	},
+	componentDidMount: function() {
+		this.getData(false);
+	},
+	calculateMaxPrice: function () {
+		var self = this;
+		var maxPrice = 0;
+		var i = 0;
+		this.state.data.forEach(function (country) {
+			i++;
+			if (i > self.state.limit) return false;
+
+			if (country.price > maxPrice) {
+				maxPrice = country.price;
+			}
+		});
+		return maxPrice
+	},
+	increaseLimit: function () {
+		this.setState({ limit: this.state.limit + 20 });
+	},
+	setRoundtrip: function () {
+		this.getData(true);
+	},
+	setOneway: function () {
+		this.getData(false);
+	},
+	renderTabs: function() {
+		return (
+			React.DOM.div({className: "tabs"}, 
+				React.DOM.a({className:  React.addons.classSet( {active: !this.state.roundtrip}), onClick: this.setOneway}, 
+					Tran(null, "One way")
+				), 
+				React.DOM.a({className:  React.addons.classSet( {active: this.state.roundtrip}), onClick: this.setRoundtrip}, 
+					Tran(null, "Round trip")
+				)
+			)
+		)
+	},
+	renderData: function () {
+		var self = this;
+		var i = 0;
+		var message;
+
+		var maxPrice = this.calculateMaxPrice();
+		var rows = Object.keys(this.state.data).map(function(value, index) {
+			i++;
+			if (i > self.state.limit) return false;
+			var country = self.state.data[value];
+			return DealsCountryRow({country: country, maxPrice: maxPrice })
+		});
+		var moreBtn = "";
+		if (self.state.data.length >= self.state.limit) {
+			moreBtn = (
+				React.DOM.div({className: "btn", onClick:  this.increaseLimit}, 
+					Tran(null, "Show more")
+				)
+			);
+		}
+		if (this.state.roundtrip) {
+			message = (
+				Tran(null, "Return flights are from 2 to 10 days after departure")
+			)
+		}
+
+		return (
+			React.DOM.div(null, 
+				React.DOM.div({className: "info-message"}, message ), 
+				React.DOM.div({className: "dealsTable"}, 
+					rows 
+				), 
+				React.DOM.div({className: "footer"}, 
+					moreBtn 
+				)
+			)
+		);
+	},
+	renderLoading: function () {
+		return (
+			React.DOM.div({className: "message"}, 
+				React.DOM.img({src: "/images/loaders/loader-search.gif", width: "32", height: "32"}), 
+				React.DOM.span(null, " ", Tran(null, "Loading"), "... ")
+			)
+		);
+	},
+	renderNoResults: function () {
+		return (
+			React.DOM.div({className: "message"}, 
+				React.DOM.span(null, " ", Tran(null, "Not enough data for this route"), " ")
+			)
+		);
+	},
+	renderError: function () {
+		return (
+			React.DOM.div({className: "message"}, 
+				React.DOM.span(null, " ", Tran(null, "error"), " ")
+			)
+		);
+	},
+	render: function() {
+		var content;
+		if (this.state.dataState == "loading") {
+			content =  this.renderLoading();
+		} else if (this.state.dataState == "done") {
+			content =  this.renderData();
+		} else if (this.state.dataState == "noResults") {
+			content =  this.renderNoResults();
+		} else {
+			content =  this.renderError();
+		}
+		return (
+			React.DOM.div(null, 
+				 this.renderTabs(), 
+				content 
+			)
+		)
+
+	}
+});
+
+module.exports = DealsList;
+
+},{}],11:[function(require,module,exports){
+// Older version of skypicker API - i don't even know if it is working for every feature
+// right now it is used only in DealsList and should be removed later
+
+
+var SkypickerAPIv1, firstDay, formatDate, inHalfAnYear, lastDay, pad, today;
+
+today = function() {
+  return new Date();
+};
+
+inHalfAnYear = function() {
+  return new Date((new Date()).setMonth(new Date().getMonth() + 6));
+};
+
+firstDay = function(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+};
+
+lastDay = function(date) {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+};
+
+pad = function(num, size) {
+  var s;
+  s = num + "";
+  while (s.length < size) {
+    s = "0" + s;
+  }
+  return s;
+};
+
+formatDate = function(date) {
+  return pad(date.getDate(), 2) + "/" + pad(date.getMonth() + 1, 2) + "/" + date.getFullYear();
+};
+
+SkypickerAPIv1 = (function() {
+  function SkypickerAPI(settings) {
+    this.settings = settings;
+  }
+
+
+  /*
+   Request:
+   {
+   from: string
+   to: string, default: "anywhere"
+   date: date | {from: date, to: date} | "anytime"
+   returnDate: date | {from: date, to: date} | "anytime" | null
+   flyDays: (not used now)
+   daysInDestination: {from: int, to: int}, default: null
+   directFlights: (not used now)
+
+   oneForDay: bool, default: false
+   oneForCity: bool, default: false
+   }
+   */
+
+  SkypickerAPI.prototype.call = function(request, callback) {
+    var searchParams, skypickerApiUrl;
+    skypickerApiUrl = "https://api.skypicker.com/flights";
+    searchParams = {
+      v: 2,
+      flyFrom: request.from,
+      to: request.to,
+      flyDays: [],
+      directFlights: 0,
+      oneforcity: request.oneForCity ? "1" : "",
+      sort: "price",
+      asc: 1,
+      locale: this.settings.lang
+    };
+    if (typeof request.date === "object") {
+      if (request.date instanceof Date) {
+        searchParams.dateFrom = formatDate(request.date);
+        searchParams.dateTo = formatDate(request.date);
+      } else {
+        searchParams.dateFrom = formatDate(request.date.from);
+        searchParams.dateTo = formatDate(request.date.to);
+      }
+    } else if (request.date === "anytime") {
+      searchParams.dateFrom = formatDate(today());
+      searchParams.dateTo = formatDate(inHalfAnYear());
+    } else {
+      throw new Error("date must be filled");
+    }
+    if (typeof request.returnDate === "object") {
+      searchParams.typeFlight = "return";
+      if (request.returnDate instanceof Date) {
+        searchParams.returnFrom = formatDate(request.returnDate);
+        searchParams.returnTo = formatDate(request.returnDate);
+      } else {
+        searchParams.returnFrom = formatDate(request.returnDate.from);
+        searchParams.returnTo = formatDate(request.returnDate.to);
+      }
+    } else if (request.returnDate === "anytime") {
+      searchParams.returnFrom = formatDate(today());
+      searchParams.returnTo = formatDate(inHalfAnYear());
+    } else {
+      searchParams.typeFlight = "oneway";
+      searchParams.returnFrom = "";
+      searchParams.returnTo = "";
+    }
+    if (request.returnDate === "anytime") {
+      if (request.daysInDestination) {
+        searchParams.daysInDestinationFrom = request.daysInDestination.from;
+        searchParams.daysInDestinationTo = request.daysInDestination.to;
+      } else {
+        searchParams.daysInDestinationFrom = 2;
+        searchParams.daysInDestinationTo = 10;
+      }
+    } else {
+      searchParams.daysInDestinationFrom = 0;
+      searchParams.daysInDestinationTo = 0;
+    }
+    return $.ajax({
+      url: skypickerApiUrl,
+      dataType: "json",
+      data: searchParams,
+      success: (function(data) {
+        return callback(null, data.data);
+      }).bind(this),
+      error: (function(xhr, status, err) {
+        walog("deals list", "error", {
+          status: status,
+          err: err
+        });
+        return callback(err);
+      }).bind(this)
+    });
+  };
+
+  return SkypickerAPI;
+
+})();
+
+module.exports = SkypickerAPIv1;
+
+},{}],12:[function(require,module,exports){
+var dateTools = require("./DateTools.js");
+
+var getPlacesUrlString = function(places) {
+  var names, place, _i, _len;
+  if (typeof places === 'string' || places instanceof String) {
+    return places;
+  }
+  names = [];
+  for (_i = 0, _len = places.length; _i < _len; _i++) {
+    place = places[_i];
+    names.push(place.label);
+  }
+  return encodeURIComponent(names.join(";"));
+};
+
+
+function SkypickerTools(settings) {
+  this.settings = settings;
+}
+
+SkypickerTools.prototype.makeSearchUrl = function(outboundDate, inboundDate, origin, destination) {
+  var targetUrl;
+  targetUrl = this.settings.searchResultsUrl;
+  targetUrl = targetUrl.replace("originsSubstitution", getPlacesUrlString(origin));
+  targetUrl = targetUrl.replace("destinationsSubstitution", getPlacesUrlString(destination));
+  targetUrl = targetUrl.replace("outboundDateSubstitution", dateTools.formatWADate(outboundDate));
+  if (inboundDate) {
+    targetUrl = targetUrl.replace("inboundDateSubstitution", dateTools.formatWADate(inboundDate));
+  } else {
+    targetUrl = targetUrl.replace("&inboundDate=inboundDateSubstitution", "");
+  }
+  return targetUrl;
+};
+
+
+module.exports = SkypickerTools;
+
+
+
+
+},{"./DateTools.js":9}],13:[function(require,module,exports){
 var moment = require("moment");
 
 var urlDateFormat = "YYYY-MM-DD";
@@ -961,7 +1469,7 @@ SearchDate.prototype.mergeInto = function(newValues){
 
 module.exports = SearchDate;
 
-},{"moment":10}],10:[function(require,module,exports){
+},{"moment":14}],14:[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.8.3

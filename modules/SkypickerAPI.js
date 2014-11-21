@@ -1,3 +1,5 @@
+// new version, not tested, should be finished later
+
 var superagent  = require("superagent");
 var moment  = require("moment");
 
