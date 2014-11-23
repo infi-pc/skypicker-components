@@ -1,17 +1,7 @@
 /** @jsx React.DOM */
 
-//var Button = React.createClass({
-//	render: function() {
-//		var style = {
-//			width: this.props.value * 100 + "%"
-//		};
-//		return (
-//			<div className="btn">
-//				<span></span>
-//			</div>
-//		);
-//	}
-//});
+var React = require('react');
+
 var Tran = React.createClass({
 	render: function() {
 		var translates = window.globalTranslates;

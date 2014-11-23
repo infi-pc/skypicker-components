@@ -1,9 +1,6 @@
 /** @jsx React.DOM */
 
-//Using global, TODO make it somehow importable from another bundle
-var React = window.React;
-//var React = require('react');
-
+var React = require('react');
 var SearchDate = require('./../containers/SearchDate.js');
 
 var CalendarFrame = require('./CalendarFrame.jsx');

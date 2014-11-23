@@ -2,9 +2,7 @@
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
 
-//Using global, TODO make it somehow importable from another bundle
-var React = window.React;
-//var React = require('react');
+var React = require('react');
 var moment = require('moment');
 
 

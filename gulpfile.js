@@ -12,6 +12,12 @@ var reactify = require('reactify');
 var connect = require('gulp-connect');
 var argv = require('yargs').argv;
 
+var globalShim = require('browserify-global-shim').configure({
+  'moment': 'moment',
+  'react': 'React',
+  'jQuery': '$'
+});
+
 //var rsync = require('gulp-rsync');
 
 var contextName = argv.c;
@@ -82,6 +88,7 @@ function browserifyfunc(watch, dir){
   }
 
   b.transform(reactify);
+  b.transform(globalShim);
   //b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
 
   return rebundle(b);
