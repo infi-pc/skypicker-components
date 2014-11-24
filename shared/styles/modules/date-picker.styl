@@ -221,3 +221,24 @@ $modeSelectorWidth = 170px
 		width: 320px
 		margin-top -13px
 		border-radius: 3px;
+
+
+@media(max-width:699px)
+	.wa-date-picker
+		height: initial
+		margin-left: 0px !important /* it is rewriting javascript generated inline style */
+		width: 100% !important
+		.mode-selector
+			height: initial;
+			width: 100%;
+			&>div
+				padding: 10px;
+				display: inline-block;
+				width: initial
+		.content
+			position: initial;
+			top: initial;
+			left: initial;
+		.calendar-view-2,
+		.calendar-view-3
+			display none

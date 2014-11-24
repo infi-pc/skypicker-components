@@ -130,9 +130,11 @@ var CalendarFrame = React.createClass({
       calendarDates.push( moment.utc(initialDate) );
       initialDate.add(1,"month")
     }
+    var j = 0;
     var calendars = calendarDates.map(function (date) {
+      j++;
       return (
-        <div className="calendar-view">
+        <div className={'calendar-view calendar-view-'+j}>
           <Calendar date={date} getDay={self.getDay} />
         </div>
       );

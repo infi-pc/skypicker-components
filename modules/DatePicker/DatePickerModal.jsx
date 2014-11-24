@@ -6,9 +6,13 @@ var SearchDate = require('./../containers/SearchDate.js');
 /**
  * show modal datepicker
  * it hides itself and take care that it is only one on page
- * @param{string} element - plain html element to bind, it takes boundaries of that object
- * @param{SearchDate} value
- * @param{SearchDate} modesEnabled (example and default value is below)
+ * @param{options} {
+ *    element: plain html element to bind, it takes boundaries of that object
+ *    value:
+ *    modesEnabled: example and default value is below
+ *    locale: (cs,en,...)
+ * }
+ *
  * @param{function(SearchDate)} onChange
  */
 
@@ -26,6 +30,10 @@ exports.show = function (options, onChange) {
   if (!jqElement.length) {
     $("body").append('<div id="wa-date-picker-container"></div>');
     jqElement = $("#wa-date-picker-container");
+  }
+
+  if (options.locale) {
+    moment.locale(options.locale);
   }
 
 

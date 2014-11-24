@@ -2,6 +2,7 @@
 
 var React = require('react');
 var moment = require('moment');
+var Tran = require('./../Tran.jsx');
 
 var MonthMatrix = React.createClass({
 
@@ -35,7 +36,7 @@ var MonthMatrix = React.createClass({
 
     return ( //onMouseLeave={ this.props.onLeave }
       <div className="month-matrix">
-        <div className="content-headline">Select month</div>
+        <div className="content-headline"><Tran>Select month</Tran></div>
         <div className="months">
           {monthsElements}
         </div>

@@ -6,10 +6,14 @@ var SearchDate = require('./../containers/SearchDate.js');
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
+var tr = require('./../tr.js');
+
+
 
 React.initializeTouchEvents(true);
 
 var moment = require('moment');
+
 
 var widths = {
   single: 454,
@@ -54,12 +58,12 @@ var DatePicker = React.createClass({
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: "Single",
-      interval: "Interval",
-      month: "Months",
-      timeToStay: "Time to stay",
-      anytime: "Anytime",
-      noReturn: "No return"
+      single: tr("Single"),
+      interval: tr("Interval"),
+      month: tr("Months"),
+      timeToStay: tr("Time to stay"),
+      anytime: tr("Anytime"),
+      noReturn: tr("No return")
     };
     return modeLabels[mode];
   },
@@ -195,9 +199,10 @@ var DatePicker = React.createClass({
     return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} />);
   },
   renderTimeToStay: function () {
+    var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
     return (
       <div className="time-to-stay">
-        <div className="content-headline">Stay time from {this.getValue().minStayDays} to {this.getValue().maxStayDays} days.</div>
+        <div className="content-headline">{headline}</div>
         <Slider step={1} minValue={1} maxValue={31} value={this.getValue().minStayDays} onChange={this.changeMinStayDays} className="slider sliderMin horizontal-slider">
           <Handle />
         </Slider>

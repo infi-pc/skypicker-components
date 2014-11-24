@@ -1,28 +1,8 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Tran = require('./Tran.js');
 
-var Tran = React.createClass({
-	render: function() {
-		var translates = window.globalTranslates;
-		var original = this.props.children;
-
-		if (translates && translates[original]) {
-			translated = translates[original]
-		} else {
-			if (!window.toTranslate) {
-				window.toTranslate = {};
-			}
-			window.toTranslate[original] = original;
-			translated = original;
-		}
-		return (
-			<span>
-				{ translated }
-			</span>
-		);
-	}
-});
 
 var FormatedPrice = React.createClass({
 	getInitialState: function() {
