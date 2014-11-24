@@ -567,17 +567,15 @@ module.exports = DatePicker;
 
 var DatePicker = require("./DatePicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
-
+var moment = (window.moment);
 /**
- * show modal datepicker
+ * show modal datepicker (only one important function for DatePicker)
  * it hides itself and take care that it is only one on page
- * @param{options} {
- *    element: plain html element to bind, it takes boundaries of that object
- *    value:
- *    modesEnabled: example and default value is below
- *    locale: (cs,en,...)
- * }
- *
+ * @param{Object} options
+ * @param{HTMLElement} options.element - plain html element to bind, it takes boundaries of that object
+ * @param{SearchDate} options.value - value
+ * @param{Object} options.modesEnabled - example and default value is below
+ * @param{string} options.locale - (cs,en,...)
  * @param{function(SearchDate)} onChange
  */
 

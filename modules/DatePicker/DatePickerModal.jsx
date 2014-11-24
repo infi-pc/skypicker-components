@@ -2,7 +2,7 @@
 
 var DatePicker = require("./DatePicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
-
+var moment = require('moment');
 /**
  * show modal datepicker (only one important function for DatePicker)
  * it hides itself and take care that it is only one on page

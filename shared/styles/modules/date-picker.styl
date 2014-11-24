@@ -102,21 +102,21 @@ $modeSelectorWidth = 170px
 .month-matrix
 	width: 370px;
 	padding-left: 25px;
+	padding-right: 25px;
 	padding-top: 13px
 	.month-option
 		cursor pointer
-		margin-bottom: 10px;
-		margin-right: 10px;
-		width: 100px;
-		height: 50px;
+		margin: 0
+		width: 33.3%;
+		height: 60px;
 		float: left
-		background-color: #30aada;
-		color: #FFF;
+		background-color: #FFF;
+		color: #666;
 		line-height: 1em;
 		/*box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.55);*/
 		text-align center
 		&:hover
-			background-color #5ac3ff
+			background-color #A1E5FF
 		.month-name
 		.month-year
 			font-weight bold
@@ -125,7 +125,7 @@ $modeSelectorWidth = 170px
 			font-size 12px
 			padding-top 3px
 		.month-name
-			padding-top 10px
+			padding-top 15px
 
 .clndr
 	width: $calendarWidth;
@@ -228,6 +228,7 @@ $modeSelectorWidth = 170px
 		height: initial
 		margin-left: 0px !important /* it is rewriting javascript generated inline style */
 		width: 100% !important
+
 		.mode-selector
 			height: initial;
 			width: 100%;
@@ -239,6 +240,16 @@ $modeSelectorWidth = 170px
 			position: initial;
 			top: initial;
 			left: initial;
+			width: 100%;
+
 		.calendar-view-2,
 		.calendar-view-3
 			display none
+
+		.month-matrix
+			width: 100%
+			padding-left: 5px;
+			padding-right: 5px;
+			.month-option
+				width: 33.3%
+				margin: 0px
