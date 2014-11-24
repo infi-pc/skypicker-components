@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Tran = require('./Tran.js');
+var Tran = require('./Tran.jsx');
 
 
 var FormatedPrice = React.createClass({

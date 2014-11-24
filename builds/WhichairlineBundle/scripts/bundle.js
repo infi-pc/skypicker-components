@@ -5,7 +5,7 @@ window.DealsList = require('./../../modules/DealsList.jsx');
 window.SkypickerAPIv1 = require('./../../modules/SkypickerAPIv1.js');
 window.SkypickerTools = require('./../../modules/SkypickerTools.js');
 
-},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/DealsList.jsx":10,"./../../modules/SkypickerAPIv1.js":11,"./../../modules/SkypickerTools.js":12,"./../../modules/containers/SearchDate.js":13}],2:[function(require,module,exports){
+},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/DealsList.jsx":10,"./../../modules/SkypickerAPIv1.js":11,"./../../modules/SkypickerTools.js":12,"./../../modules/containers/SearchDate.js":14}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
@@ -290,9 +290,11 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
       calendarDates.push( moment.utc(initialDate) );
       initialDate.add(1,"month")
     }
+    var j = 0;
     var calendars = calendarDates.map(function (date) {
+      j++;
       return (
-        React.DOM.div({className: "calendar-view"}, 
+        React.DOM.div({className: 'calendar-view calendar-view-'+j}, 
           Calendar({date: date, getDay: self.getDay})
         )
       );
@@ -319,10 +321,14 @@ var SearchDate = require('./../containers/SearchDate.js');
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
+var tr = require('./../tr.js');
+
+
 
 React.initializeTouchEvents(true);
 
 var moment = (window.moment);
+
 
 var widths = {
   single: 454,
@@ -367,12 +373,12 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: "Single",
-      interval: "Interval",
-      month: "Months",
-      timeToStay: "Time to stay",
-      anytime: "Anytime",
-      noReturn: "No return"
+      single: tr("Single"),
+      interval: tr("Interval"),
+      month: tr("Months"),
+      timeToStay: tr("Time to stay"),
+      anytime: tr("Anytime"),
+      noReturn: tr("No return")
     };
     return modeLabels[mode];
   },
@@ -508,9 +514,10 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     return (MonthMatrix({minValue: this.props.minValue, onSet: this.setMonth}));
   },
   renderTimeToStay: function () {
+    var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
     return (
       React.DOM.div({className: "time-to-stay"}, 
-        React.DOM.div({className: "content-headline"}, "Stay time from ", this.getValue().minStayDays, " to ", this.getValue().maxStayDays, " days."), 
+        React.DOM.div({className: "content-headline"}, headline), 
         Slider({step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
           Handle(null)
         ), 
@@ -555,7 +562,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
 module.exports = DatePicker;
 
-},{"./../containers/SearchDate.js":13,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8}],6:[function(require,module,exports){
+},{"./../containers/SearchDate.js":14,"./../tr.js":15,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var DatePicker = require("./DatePicker.jsx");
@@ -564,9 +571,13 @@ var SearchDate = require('./../containers/SearchDate.js');
 /**
  * show modal datepicker
  * it hides itself and take care that it is only one on page
- * @param{string} element - plain html element to bind, it takes boundaries of that object
- * @param{SearchDate} value
- * @param{SearchDate} modesEnabled (example and default value is below)
+ * @param{options} {
+ *    element: plain html element to bind, it takes boundaries of that object
+ *    value:
+ *    modesEnabled: example and default value is below
+ *    locale: (cs,en,...)
+ * }
+ *
  * @param{function(SearchDate)} onChange
  */
 
@@ -584,6 +595,10 @@ exports.show = function (options, onChange) {
   if (!jqElement.length) {
     $("body").append('<div id="wa-date-picker-container"></div>');
     jqElement = $("#wa-date-picker-container");
+  }
+
+  if (options.locale) {
+    moment.locale(options.locale);
   }
 
 
@@ -678,11 +693,12 @@ exports.show = function (options, onChange) {
 
 
 
-},{"./../containers/SearchDate.js":13,"./DatePicker.jsx":5}],7:[function(require,module,exports){
+},{"./../containers/SearchDate.js":14,"./DatePicker.jsx":5}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
 var moment = (window.moment);
+var Tran = require('./../Tran.jsx');
 
 var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
@@ -716,7 +732,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
     return ( //onMouseLeave={ this.props.onLeave }
       React.DOM.div({className: "month-matrix"}, 
-        React.DOM.div({className: "content-headline"}, "Select month"), 
+        React.DOM.div({className: "content-headline"}, Tran(null, "Select month")), 
         React.DOM.div({className: "months"}, 
           monthsElements
         )
@@ -727,7 +743,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
 module.exports = MonthMatrix;
 
-},{}],8:[function(require,module,exports){
+},{"./../Tran.jsx":13}],8:[function(require,module,exports){
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['react'], factory);
@@ -927,28 +943,8 @@ module.exports = DateTools;
 /** @jsx React.DOM */
 
 var React = (window.React);
+var Tran = require('./Tran.jsx');
 
-var Tran = React.createClass({displayName: 'Tran',
-	render: function() {
-		var translates = window.globalTranslates;
-		var original = this.props.children;
-
-		if (translates && translates[original]) {
-			translated = translates[original]
-		} else {
-			if (!window.toTranslate) {
-				window.toTranslate = {};
-			}
-			window.toTranslate[original] = original;
-			translated = original;
-		}
-		return (
-			React.DOM.span(null, 
-				translated 
-			)
-		);
-	}
-});
 
 var FormatedPrice = React.createClass({displayName: 'FormatedPrice',
 	getInitialState: function() {
@@ -1209,7 +1205,7 @@ var DealsList = React.createClass({displayName: 'DealsList',
 
 module.exports = DealsList;
 
-},{}],11:[function(require,module,exports){
+},{"./Tran.jsx":13}],11:[function(require,module,exports){
 // Older version of skypicker API - i don't even know if it is working for every feature
 // right now it is used only in DealsList and should be removed later
 
@@ -1389,6 +1385,27 @@ module.exports = SkypickerTools;
 
 
 },{"./DateTools.js":9}],13:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var React = (window.React);
+var tr = require('./tr.js');
+
+/* react component wrapper of tr function */
+
+var Tran = React.createClass({displayName: 'Tran',
+  render: function() {
+    var original = this.props.children;
+    return (
+      React.DOM.span(null, 
+				 tr(original) 
+      )
+    );
+  }
+});
+
+module.exports = Tran;
+
+},{"./tr.js":15}],14:[function(require,module,exports){
 var moment = (window.moment);
 
 var urlDateFormat = "YYYY-MM-DD";
@@ -1445,5 +1462,36 @@ SearchDate.prototype.mergeInto = function(newValues){
 
 
 module.exports = SearchDate;
+
+},{}],15:[function(require,module,exports){
+
+/* simple function to translate plain texts */
+/* to get text which are not translated on current page, take console.log(window.toTranslate) */
+
+var tr = function (original) {
+  var translates = window.globalTranslates;
+
+
+  if (translates && translates[original]) {
+    translated = translates[original]
+  } else {
+    if (!window.toTranslate) {
+      window.toTranslate = {};
+    }
+    window.toTranslate[original] = original;
+    translated = original;
+  }
+
+  if (arguments.length > 1) {
+    for (var i = 1, j = arguments.length; i < j; i++){
+      translated = translated.replace("%s",arguments[i])
+    }
+  }
+
+
+  return translated;
+};
+
+module.exports = tr;
 
 },{}]},{},[1]);
