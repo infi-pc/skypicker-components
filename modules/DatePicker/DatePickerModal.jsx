@@ -34,16 +34,36 @@ exports.show = function (options, onChange) {
     moment.locale(options.locale);
   }
 
+  var defaultModes = {
+    "single": {
+      closeAfterSelect: true
+    },
+    "interval": {
+      closeAfterSelect: true
+    },
+    "month": {
+      closeAfterSelect: true
+    },
+    "timeToStay": {
+      closeAfterSelect: true
+    },
+    "anytime": {
+      closeAfterSelect: true
+    },
+    "noReturn": {
+      closeAfterSelect: true
+    }
+  };
 
-  if (!modesEnabled) {
-    modesEnabled = {
-      "single": true,
-      "interval": false,
-      "month": true,
-      "timeToStay": false,
-      "anytime": true,
-      "noReturn": true
-    };
+  var modes = {};
+  for (mode in modesEnabled) {
+    if (modesEnabled[mode]) {
+      if (typeof modesEnabled[mode] == 'object') {
+        modes[mode] = modesEnabled[mode]
+      } else {
+        modes[mode] = defaultModes[mode]
+      }
+    }
   }
 
   var position = {
@@ -112,7 +132,7 @@ exports.show = function (options, onChange) {
             onChange={this.onChange}
             leftOffset={position.left}
             maxWidth={pageWidth}
-            modesEnabled={modesEnabled}
+            modesEnabled={modes}
             hide={this.hide}
           ></DatePicker>
         </div>

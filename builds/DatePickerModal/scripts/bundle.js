@@ -4,7 +4,7 @@ window.SearchDate = require('./../../modules/containers/SearchDate.js');
 
 
 
-},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":9}],2:[function(require,module,exports){
+},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":10}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
@@ -178,7 +178,8 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     return {
       value: null,
       calendarsNumber: 1,
-      selectionMode: "single"
+      selectionMode: "single",
+      onFinish: function () {}
     };
   },
 
@@ -209,6 +210,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     if (this.props.selectionMode == "single") {
       //if single just select
       this.setValue({mode: "single", from: date, to: date});
+      this.props.onFinish();
     } else if (this.props.selectionMode == "interval") {
       //if interval decide on mode
       if (!this.props.value.from) {
@@ -219,6 +221,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
           this.setValue({mode: "interval", from: date, to: null});
         } else {
           this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date});
+          this.props.onFinish();
         }
 
       } else {
@@ -289,9 +292,11 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
       calendarDates.push( moment.utc(initialDate) );
       initialDate.add(1,"month")
     }
+    var j = 0;
     var calendars = calendarDates.map(function (date) {
+      j++;
       return (
-        React.DOM.div({className: "calendar-view"}, 
+        React.DOM.div({className: 'calendar-view calendar-view-'+j}, 
           Calendar({date: date, getDay: self.getDay})
         )
       );
@@ -318,10 +323,14 @@ var SearchDate = require('./../containers/SearchDate.js');
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
+var tr = require('./../tr.js');
+
+
 
 React.initializeTouchEvents(true);
 
 var moment = (window.moment);
+
 
 var widths = {
   single: 454,
@@ -366,12 +375,12 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: "Single",
-      interval: "Interval",
-      month: "Months",
-      timeToStay: "Time to stay",
-      anytime: "Anytime",
-      noReturn: "No return"
+      single: tr("Single"),
+      interval: tr("Interval"),
+      month: tr("Months"),
+      timeToStay: tr("Time to stay"),
+      anytime: tr("Anytime"),
+      noReturn: tr("No return")
     };
     return modeLabels[mode];
   },
@@ -389,10 +398,10 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
         case "anytime":
         case "noReturn":
-          self.props.hide();
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
           self.changeValue(newValue);
+          self.finish();
           break;
         default:
       }
@@ -443,6 +452,9 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     });
   },
 
+  finish: function () {
+    this.props.hide();
+  },
   //setAnytime: function () {
   //  this.changeValue({
   //    mode: "anytime"
@@ -495,21 +507,22 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   renderSingle: function () {
     return (
-      CalendarFrame({onChange: this.changeValue, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
+      CalendarFrame({onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
     )
   },
   renderInterval: function () {
     return (
-      CalendarFrame({onChange: this.changeValue, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
+      CalendarFrame({onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
     )
   },
   renderMonth: function () {
-    return (MonthMatrix({minValue: this.props.minValue, onSet: this.setMonth}));
+    return (MonthMatrix({minValue: this.props.minValue, onFinish: this.finish, onSet: this.setMonth}));
   },
   renderTimeToStay: function () {
+    var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
     return (
       React.DOM.div({className: "time-to-stay"}, 
-        React.DOM.div({className: "content-headline"}, "Stay time from ", this.getValue().minStayDays, " to ", this.getValue().maxStayDays, " days."), 
+        React.DOM.div({className: "content-headline"}, headline), 
         Slider({step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
           Handle(null)
         ), 
@@ -554,18 +567,20 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
 module.exports = DatePicker;
 
-},{"./../containers/SearchDate.js":9,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8}],6:[function(require,module,exports){
+},{"./../containers/SearchDate.js":10,"./../tr.js":11,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var DatePicker = require("./DatePicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
-
+var moment = (window.moment);
 /**
- * show modal datepicker
+ * show modal datepicker (only one important function for DatePicker)
  * it hides itself and take care that it is only one on page
- * @param{string} element - plain html element to bind, it takes boundaries of that object
- * @param{SearchDate} value
- * @param{SearchDate} modesEnabled (example and default value is below)
+ * @param{Object} options
+ * @param{HTMLElement} options.element - plain html element to bind, it takes boundaries of that object
+ * @param{SearchDate} options.value - value
+ * @param{Object} options.modesEnabled - example and default value is below
+ * @param{string} options.locale - (cs,en,...)
  * @param{function(SearchDate)} onChange
  */
 
@@ -585,16 +600,38 @@ exports.show = function (options, onChange) {
     jqElement = $("#wa-date-picker-container");
   }
 
+  if (options.locale) {
+    moment.locale(options.locale);
+  }
 
-  if (!modesEnabled) {
-    modesEnabled = {
-      "single": true,
-      "interval": false,
-      "month": true,
-      "timeToStay": false,
-      "anytime": true,
-      "noReturn": true
-    };
+  var defaultModes = {
+    "single": {
+      closeAfterSelect: true
+    },
+    "interval": {
+      closeAfterSelect: true
+    },
+    "month": {
+      closeAfterSelect: true
+    },
+    "timeToStay": {
+      closeAfterSelect: true
+    },
+    "anytime": {
+      closeAfterSelect: true
+    },
+    "noReturn": {
+      closeAfterSelect: true
+    }
+  };
+
+  var modes = {};
+  for (mode in modesEnabled) {
+    if (typeof modesEnabled[mode] == 'object') {
+      modes[mode] = modesEnabled[mode]
+    } else {
+      modes[mode] = defaultModes[mode]
+    }
   }
 
   var position = {
@@ -663,7 +700,7 @@ exports.show = function (options, onChange) {
             onChange: this.onChange, 
             leftOffset: position.left, 
             maxWidth: pageWidth, 
-            modesEnabled: modesEnabled, 
+            modesEnabled: modes, 
             hide: this.hide
           })
         )
@@ -677,11 +714,12 @@ exports.show = function (options, onChange) {
 
 
 
-},{"./../containers/SearchDate.js":9,"./DatePicker.jsx":5}],7:[function(require,module,exports){
+},{"./../containers/SearchDate.js":10,"./DatePicker.jsx":5}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
 var moment = (window.moment);
+var Tran = require('./../Tran.jsx');
 
 var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
@@ -689,6 +727,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
     var that = this;
     return function () {
       that.props.onSet(month);
+      that.props.onFinish();
     }
   },
   render: function() {
@@ -715,7 +754,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
     return ( //onMouseLeave={ this.props.onLeave }
       React.DOM.div({className: "month-matrix"}, 
-        React.DOM.div({className: "content-headline"}, "Select month"), 
+        React.DOM.div({className: "content-headline"}, Tran(null, "Select month")), 
         React.DOM.div({className: "months"}, 
           monthsElements
         )
@@ -726,7 +765,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
 module.exports = MonthMatrix;
 
-},{}],8:[function(require,module,exports){
+},{"./../Tran.jsx":9}],8:[function(require,module,exports){
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['react'], factory);
@@ -891,6 +930,27 @@ module.exports = MonthMatrix;
 }));
 
 },{}],9:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var React = (window.React);
+var tr = require('./tr.js');
+
+/* react component wrapper of tr function */
+
+var Tran = React.createClass({displayName: 'Tran',
+  render: function() {
+    var original = this.props.children;
+    return (
+      React.DOM.span(null, 
+				 tr(original) 
+      )
+    );
+  }
+});
+
+module.exports = Tran;
+
+},{"./tr.js":11}],10:[function(require,module,exports){
 var moment = (window.moment);
 
 var urlDateFormat = "YYYY-MM-DD";
@@ -947,5 +1007,36 @@ SearchDate.prototype.mergeInto = function(newValues){
 
 
 module.exports = SearchDate;
+
+},{}],11:[function(require,module,exports){
+
+/* simple function to translate plain texts */
+/* to get text which are not translated on current page, take console.log(window.toTranslate) */
+
+var tr = function (original) {
+  var translates = window.globalTranslates;
+
+
+  if (translates && translates[original]) {
+    translated = translates[original]
+  } else {
+    if (!window.toTranslate) {
+      window.toTranslate = {};
+    }
+    window.toTranslate[original] = original;
+    translated = original;
+  }
+
+  if (arguments.length > 1) {
+    for (var i = 1, j = arguments.length; i < j; i++){
+      translated = translated.replace("%s",arguments[i])
+    }
+  }
+
+
+  return translated;
+};
+
+module.exports = tr;
 
 },{}]},{},[1]);

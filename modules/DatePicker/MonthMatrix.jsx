@@ -10,6 +10,7 @@ var MonthMatrix = React.createClass({
     var that = this;
     return function () {
       that.props.onSet(month);
+      that.props.onFinish();
     }
   },
   render: function() {

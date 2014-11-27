@@ -179,7 +179,8 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     return {
       value: null,
       calendarsNumber: 1,
-      selectionMode: "single"
+      selectionMode: "single",
+      onFinish: function () {}
     };
   },
 
@@ -210,6 +211,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     if (this.props.selectionMode == "single") {
       //if single just select
       this.setValue({mode: "single", from: date, to: date});
+      this.props.onFinish();
     } else if (this.props.selectionMode == "interval") {
       //if interval decide on mode
       if (!this.props.value.from) {
@@ -220,6 +222,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
           this.setValue({mode: "interval", from: date, to: null});
         } else {
           this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date});
+          this.props.onFinish();
         }
 
       } else {
@@ -373,7 +376,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: tr("Single"),
+      single: tr("Specific"),
       interval: tr("Interval"),
       month: tr("Months"),
       timeToStay: tr("Time to stay"),
@@ -396,10 +399,10 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
         case "anytime":
         case "noReturn":
-          self.props.hide();
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
           self.changeValue(newValue);
+          self.finish();
           break;
         default:
       }
@@ -450,6 +453,9 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     });
   },
 
+  finish: function () {
+    this.props.hide();
+  },
   //setAnytime: function () {
   //  this.changeValue({
   //    mode: "anytime"
@@ -502,16 +508,16 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   renderSingle: function () {
     return (
-      CalendarFrame({onChange: this.changeValue, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
+      CalendarFrame({onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
     )
   },
   renderInterval: function () {
     return (
-      CalendarFrame({onChange: this.changeValue, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
+      CalendarFrame({onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
     )
   },
   renderMonth: function () {
-    return (MonthMatrix({minValue: this.props.minValue, onSet: this.setMonth}));
+    return (MonthMatrix({minValue: this.props.minValue, onFinish: this.finish, onSet: this.setMonth}));
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
@@ -599,16 +605,36 @@ exports.show = function (options, onChange) {
     moment.locale(options.locale);
   }
 
+  var defaultModes = {
+    "single": {
+      closeAfterSelect: true
+    },
+    "interval": {
+      closeAfterSelect: true
+    },
+    "month": {
+      closeAfterSelect: true
+    },
+    "timeToStay": {
+      closeAfterSelect: true
+    },
+    "anytime": {
+      closeAfterSelect: true
+    },
+    "noReturn": {
+      closeAfterSelect: true
+    }
+  };
 
-  if (!modesEnabled) {
-    modesEnabled = {
-      "single": true,
-      "interval": false,
-      "month": true,
-      "timeToStay": false,
-      "anytime": true,
-      "noReturn": true
-    };
+  var modes = {};
+  for (mode in modesEnabled) {
+    if (modesEnabled[mode]) {
+      if (typeof modesEnabled[mode] == 'object') {
+        modes[mode] = modesEnabled[mode]
+      } else {
+        modes[mode] = defaultModes[mode]
+      }
+    }
   }
 
   var position = {
@@ -677,7 +703,7 @@ exports.show = function (options, onChange) {
             onChange: this.onChange, 
             leftOffset: position.left, 
             maxWidth: pageWidth, 
-            modesEnabled: modesEnabled, 
+            modesEnabled: modes, 
             hide: this.hide
           })
         )
@@ -704,6 +730,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
     var that = this;
     return function () {
       that.props.onSet(month);
+      that.props.onFinish();
     }
   },
   render: function() {

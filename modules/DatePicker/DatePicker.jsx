@@ -58,7 +58,7 @@ var DatePicker = React.createClass({
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: tr("Single"),
+      single: tr("Specific"),
       interval: tr("Interval"),
       month: tr("Months"),
       timeToStay: tr("Time to stay"),
@@ -81,10 +81,10 @@ var DatePicker = React.createClass({
 
         case "anytime":
         case "noReturn":
-          self.props.hide();
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
           self.changeValue(newValue);
+          self.finish();
           break;
         default:
       }
@@ -135,6 +135,9 @@ var DatePicker = React.createClass({
     });
   },
 
+  finish: function () {
+    this.props.hide();
+  },
   //setAnytime: function () {
   //  this.changeValue({
   //    mode: "anytime"
@@ -187,16 +190,16 @@ var DatePicker = React.createClass({
 
   renderSingle: function () {
     return (
-      <CalendarFrame onChange={this.changeValue} value={this.props.value} minValue={this.props.minValue} selectionMode="single" calendarsNumber={1} />
+      <CalendarFrame onChange={this.changeValue} onFinish={this.finish} value={this.props.value} minValue={this.props.minValue} selectionMode="single" calendarsNumber={1} />
     )
   },
   renderInterval: function () {
     return (
-      <CalendarFrame onChange={this.changeValue} value={this.props.value} minValue={this.props.minValue} selectionMode="interval" calendarsNumber={3}  />
+      <CalendarFrame onChange={this.changeValue} onFinish={this.finish} value={this.props.value} minValue={this.props.minValue} selectionMode="interval" calendarsNumber={3}  />
     )
   },
   renderMonth: function () {
-    return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} />);
+    return (<MonthMatrix minValue={this.props.minValue} onFinish={this.finish} onSet={this.setMonth} />);
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);

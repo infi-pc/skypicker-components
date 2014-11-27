@@ -19,7 +19,8 @@ var CalendarFrame = React.createClass({
     return {
       value: null,
       calendarsNumber: 1,
-      selectionMode: "single"
+      selectionMode: "single",
+      onFinish: function () {}
     };
   },
 
@@ -50,6 +51,7 @@ var CalendarFrame = React.createClass({
     if (this.props.selectionMode == "single") {
       //if single just select
       this.setValue({mode: "single", from: date, to: date});
+      this.props.onFinish();
     } else if (this.props.selectionMode == "interval") {
       //if interval decide on mode
       if (!this.props.value.from) {
@@ -60,6 +62,7 @@ var CalendarFrame = React.createClass({
           this.setValue({mode: "interval", from: date, to: null});
         } else {
           this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date});
+          this.props.onFinish();
         }
 
       } else {
