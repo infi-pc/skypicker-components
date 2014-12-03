@@ -4,7 +4,7 @@ function searchDateToString (date) {
   } else if (date.mode == "timeToStay") {
     return date.minStayDays+ " - " + date.maxStayDays + " days"
   } else if (date.mode == "interval" || date.mode == "month") {
-    var toDate;
+    var toDateString;
     if (!date.to) {
       toDateString = "_"
     } else {
