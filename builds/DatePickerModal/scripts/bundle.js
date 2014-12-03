@@ -414,13 +414,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     if (value) {
       newValue.mergeInto(value);
     }
-    newValue.final = !!(this.props.modes[value.mode] && this.props.modes[value.mode].finishAfter == changeType);
-
-    console.log(value.mode);
-    console.log(this.props.modes);
-    console.log(changeType);
-    console.log(this.props.modes[value.mode].finishAfter);
-    console.log(newValue.final);
+    newValue.final = !!(this.props.modes[newValue.mode] && this.props.modes[newValue.mode].finishAfter == changeType);
 
     this.props.onChange(newValue,changeType);
   },
