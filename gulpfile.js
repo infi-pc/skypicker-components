@@ -87,7 +87,7 @@ function browserifyfunc(watch, dir){
     });
   }
 
-  b.transform(reactify);
+  b.transform(reactify, {"es6": true});
   b.transform(globalShim);
   //b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
 

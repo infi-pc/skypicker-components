@@ -7,7 +7,7 @@ var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
 var tr = require('./../tr.js');
-
+var isIE = require('./../tools/isIE.js');
 
 
 React.initializeTouchEvents(true);
@@ -42,8 +42,8 @@ var DatePicker = React.createClass({
 
   getInitialState: function() {
     return {
-      viewDate: this.props.value.from || moment.utc(), //TODO decide if it will be here or in CalendarFrame
-      viewMode: this.props.value.mode
+      value: this.props.value ? this.props.value : new SearchDate(), //TODO decide if it will be here or in CalendarFrame
+      viewMode: this.props.value ? this.props.value.mode : "single"
     };
   },
 
@@ -76,15 +76,14 @@ var DatePicker = React.createClass({
         case "timeToStay":
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
-          self.changeValue(newValue);
+          self.changeValue(newValue, "release"); // should by something like change mode, but it finishes value only after release so TODO make it smarter
           break;
 
         case "anytime":
         case "noReturn":
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
-          self.changeValue(newValue);
-          self.finish();
+          self.changeValue(newValue, "select");
           break;
         default:
       }
@@ -94,10 +93,20 @@ var DatePicker = React.createClass({
     }
   },
 
-  changeValue: function (value) {
-    var newValue = new SearchDate(this.props.value);
-    newValue.mergeInto(value);
-    this.props.onChange(newValue);
+  changeValue: function (value,changeType) {
+    var newValue = new SearchDate(this.getValue());
+    if (value) {
+      newValue.mergeInto(value);
+    }
+    newValue.final = !!(this.props.modes[value.mode] && this.props.modes[value.mode].finishAfter == changeType);
+
+    console.log(value.mode);
+    console.log(this.props.modes);
+    console.log(changeType);
+    console.log(this.props.modes[value.mode].finishAfter);
+    console.log(newValue.final);
+
+    this.props.onChange(newValue,changeType);
   },
 
   getValue: function () {
@@ -109,11 +118,10 @@ var DatePicker = React.createClass({
       mode: "month",
       from: moment.utc(date).startOf('month'),
       to: moment.utc(date).endOf('month')
-    });
+    },"select");
   },
 
   changeMinStayDays: function (value) {
-
     if (value > this.state.maxStayDays) {
       return;
     }
@@ -121,7 +129,7 @@ var DatePicker = React.createClass({
       mode: "timeToStay",
       minStayDays: value,
       maxStayDays: this.getValue().maxStayDays
-    });
+    }, "select");
   },
 
   changeMaxStayDays: function (value) {
@@ -132,11 +140,16 @@ var DatePicker = React.createClass({
       mode: "timeToStay",
       minStayDays: this.getValue().minStayDays,
       maxStayDays: value
-    });
+    }, "select");
   },
 
-  finish: function () {
-    this.props.hide();
+
+  releaseMinStayDays: function () {
+    // do not change value, but trigger it with different change type
+    this.changeValue(null, "release");
+  },
+  releaseMaxStayDays: function () {
+    this.changeValue(null, "release");
   },
   //setAnytime: function () {
   //  this.changeValue({
@@ -190,26 +203,26 @@ var DatePicker = React.createClass({
 
   renderSingle: function () {
     return (
-      <CalendarFrame onChange={this.changeValue} onFinish={this.finish} value={this.props.value} minValue={this.props.minValue} selectionMode="single" calendarsNumber={1} />
+      <CalendarFrame onChange={this.changeValue} value={this.getValue()} minValue={this.props.minValue} selectionMode="single" calendarsNumber={1} />
     )
   },
   renderInterval: function () {
     return (
-      <CalendarFrame onChange={this.changeValue} onFinish={this.finish} value={this.props.value} minValue={this.props.minValue} selectionMode="interval" calendarsNumber={3}  />
+      <CalendarFrame onChange={this.changeValue} value={this.getValue()} minValue={this.props.minValue} selectionMode="interval" calendarsNumber={3}  />
     )
   },
   renderMonth: function () {
-    return (<MonthMatrix minValue={this.props.minValue} onFinish={this.finish} onSet={this.setMonth} />);
+    return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} />);
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
     return (
       <div className="time-to-stay">
         <div className="content-headline">{headline}</div>
-        <Slider step={1} minValue={1} maxValue={31} value={this.getValue().minStayDays} onChange={this.changeMinStayDays} className="slider sliderMin horizontal-slider">
+        <Slider step={1} minValue={1} maxValue={31} value={this.getValue().minStayDays} onRelease={this.releaseMinStayDays} onChange={this.changeMinStayDays} className="slider sliderMin horizontal-slider">
           <Handle />
         </Slider>
-        <Slider step={1} minValue={1} maxValue={31} value={this.getValue().maxStayDays} onChange={this.changeMaxStayDays} className="slider sliderMax horizontal-slider">
+        <Slider step={1} minValue={1} maxValue={31} value={this.getValue().maxStayDays} onRelease={this.releaseMaxStayDays} onChange={this.changeMaxStayDays} className="slider sliderMax horizontal-slider">
           <Handle />
         </Slider>
         <div className="slider-axe"></div>
@@ -227,12 +240,14 @@ var DatePicker = React.createClass({
     var styles = this.calculateStyles(mode);
 
     var modeOptions = [];
-    for (var imode in this.props.modesEnabled) {
-      if (this.props.modesEnabled[imode]) {
-        modeOptions.push(<div className={ mode == imode ? "active" : "" } onClick={ this.switchModeTo(imode) }>{ this.getModeLabel(imode) }</div>)
+    for (var imode in this.props.modes) {
+      if (this.props.modes[imode]) {
+        modeOptions.push(<div key={imode} className={ (mode == imode) ? "active" : "" } onClick={ this.switchModeTo(imode) }>{ this.getModeLabel(imode) }</div>)
       }
     }
-
+    if (isIE(8,'lte')) {
+      styles = {};
+    }
     return (
       <div className={'wa-date-picker '+mode} style={styles}>
         <div className="mode-selector">

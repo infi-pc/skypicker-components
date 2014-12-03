@@ -19,8 +19,8 @@ var CalendarFrame = React.createClass({
     return {
       value: null,
       calendarsNumber: 1,
-      selectionMode: "single",
-      onFinish: function () {}
+      selectionMode: "single"
+
     };
   },
 
@@ -43,31 +43,29 @@ var CalendarFrame = React.createClass({
     });
   },
 
-  setValue: function (value) {
-    this.props.onChange(value)
+  setValue: function (value, changeType) {
+    this.props.onChange(value, changeType)
   },
 
   onSelect: function (date) {
     if (this.props.selectionMode == "single") {
       //if single just select
-      this.setValue({mode: "single", from: date, to: date});
-      this.props.onFinish();
+      this.setValue({mode: "single", from: date, to: date},"select");
     } else if (this.props.selectionMode == "interval") {
       //if interval decide on mode
       if (!this.props.value.from) {
-        this.setValue({mode: "interval", from: date, to: null});
+        this.setValue({mode: "interval", from: date, to: null},"select");
       } else if (!this.props.value.to) {
         //if is before, just put start date again
         if (date < this.props.value.from) {
-          this.setValue({mode: "interval", from: date, to: null});
+          this.setValue({mode: "interval", from: date, to: null},"select");
         } else {
-          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date});
-          this.props.onFinish();
+          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date},"selectComplete");
         }
 
       } else {
         // if i have chosen both i start to pick new one
-        this.setValue({mode: "interval", from: date, to: null});
+        this.setValue({mode: "interval", from: date, to: null},"select");
       }
     }
   },
@@ -113,6 +111,7 @@ var CalendarFrame = React.createClass({
     }
     return (
       <CalendarDay
+        key={date.valueOf()}
         date={date}
         otherMonth={otherMonth}
         onOver={this.onOver}
@@ -137,7 +136,7 @@ var CalendarFrame = React.createClass({
     var calendars = calendarDates.map(function (date) {
       j++;
       return (
-        <div className={'calendar-view calendar-view-'+j}>
+        <div key={date.valueOf()} className={'calendar-view calendar-view-'+j}>
           <Calendar date={date} getDay={self.getDay} />
         </div>
       );

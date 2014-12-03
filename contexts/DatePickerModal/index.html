@@ -11,12 +11,21 @@
   </head>
   <body>
     <div class="hero-unit">
-      <input type="text" id="date-picker" />
+      <input type="text" id="date-picker1" />
+      <div style="position: absolute; top: 340px;" id="date-picker1-json"></div>
+      <input type="text" id="date-picker2" />
+      <div style="position: absolute; top: 340px;" id="date-picker2-json"></div>
     </div>
 
+    <script src="/scripts/es5-shim.min.js"></script>
+    <script src="/scripts/es5-sham.min.js"></script>
+    <script src="/scripts/eventListener.polyfill.js"></script>
+    <script src="/scripts/console.polyfill.js"></script>
 
-    <script src="/scripts/jquery-2.1.1.js"></script>
-    <script src="/scripts/react-0.12.0/build/react-with-addons.js"></script>
+
+    <script src="/scripts/jquery-1.11.1.min.js"></script>
+    <!--<script src="/scripts/jquery-2.1.1.js"></script>-->
+    <script src="/scripts/react-0.12.1/build/react-with-addons.js"></script>
     <script src="/scripts/moment-with-locales.js"></script>
 
     <script src="/scripts/bundle.js"></script>

@@ -18,6 +18,7 @@
       step: React.PropTypes.number,
       orientation: React.PropTypes.oneOf(['horizontal', 'vertical']),
       onChange: React.PropTypes.func,
+      onRelease: React.PropTypes.func,
       valuePropName: React.PropTypes.string
     },
 
@@ -107,6 +108,7 @@
     _dragEnd: function() {
       document.removeEventListener('mousemove', this._dragMove, false);
       document.removeEventListener('mouseup', this._dragEnd, false);
+      this.props.onRelease();
     },
 
     _touchMove: function(e) {

@@ -1,8 +1,9 @@
 /** @jsx React.DOM */
 
-var DatePicker = require("./DatePicker.jsx");
+var DatePickerModalComponent = require("./DatePickerModalComponent.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
 var moment = require('moment');
+
 /**
  * show modal datepicker (only one important function for DatePicker)
  * it hides itself and take care that it is only one on page
@@ -11,137 +12,108 @@ var moment = require('moment');
  * @param{SearchDate} options.value - value
  * @param{Object} options.modesEnabled - example and default value is below
  * @param{string} options.locale - (cs,en,...)
- * @param{function(SearchDate)} onChange
+ * ------- TODO @param{bool} options.hideOnElementClick - (default: false)
+ * @param{function(SearchDate)} options.onChange - callback on every change
  */
 
-exports.show = function (options, onChange) {
-  var element = options.element;
-  var value = options.value;
-  var modesEnabled = options.modes;
+/* responsibility: make simple plain js api */
+class DatePickerModal {
+  constructor(options) {
+    this.options = options;
 
-  var goToPast = false;
-
-  var rect = element.getBoundingClientRect();
-
-  var jqElement = $("#wa-date-picker-container");
-
-  if (!jqElement.length) {
-    $("body").append('<div id="wa-date-picker-container"></div>');
-    jqElement = $("#wa-date-picker-container");
+    if (this.options.defaultValue) {
+      this.value = this.options.defaultValue;
+    }
+    //if (!this.value) {
+    //  this.value = new SearchDate();
+    //}
+    if (options.locale) {
+      moment.locale(options.locale);
+    }
+    this._loadModes();
+    this._createComponent();
   }
 
-  if (options.locale) {
-    moment.locale(options.locale);
+  _loadModes() {
+    var defaultModes = {
+      "single": {
+        closeAfter: "select", // select
+        finishAfter: "select" // select
+      },
+      "interval": {
+        closeAfter: "selectComplete", // select
+        finishAfter: "selectComplete" // selectComplete | select
+      },
+      "month": {
+        closeAfter: "select", // select
+        finishAfter: "select" // select
+      },
+      "timeToStay": {
+        closeAfter: "", //TODO on click "ok"
+        finishAfter: "release" // release | select
+      },
+      "anytime": {
+        closeAfter: "select", // select
+        finishAfter: "select" // select
+      },
+      "noReturn": {
+        closeAfter: "select", // select
+        finishAfter: "select" // select
+      }
+    };
+    var modes = {};
+    for (var mode in this.options.modes) {
+      if (this.options.modes[mode]) {
+        if (typeof this.options.modes[mode] == 'object') {
+          modes[mode] = this.options.modes[mode]
+        } else {
+          modes[mode] = defaultModes[mode]
+        }
+      }
+    }
+    this.options.modes = modes;
   }
+  _createComponent() {
+    //this.htmlElement = document.createElement('div');
+    //$("body").append(this.htmlElement);
 
-  var defaultModes = {
-    "single": {
-      closeAfterSelect: true
-    },
-    "interval": {
-      closeAfterSelect: true
-    },
-    "month": {
-      closeAfterSelect: true
-    },
-    "timeToStay": {
-      closeAfterSelect: true
-    },
-    "anytime": {
-      closeAfterSelect: true
-    },
-    "noReturn": {
-      closeAfterSelect: true
-    }
-  };
+    //TODO make it in plain javascript way and without id
+    this.jqElement = $("<div class=\"datepicker-modal-container-element\"></div>");
+    $("body").append(this.jqElement);
+    this.htmlElement = this.jqElement.get()[0];
 
-  var modes = {};
-  for (mode in modesEnabled) {
-    if (modesEnabled[mode]) {
-      if (typeof modesEnabled[mode] == 'object') {
-        modes[mode] = modesEnabled[mode]
-      } else {
-        modes[mode] = defaultModes[mode]
-      }
-    }
+    var root = React.createFactory(DatePickerModalComponent);
+
+    this.component = React.render(root(), this.htmlElement);
+    this.component.setProps({
+      inputElement: this.options.element,
+      value: this.value,
+      minValue: this.options.minValue,
+      onChange: this.options.onChange,
+      modes: this.options.modes
+    });
+
   }
+  show() {
+    this.component.setState({
+      shown: true
+    });
+  }
+  hide() {
+    this.component.setState({
+      shown: false
+    });
+  }
+  setValue(newValue) {
+    //this.value = newValue;
+    //if (!this.value) {
+    //  this.value = new SearchDate();
+    //}
+    this.component.setProps({
+      value: newValue
+    });
+  }
+}
 
-  var position = {
-    top: rect.bottom + window.pageYOffset,
-    left: rect.left
-  };
-
-  var htmlElement = jqElement.get()[0];
-
-  var pageWidth = $(window).width();
-
-  var RootDatePicker = React.createClass({
-
-
-    hide: function () {
-      this.setState({
-        shown: false
-      });
-    },
-    clickOutside: function (e) {
-      if (this.refs.datePicker) {
-        if ($(this.refs.datePicker.getDOMNode()).has(e.target).length) return;
-      }
-      if ($(element).is(e.target)) return;
-      if ($(element).has(e.target).length) return;
-      this.hide();
-    },
-    componentDidMount: function() {
-      document.addEventListener("click", this.clickOutside, false);
-    },
-    componentWillUnmount: function() {
-      document.removeEventListener("click", this.clickOutside, false);
-    },
-
-    getInitialState: function() {
-      if (!value) {
-        value = new SearchDate();
-      }
-      return {
-        value: value,
-        shown: true
-      };
-    },
-    onChange: function(newValue) {
-      onChange(newValue);
-      return this.setState({
-        value: newValue
-      });
-    },
-    render: function() {
-      if (!this.state.shown) {
-        return (
-          <div></div>
-        );
-      }
-      var styles = {
-        top: position.top
-      };
-      return (
-        <div  className="wa-date-picker-modal" style={styles} >
-          <DatePicker
-            ref="datePicker"
-            weekOffset={1}
-            value={this.state.value}
-            minValue={options.minValue}
-            onChange={this.onChange}
-            leftOffset={position.left}
-            maxWidth={pageWidth}
-            modesEnabled={modes}
-            hide={this.hide}
-          ></DatePicker>
-        </div>
-      );
-    }
-  });
-
-  React.renderComponent(RootDatePicker(), htmlElement);
-};
-
-
+module.exports = DatePickerModal;
 

@@ -18,6 +18,7 @@ SearchDate = function (input) {
   this.to = plain.to || moment.utc();
   this.minStayDays = plain.minStayDays || 2;
   this.maxStayDays = plain.maxStayDays || 10;
+  this.final = true;
 };
 
 SearchDate.prototype.toUrlString = function() {

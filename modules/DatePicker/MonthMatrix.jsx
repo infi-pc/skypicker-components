@@ -10,7 +10,6 @@ var MonthMatrix = React.createClass({
     var that = this;
     return function () {
       that.props.onSet(month);
-      that.props.onFinish();
     }
   },
   render: function() {
@@ -23,7 +22,7 @@ var MonthMatrix = React.createClass({
     }
     var monthsElements = months.map(function (month) {
       return (
-        <div className="month-option" onClick={self.setMonth(month)}>
+        <div key={month.valueOf()} className="month-option" onClick={self.setMonth(month)}>
           <span className="month-name">
             { month.format("MMMM") }
           </span>

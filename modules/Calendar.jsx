@@ -70,7 +70,7 @@ var Calendar = React.createClass({
     return this.props.getDay(day.date, day.otherMonth);
   },
   renderDayName: function (dayName) {
-    return <div className="day-name"><span>{ dayName }</span></div>;
+    return <div key={dayName} className="day-name"><span>{ dayName }</span></div>;
   },
   render: function() {
     return (

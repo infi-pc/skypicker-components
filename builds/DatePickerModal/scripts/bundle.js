@@ -1,10 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/** @jsx React.DOM */window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
+window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
 window.SearchDate = require('./../../modules/containers/SearchDate.js');
 
 
 
-},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":10}],2:[function(require,module,exports){
+},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":11}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
@@ -77,22 +77,22 @@ var Calendar = React.createClass({displayName: 'Calendar',
     return this.props.getDay(day.date, day.otherMonth);
   },
   renderDayName: function (dayName) {
-    return React.DOM.div({className: "day-name"}, React.DOM.span(null, dayName ));
+    return React.createElement("div", {key: dayName, className: "day-name"}, React.createElement("span", null, dayName ));
   },
   render: function() {
     return (
-      React.DOM.div({className: "clndr"}, 
-        React.DOM.div({className: "clndr-month"}, 
+      React.createElement("div", {className: "clndr"}, 
+        React.createElement("div", {className: "clndr-month"}, 
            this.props.date.format("MMMM YYYY") 
         ), 
-        React.DOM.div({className: "clndr-grid"}, 
-          React.DOM.div({className: "day-names"}, 
+        React.createElement("div", {className: "clndr-grid"}, 
+          React.createElement("div", {className: "day-names"}, 
             this.dayNames().map(this.renderDayName)
           ), 
-          React.DOM.div({className: "days"}, 
+          React.createElement("div", {className: "days"}, 
             this.days().map(this.renderDay)
           ), 
-          React.DOM.div({className: "clear-both"})
+          React.createElement("div", {className: "clear-both"})
         )
       )
     );
@@ -132,8 +132,8 @@ var CalendarDay = React.createClass({displayName: 'CalendarDay',
     if (this.props.disabled) {
       classes += " disabled";
       return ( //onMouseLeave={ this.props.onLeave }
-        React.DOM.div({className: classes }, 
-          React.DOM.span({className: "day-number"}, this.props.date.date())
+        React.createElement("div", {className: classes }, 
+          React.createElement("span", {className: "day-number"}, this.props.date.date())
         )
       );
     }
@@ -147,8 +147,8 @@ var CalendarDay = React.createClass({displayName: 'CalendarDay',
       classes += " selected"
     }
     return ( //onMouseLeave={ this.props.onLeave }
-      React.DOM.div({className: classes, onMouseEnter:  this.onOver, onClick:  this.onSelect}, 
-        React.DOM.span({className: "day-number"}, this.props.date.date())
+      React.createElement("div", {className: classes, onMouseEnter:  this.onOver, onClick:  this.onSelect}, 
+        React.createElement("span", {className: "day-number"}, this.props.date.date())
       )
     );
   }
@@ -271,7 +271,8 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
       disabled = true; //TODO should be probably defined somewhere more outside
     }
     return (
-      CalendarDay({
+      React.createElement(CalendarDay, {
+        key: date.valueOf(), 
         date: date, 
         otherMonth: otherMonth, 
         onOver: this.onOver, 
@@ -296,17 +297,17 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     var calendars = calendarDates.map(function (date) {
       j++;
       return (
-        React.DOM.div({className: 'calendar-view calendar-view-'+j}, 
-          Calendar({date: date, getDay: self.getDay})
+        React.createElement("div", {key: date.valueOf(), className: 'calendar-view calendar-view-'+j}, 
+          React.createElement(Calendar, {date: date, getDay: self.getDay})
         )
       );
     });
     return (
-      React.DOM.div(null, 
-        React.DOM.div({className: "prev", onClick: this.prev}, React.DOM.div(null)), 
+      React.createElement("div", null, 
+        React.createElement("div", {className: "prev", onClick: this.prev}, React.createElement("div", null)), 
         calendars, 
-        React.DOM.div({className: "next", onClick: this.next}, React.DOM.div(null)), 
-        React.DOM.div({className: "clear-both"})
+        React.createElement("div", {className: "next", onClick: this.next}, React.createElement("div", null)), 
+        React.createElement("div", {className: "clear-both"})
       )
     )
   }
@@ -324,7 +325,7 @@ var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
 var tr = require('./../tr.js');
-
+var isIE = require('./../tools/isIE.js');
 
 
 React.initializeTouchEvents(true);
@@ -345,7 +346,7 @@ var widths = {
 var Handle = React.createClass({displayName: 'Handle',
   render: function() {
     return (
-      React.DOM.div({className: "handle"}, 
+      React.createElement("div", {className: "handle"}, 
         this.props.sliderValue
       )
     );
@@ -375,7 +376,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: tr("Single"),
+      single: tr("Specific"),
       interval: tr("Interval"),
       month: tr("Months"),
       timeToStay: tr("Time to stay"),
@@ -507,29 +508,29 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   renderSingle: function () {
     return (
-      CalendarFrame({onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
+      React.createElement(CalendarFrame, {onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
     )
   },
   renderInterval: function () {
     return (
-      CalendarFrame({onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
+      React.createElement(CalendarFrame, {onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
     )
   },
   renderMonth: function () {
-    return (MonthMatrix({minValue: this.props.minValue, onFinish: this.finish, onSet: this.setMonth}));
+    return (React.createElement(MonthMatrix, {minValue: this.props.minValue, onFinish: this.finish, onSet: this.setMonth}));
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
     return (
-      React.DOM.div({className: "time-to-stay"}, 
-        React.DOM.div({className: "content-headline"}, headline), 
-        Slider({step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
-          Handle(null)
+      React.createElement("div", {className: "time-to-stay"}, 
+        React.createElement("div", {className: "content-headline"}, headline), 
+        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
+          React.createElement(Handle, null)
         ), 
-        Slider({step: 1, minValue: 1, maxValue: 31, value: this.getValue().maxStayDays, onChange: this.changeMaxStayDays, className: "slider sliderMax horizontal-slider"}, 
-          Handle(null)
+        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().maxStayDays, onChange: this.changeMaxStayDays, className: "slider sliderMax horizontal-slider"}, 
+          React.createElement(Handle, null)
         ), 
-        React.DOM.div({className: "slider-axe"})
+        React.createElement("div", {className: "slider-axe"})
       )
     );
   },
@@ -544,21 +545,23 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     var styles = this.calculateStyles(mode);
 
     var modeOptions = [];
-    for (var imode in this.props.modesEnabled) {
-      if (this.props.modesEnabled[imode]) {
-        modeOptions.push(React.DOM.div({className:  mode == imode ? "active" : "", onClick:  this.switchModeTo(imode) },  this.getModeLabel(imode) ))
+    for (var imode in this.props.modes) {
+      if (this.props.modes[imode]) {
+        modeOptions.push(React.createElement("div", {key: imode, className:  (mode == imode) ? "active" : "", onClick:  this.switchModeTo(imode) },  this.getModeLabel(imode) ))
       }
     }
-
+    if (isIE(8,'lte')) {
+      styles = {};
+    }
     return (
-      React.DOM.div({className: 'wa-date-picker '+mode, style: styles}, 
-        React.DOM.div({className: "mode-selector"}, 
+      React.createElement("div", {className: 'wa-date-picker '+mode, style: styles}, 
+        React.createElement("div", {className: "mode-selector"}, 
           modeOptions
         ), 
-        React.DOM.div({className: "content"}, 
+        React.createElement("div", {className: "content"}, 
            this.renderBody() 
         ), 
-        React.DOM.div({className: "clear-both"})
+        React.createElement("div", {className: "clear-both"})
       )
     );
   }
@@ -567,12 +570,13 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
 module.exports = DatePicker;
 
-},{"./../containers/SearchDate.js":10,"./../tr.js":11,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":7,"./Slider.js":8}],6:[function(require,module,exports){
+},{"./../containers/SearchDate.js":11,"./../tools/isIE.js":12,"./../tr.js":13,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":8,"./Slider.js":9}],6:[function(require,module,exports){
 /** @jsx React.DOM */
 
-var DatePicker = require("./DatePicker.jsx");
+var DatePickerModalComponent = require("./DatePickerModalComponent.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
 var moment = (window.moment);
+
 /**
  * show modal datepicker (only one important function for DatePicker)
  * it hides itself and take care that it is only one on page
@@ -581,140 +585,190 @@ var moment = (window.moment);
  * @param{SearchDate} options.value - value
  * @param{Object} options.modesEnabled - example and default value is below
  * @param{string} options.locale - (cs,en,...)
- * @param{function(SearchDate)} onChange
+ * ------- TODO @param{bool} options.hideOnElementClick - (default: false)
+ * @param{function(SearchDate)} options.onChange
  */
 
-exports.show = function (options, onChange) {
-  var element = options.element;
-  var value = options.value;
-  var modesEnabled = options.modes;
+/* responsibility: make simple plain js api */
 
-  var goToPast = false;
+  function DatePickerModal(options) {"use strict";
+    this.options = options;
 
-  var rect = element.getBoundingClientRect();
-
-  var jqElement = $("#wa-date-picker-container");
-
-  if (!jqElement.length) {
-    $("body").append('<div id="wa-date-picker-container"></div>');
-    jqElement = $("#wa-date-picker-container");
-  }
-
-  if (options.locale) {
-    moment.locale(options.locale);
-  }
-
-  var defaultModes = {
-    "single": {
-      closeAfterSelect: true
-    },
-    "interval": {
-      closeAfterSelect: true
-    },
-    "month": {
-      closeAfterSelect: true
-    },
-    "timeToStay": {
-      closeAfterSelect: true
-    },
-    "anytime": {
-      closeAfterSelect: true
-    },
-    "noReturn": {
-      closeAfterSelect: true
+    if (this.options.defaultValue) {
+      this.value = this.options.defaultValue;
     }
+    if (!this.value) {
+      this.value = new SearchDate();
+    }
+    if (options.locale) {
+      moment.locale(options.locale);
+    }
+    this.$DatePickerModal_loadModes();
+    this.$DatePickerModal_createComponent();
+  }
+
+  DatePickerModal.prototype.$DatePickerModal_loadModes=function() {"use strict";
+    var defaultModes = {
+      "single": {
+        closeAfterSelect: true
+      },
+      "interval": {
+        closeAfterSelect: true
+      },
+      "month": {
+        closeAfterSelect: true
+      },
+      "timeToStay": {
+        closeAfterSelect: true
+      },
+      "anytime": {
+        closeAfterSelect: true
+      },
+      "noReturn": {
+        closeAfterSelect: true
+      }
+    };
+    var modes = {};
+    for (var mode in this.options.modes) {
+      if (this.options.modes[mode]) {
+        if (typeof this.options.modes[mode] == 'object') {
+          modes[mode] = this.options.modes[mode]
+        } else {
+          modes[mode] = defaultModes[mode]
+        }
+      }
+    }
+    this.options.modes = modes;
+  };
+  DatePickerModal.prototype.$DatePickerModal_createComponent=function() {"use strict";
+    //this.htmlElement = document.createElement('div');
+    //$("body").append(this.htmlElement);
+
+    //TODO make it in plain javascript way and without id
+    this.jqElement = $("<div class=\"datepicker-modal-container-element\"></div>");
+    $("body").append(this.jqElement);
+    this.htmlElement = this.jqElement.get()[0];
+
+    var root = React.createFactory(DatePickerModalComponent);
+
+    this.component = React.render(root(), this.htmlElement);
+    this.component.setProps({
+      inputElement: this.options.element,
+      value: this.value,
+      minValue: this.options.minValue,
+      onChange: this.options.onChange,
+      modes: this.options.modes
+    });
+
+  };
+  DatePickerModal.prototype.show=function() {"use strict";
+    this.component.setState({
+      shown: true
+    });
+  };
+  DatePickerModal.prototype.hide=function() {"use strict";
+    this.component.setState({
+      shown: false
+    });
+  };
+  DatePickerModal.prototype.setValue=function(newValue) {"use strict";
+    this.value = newValue;
+    if (!this.value) {
+      this.value = new SearchDate();
+    }
+    this.component.setProps({
+      value: this.value
+    });
   };
 
-  var modes = {};
-  for (mode in modesEnabled) {
-    if (typeof modesEnabled[mode] == 'object') {
-      modes[mode] = modesEnabled[mode]
-    } else {
-      modes[mode] = defaultModes[mode]
+
+module.exports = DatePickerModal;
+
+
+},{"./../containers/SearchDate.js":11,"./DatePickerModalComponent.jsx":7}],7:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var DatePicker = require("./DatePicker.jsx");
+var SearchDate = require('./../containers/SearchDate.js');
+var isIE = require('./../tools/isIE.js');
+var moment = (window.moment);
+
+
+var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalComponent',
+  getInitialState: function() {
+    return {
+      shown: false
+    };
+  },
+  hide: function () {
+    this.setState({
+      shown: false
+    });
+  },
+  show: function () {
+    this.setState({
+      shown: true
+    });
+  },
+
+  clickOutside: function (e) {
+    if (this.refs.datePicker) {
+      if ($(this.refs.datePicker.getDOMNode()).has(e.target).length) return;
     }
-  }
-
-  var position = {
-    top: rect.bottom + window.pageYOffset,
-    left: rect.left
-  };
-
-  var htmlElement = jqElement.get()[0];
-
-  var pageWidth = $(window).width();
-
-  var RootDatePicker = React.createClass({displayName: 'RootDatePicker',
-
-
-    hide: function () {
-      this.setState({
-        shown: false
-      });
-    },
-    clickOutside: function (e) {
-      if (this.refs.datePicker) {
-        if ($(this.refs.datePicker.getDOMNode()).has(e.target).length) return;
-      }
-      if ($(element).is(e.target)) return;
-      if ($(element).has(e.target).length) return;
-      this.hide();
-    },
-    componentDidMount: function() {
-      document.addEventListener("click", this.clickOutside, false);
-    },
-    componentWillUnmount: function() {
-      document.removeEventListener("click", this.clickOutside, false);
-    },
-
-    getInitialState: function() {
-      if (!value) {
-        value = new SearchDate();
-      }
-      return {
-        value: value,
-        shown: true
-      };
-    },
-    onChange: function(newValue) {
-      onChange(newValue);
-      return this.setState({
-        value: newValue
-      });
-    },
-    render: function() {
-      if (!this.state.shown) {
-        return (
-          React.DOM.div(null)
-        );
-      }
-      var styles = {
-        top: position.top
-      };
+    //if (options.hideOnElementClick) {
+    if ($(this.props.inputElement).is(e.target)) return;
+    if ($(this.props.inputElement).has(e.target).length) return;
+    //}
+    this.hide();
+  },
+  componentDidMount: function() {
+    document.addEventListener("click", this.clickOutside, false);
+  },
+  componentWillUnmount: function() {
+    document.removeEventListener("click", this.clickOutside, false);
+  },
+  render: function() {
+    if (!this.state.shown) {
       return (
-        React.DOM.div({className: "wa-date-picker-modal", style: styles}, 
-          DatePicker({
-            ref: "datePicker", 
-            weekOffset: 1, 
-            value: this.state.value, 
-            minValue: options.minValue, 
-            onChange: this.onChange, 
-            leftOffset: position.left, 
-            maxWidth: pageWidth, 
-            modesEnabled: modes, 
-            hide: this.hide
-          })
-        )
+        React.createElement("div", null)
       );
     }
-  });
 
-  React.renderComponent(RootDatePicker(), htmlElement);
-};
+    var rect = this.props.inputElement.getBoundingClientRect();
+    var position = {
+      top: rect.bottom + window.pageYOffset,
+      left: rect.left
+    };
+    var pageWidth = $(window).width();
+    var styles = {
+      top: position.top + "px"
+    };
+    if (isIE(8,'lte')) {
+      styles = {};
+    }
+    return (
+      React.createElement("div", {className: "wa-date-picker-modal", style: styles}, 
+        React.createElement(DatePicker, {
+          ref: "datePicker", 
+          weekOffset: 1, 
+          value: this.props.value, 
+          minValue: this.props.minValue, 
+          onChange: this.props.onChange, 
+          leftOffset: position.left, 
+          maxWidth: pageWidth, 
+          modes: this.props.modes, 
+          hide: this.hide//TODO rename hide -> finish, DatePicker shouldn't know about something modal
+        })
+      )
+    );
+  }
+});
+
+module.exports = DatePickerModalComponent;
 
 
 
-
-},{"./../containers/SearchDate.js":10,"./DatePicker.jsx":5}],7:[function(require,module,exports){
+},{"./../containers/SearchDate.js":11,"./../tools/isIE.js":12,"./DatePicker.jsx":5}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
@@ -740,12 +794,12 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
     }
     var monthsElements = months.map(function (month) {
       return (
-        React.DOM.div({className: "month-option", onClick: self.setMonth(month)}, 
-          React.DOM.span({className: "month-name"}, 
+        React.createElement("div", {key: month.valueOf(), className: "month-option", onClick: self.setMonth(month)}, 
+          React.createElement("span", {className: "month-name"}, 
              month.format("MMMM") 
           ), 
-          React.DOM.br(null), 
-          React.DOM.span({className: "month-year"}, 
+          React.createElement("br", null), 
+          React.createElement("span", {className: "month-year"}, 
              month.format("YYYY") 
           )
         )
@@ -753,9 +807,9 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
     });
 
     return ( //onMouseLeave={ this.props.onLeave }
-      React.DOM.div({className: "month-matrix"}, 
-        React.DOM.div({className: "content-headline"}, Tran(null, "Select month")), 
-        React.DOM.div({className: "months"}, 
+      React.createElement("div", {className: "month-matrix"}, 
+        React.createElement("div", {className: "content-headline"}, React.createElement(Tran, null, "Select month")), 
+        React.createElement("div", {className: "months"}, 
           monthsElements
         )
       )
@@ -765,7 +819,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
 module.exports = MonthMatrix;
 
-},{"./../Tran.jsx":9}],8:[function(require,module,exports){
+},{"./../Tran.jsx":10}],9:[function(require,module,exports){
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['react'], factory);
@@ -929,7 +983,7 @@ module.exports = MonthMatrix;
 
 }));
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
@@ -941,7 +995,7 @@ var Tran = React.createClass({displayName: 'Tran',
   render: function() {
     var original = this.props.children;
     return (
-      React.DOM.span(null, 
+      React.createElement("span", null, 
 				 tr(original) 
       )
     );
@@ -950,7 +1004,7 @@ var Tran = React.createClass({displayName: 'Tran',
 
 module.exports = Tran;
 
-},{"./tr.js":11}],10:[function(require,module,exports){
+},{"./tr.js":13}],11:[function(require,module,exports){
 var moment = (window.moment);
 
 var urlDateFormat = "YYYY-MM-DD";
@@ -1008,7 +1062,44 @@ SearchDate.prototype.mergeInto = function(newValues){
 
 module.exports = SearchDate;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+//EnhanceJS isIE test idea
+
+//detect IE and version number through injected conditional comments (no UA detect, no need for cond. compilation / jscript check)
+
+//version arg is for IE version (optional)
+//comparison arg supports 'lte', 'gte', etc (optional)
+
+function isIE(version, comparison) {
+  var cc      = 'IE',
+    b       = document.createElement('B'),
+    docElem = document.documentElement,
+    isIE;
+
+  if(version){
+    cc += ' ' + version;
+    if(comparison){ cc = comparison + ' ' + cc; }
+  }
+
+  b.innerHTML = '<!--[if '+ cc +']><b id="iecctest"></b><![endif]-->';
+  docElem.appendChild(b);
+  isIE = !!document.getElementById('iecctest');
+  docElem.removeChild(b);
+  return isIE;
+}
+
+////is it IE?
+//isIE();
+//
+////is it IE6?
+//isIE(6);
+//
+////is it less than or equal to IE 6?
+//isIE(7,'lte');
+
+module.exports = isIE;
+
+},{}],13:[function(require,module,exports){
 
 /* simple function to translate plain texts */
 /* to get text which are not translated on current page, take console.log(window.toTranslate) */
