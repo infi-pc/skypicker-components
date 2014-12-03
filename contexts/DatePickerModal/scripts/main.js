@@ -23,7 +23,7 @@ var element1 = document.getElementById("date-picker1");
 var element1json = document.getElementById("date-picker1-json");
 datePicker1 = new DatePickerModal({
   element: element1,
-  defaultValue: selectedDate1,
+  //defaultValue: selectedDate1,
   modes: {
     "single": true,
     "interval": true,

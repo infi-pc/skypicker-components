@@ -21,12 +21,11 @@ class DatePickerModal {
   constructor(options) {
     this.options = options;
 
-    if (this.options.defaultValue) {
-      this.value = this.options.defaultValue;
+    if (!options.defaultValue) {
+      options.defaultValue = new SearchDate();
     }
-    //if (!this.value) {
-    //  this.value = new SearchDate();
-    //}
+    this.value = options.defaultValue;
+
     if (options.locale) {
       moment.locale(options.locale);
     }
@@ -74,8 +73,6 @@ class DatePickerModal {
     this.options.modes = modes;
   }
   _createComponent() {
-    //this.htmlElement = document.createElement('div');
-    //$("body").append(this.htmlElement);
 
     //TODO make it in plain javascript way and without id
     this.jqElement = $("<div class=\"datepicker-modal-container-element\"></div>");
@@ -105,12 +102,12 @@ class DatePickerModal {
     });
   }
   setValue(newValue) {
-    //this.value = newValue;
-    //if (!this.value) {
-    //  this.value = new SearchDate();
-    //}
+    this.value = newValue;
+    if (!this.value) {
+      this.value = new SearchDate();
+    }
     this.component.setProps({
-      value: newValue
+      value: this.value
     });
   }
 }

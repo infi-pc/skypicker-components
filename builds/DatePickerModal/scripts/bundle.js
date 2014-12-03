@@ -178,8 +178,8 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     return {
       value: null,
       calendarsNumber: 1,
-      selectionMode: "single",
-      onFinish: function () {}
+      selectionMode: "single"
+
     };
   },
 
@@ -202,31 +202,29 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     });
   },
 
-  setValue: function (value) {
-    this.props.onChange(value)
+  setValue: function (value, changeType) {
+    this.props.onChange(value, changeType)
   },
 
   onSelect: function (date) {
     if (this.props.selectionMode == "single") {
       //if single just select
-      this.setValue({mode: "single", from: date, to: date});
-      this.props.onFinish();
+      this.setValue({mode: "single", from: date, to: date},"select");
     } else if (this.props.selectionMode == "interval") {
       //if interval decide on mode
       if (!this.props.value.from) {
-        this.setValue({mode: "interval", from: date, to: null});
+        this.setValue({mode: "interval", from: date, to: null},"select");
       } else if (!this.props.value.to) {
         //if is before, just put start date again
         if (date < this.props.value.from) {
-          this.setValue({mode: "interval", from: date, to: null});
+          this.setValue({mode: "interval", from: date, to: null},"select");
         } else {
-          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date});
-          this.props.onFinish();
+          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date},"selectComplete");
         }
 
       } else {
         // if i have chosen both i start to pick new one
-        this.setValue({mode: "interval", from: date, to: null});
+        this.setValue({mode: "interval", from: date, to: null},"select");
       }
     }
   },
@@ -360,8 +358,8 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   getInitialState: function() {
     return {
-      viewDate: this.props.value.from || moment.utc(), //TODO decide if it will be here or in CalendarFrame
-      viewMode: this.props.value.mode
+      value: this.props.value ? this.props.value : new SearchDate(), //TODO decide if it will be here or in CalendarFrame
+      viewMode: this.props.value ? this.props.value.mode : "single"
     };
   },
 
@@ -394,15 +392,14 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
         case "timeToStay":
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
-          self.changeValue(newValue);
+          self.changeValue(newValue, "release"); // should by something like change mode, but it finishes value only after release so TODO make it smarter
           break;
 
         case "anytime":
         case "noReturn":
           newValue = new SearchDate(self.getValue());
           newValue.mode = mode;
-          self.changeValue(newValue);
-          self.finish();
+          self.changeValue(newValue, "select");
           break;
         default:
       }
@@ -412,10 +409,20 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     }
   },
 
-  changeValue: function (value) {
-    var newValue = new SearchDate(this.props.value);
-    newValue.mergeInto(value);
-    this.props.onChange(newValue);
+  changeValue: function (value,changeType) {
+    var newValue = new SearchDate(this.getValue());
+    if (value) {
+      newValue.mergeInto(value);
+    }
+    newValue.final = !!(this.props.modes[value.mode] && this.props.modes[value.mode].finishAfter == changeType);
+
+    console.log(value.mode);
+    console.log(this.props.modes);
+    console.log(changeType);
+    console.log(this.props.modes[value.mode].finishAfter);
+    console.log(newValue.final);
+
+    this.props.onChange(newValue,changeType);
   },
 
   getValue: function () {
@@ -427,11 +434,10 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
       mode: "month",
       from: moment.utc(date).startOf('month'),
       to: moment.utc(date).endOf('month')
-    });
+    },"select");
   },
 
   changeMinStayDays: function (value) {
-
     if (value > this.state.maxStayDays) {
       return;
     }
@@ -439,7 +445,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
       mode: "timeToStay",
       minStayDays: value,
       maxStayDays: this.getValue().maxStayDays
-    });
+    }, "select");
   },
 
   changeMaxStayDays: function (value) {
@@ -450,11 +456,16 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
       mode: "timeToStay",
       minStayDays: this.getValue().minStayDays,
       maxStayDays: value
-    });
+    }, "select");
   },
 
-  finish: function () {
-    this.props.hide();
+
+  releaseMinStayDays: function () {
+    // do not change value, but trigger it with different change type
+    this.changeValue(null, "release");
+  },
+  releaseMaxStayDays: function () {
+    this.changeValue(null, "release");
   },
   //setAnytime: function () {
   //  this.changeValue({
@@ -508,26 +519,26 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   renderSingle: function () {
     return (
-      React.createElement(CalendarFrame, {onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
+      React.createElement(CalendarFrame, {onChange: this.changeValue, value: this.getValue(), minValue: this.props.minValue, selectionMode: "single", calendarsNumber: 1})
     )
   },
   renderInterval: function () {
     return (
-      React.createElement(CalendarFrame, {onChange: this.changeValue, onFinish: this.finish, value: this.props.value, minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
+      React.createElement(CalendarFrame, {onChange: this.changeValue, value: this.getValue(), minValue: this.props.minValue, selectionMode: "interval", calendarsNumber: 3})
     )
   },
   renderMonth: function () {
-    return (React.createElement(MonthMatrix, {minValue: this.props.minValue, onFinish: this.finish, onSet: this.setMonth}));
+    return (React.createElement(MonthMatrix, {minValue: this.props.minValue, onSet: this.setMonth}));
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
     return (
       React.createElement("div", {className: "time-to-stay"}, 
         React.createElement("div", {className: "content-headline"}, headline), 
-        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
+        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onRelease: this.releaseMinStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
           React.createElement(Handle, null)
         ), 
-        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().maxStayDays, onChange: this.changeMaxStayDays, className: "slider sliderMax horizontal-slider"}, 
+        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().maxStayDays, onRelease: this.releaseMaxStayDays, onChange: this.changeMaxStayDays, className: "slider sliderMax horizontal-slider"}, 
           React.createElement(Handle, null)
         ), 
         React.createElement("div", {className: "slider-axe"})
@@ -586,7 +597,7 @@ var moment = (window.moment);
  * @param{Object} options.modesEnabled - example and default value is below
  * @param{string} options.locale - (cs,en,...)
  * ------- TODO @param{bool} options.hideOnElementClick - (default: false)
- * @param{function(SearchDate)} options.onChange
+ * @param{function(SearchDate)} options.onChange - callback on every change
  */
 
 /* responsibility: make simple plain js api */
@@ -594,12 +605,11 @@ var moment = (window.moment);
   function DatePickerModal(options) {"use strict";
     this.options = options;
 
-    if (this.options.defaultValue) {
-      this.value = this.options.defaultValue;
+    if (!options.defaultValue) {
+      options.defaultValue = new SearchDate();
     }
-    if (!this.value) {
-      this.value = new SearchDate();
-    }
+    this.value = options.defaultValue;
+
     if (options.locale) {
       moment.locale(options.locale);
     }
@@ -610,22 +620,28 @@ var moment = (window.moment);
   DatePickerModal.prototype.$DatePickerModal_loadModes=function() {"use strict";
     var defaultModes = {
       "single": {
-        closeAfterSelect: true
+        closeAfter: "select", // select
+        finishAfter: "select" // select
       },
       "interval": {
-        closeAfterSelect: true
+        closeAfter: "selectComplete", // select
+        finishAfter: "selectComplete" // selectComplete | select
       },
       "month": {
-        closeAfterSelect: true
+        closeAfter: "select", // select
+        finishAfter: "select" // select
       },
       "timeToStay": {
-        closeAfterSelect: true
+        closeAfter: "", //TODO on click "ok"
+        finishAfter: "release" // release | select
       },
       "anytime": {
-        closeAfterSelect: true
+        closeAfter: "select", // select
+        finishAfter: "select" // select
       },
       "noReturn": {
-        closeAfterSelect: true
+        closeAfter: "select", // select
+        finishAfter: "select" // select
       }
     };
     var modes = {};
@@ -641,8 +657,6 @@ var moment = (window.moment);
     this.options.modes = modes;
   };
   DatePickerModal.prototype.$DatePickerModal_createComponent=function() {"use strict";
-    //this.htmlElement = document.createElement('div');
-    //$("body").append(this.htmlElement);
 
     //TODO make it in plain javascript way and without id
     this.jqElement = $("<div class=\"datepicker-modal-container-element\"></div>");
@@ -721,6 +735,14 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
     //}
     this.hide();
   },
+
+  onChange: function (value, changeType) {
+    if (this.props.modes[value.mode] && this.props.modes[value.mode].closeAfter == changeType) {
+      this.hide();
+    }
+    this.props.onChange(value, changeType);
+  },
+
   componentDidMount: function() {
     document.addEventListener("click", this.clickOutside, false);
   },
@@ -753,11 +775,11 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
           weekOffset: 1, 
           value: this.props.value, 
           minValue: this.props.minValue, 
-          onChange: this.props.onChange, 
+          onChange: this.onChange, 
           leftOffset: position.left, 
           maxWidth: pageWidth, 
           modes: this.props.modes, 
-          hide: this.hide//TODO rename hide -> finish, DatePicker shouldn't know about something modal
+          hide: this.hide//TODO reamove
         })
       )
     );
@@ -781,7 +803,6 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
     var that = this;
     return function () {
       that.props.onSet(month);
-      that.props.onFinish();
     }
   },
   render: function() {
@@ -840,6 +861,7 @@ module.exports = MonthMatrix;
       step: React.PropTypes.number,
       orientation: React.PropTypes.oneOf(['horizontal', 'vertical']),
       onChange: React.PropTypes.func,
+      onRelease: React.PropTypes.func,
       valuePropName: React.PropTypes.string
     },
 
@@ -929,6 +951,7 @@ module.exports = MonthMatrix;
     _dragEnd: function() {
       document.removeEventListener('mousemove', this._dragMove, false);
       document.removeEventListener('mouseup', this._dragEnd, false);
+      this.props.onRelease();
     },
 
     _touchMove: function(e) {
@@ -1025,6 +1048,7 @@ SearchDate = function (input) {
   this.to = plain.to || moment.utc();
   this.minStayDays = plain.minStayDays || 2;
   this.maxStayDays = plain.maxStayDays || 10;
+  this.final = true;
 };
 
 SearchDate.prototype.toUrlString = function() {
