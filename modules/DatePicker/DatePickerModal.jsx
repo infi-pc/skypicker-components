@@ -24,6 +24,9 @@ class DatePickerModal {
     if (!options.defaultValue) {
       options.defaultValue = new SearchDate();
     }
+    if (!options.onHide) {
+      options.onHide = function() {};
+    }
     this.value = options.defaultValue;
 
     if (options.locale) {
@@ -87,6 +90,7 @@ class DatePickerModal {
       value: this.value,
       minValue: this.options.minValue,
       onChange: this.options.onChange,
+      onHide: this.options.onHide,
       modes: this.options.modes
     });
 
@@ -97,9 +101,7 @@ class DatePickerModal {
     });
   }
   hide() {
-    this.component.setState({
-      shown: false
-    });
+    this.component.hide();
   }
   setValue(newValue) {
     this.value = newValue;

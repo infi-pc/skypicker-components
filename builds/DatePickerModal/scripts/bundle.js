@@ -602,6 +602,9 @@ var moment = (window.moment);
     if (!options.defaultValue) {
       options.defaultValue = new SearchDate();
     }
+    if (!options.onHide) {
+      options.onHide = function() {};
+    }
     this.value = options.defaultValue;
 
     if (options.locale) {
@@ -665,6 +668,7 @@ var moment = (window.moment);
       value: this.value,
       minValue: this.options.minValue,
       onChange: this.options.onChange,
+      onHide: this.options.onHide,
       modes: this.options.modes
     });
 
@@ -675,9 +679,7 @@ var moment = (window.moment);
     });
   };
   DatePickerModal.prototype.hide=function() {"use strict";
-    this.component.setState({
-      shown: false
-    });
+    this.component.hide();
   };
   DatePickerModal.prototype.setValue=function(newValue) {"use strict";
     this.value = newValue;
@@ -709,6 +711,7 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
     };
   },
   hide: function () {
+    this.props.onHide();
     this.setState({
       shown: false
     });

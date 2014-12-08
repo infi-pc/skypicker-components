@@ -13,6 +13,7 @@ var DatePickerModalComponent = React.createClass({
     };
   },
   hide: function () {
+    this.props.onHide();
     this.setState({
       shown: false
     });
