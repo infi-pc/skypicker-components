@@ -32,6 +32,14 @@ datePicker1 = new DatePickerModal({
     "anytime": true,
     "noReturn": true
   },
+  widths: {
+    single: 490,
+    interval: 907,
+    month: 550,
+    timeToStay: 550,
+    anytime: 550,
+    noReturn: 550
+  },
   minValue: moment().add(5,"days"),
   onChange: function(newDate) {
     $(element1).val(searchDateToString(newDate));

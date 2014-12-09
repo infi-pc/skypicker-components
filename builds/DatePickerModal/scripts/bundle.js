@@ -331,16 +331,6 @@ React.initializeTouchEvents(true);
 var moment = (window.moment);
 
 
-var widths = {
-  single: 454,
-  interval: 907,
-  month: 550,
-  timeToStay: 550,
-  anytime: 550,
-  noReturn: 550
-};
-
-
 var Handle = React.createClass({displayName: 'Handle',
   render: function() {
     return (
@@ -475,23 +465,27 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   calculateStyles: function (mode) {
     var styles;
-    if (this.props.leftOffset + widths[mode] < this.props.maxWidth) {
+    var widths = this.props.widths;
+    var offset = this.props.leftOffset;
+    var maxWidth = this.props.maxWidth;
+
+    if (offset + widths[mode] < maxWidth) {
       //KEEP IT
       styles = {
-        marginLeft: this.props.leftOffset,
+        marginLeft: offset,
         width: widths[mode]
       };
-    } else if (this.props.leftOffset + widths[mode] > this.props.maxWidth && widths[mode] < this.props.maxWidth) {
+    } else if (offset + widths[mode] > maxWidth && widths[mode] < maxWidth) {
       //MOVE IT
-      var missingSpace = this.props.leftOffset + widths[mode] - this.props.maxWidth;
+      var missingSpace = offset + widths[mode] - maxWidth;
       styles = {
-        marginLeft: this.props.leftOffset - missingSpace,
+        marginLeft: offset - missingSpace,
         width: widths[mode]
       };
     } else {
       //MAKE IT SMALLER
       styles = {
-        marginLeft: this.props.leftOffset,
+        marginLeft: offset,
         width: widths[mode]
       };
     }
@@ -611,9 +605,29 @@ var moment = (window.moment);
       moment.locale(options.locale);
     }
     this.$DatePickerModal_loadModes();
+    this.$DatePickerModal_mergeSizes();
     this.$DatePickerModal_createComponent();
   }
 
+  DatePickerModal.prototype.$DatePickerModal_mergeSizes=function() {"use strict";
+    /* default sizes are from whichairline */
+    var widths = {
+      single: 454,
+      interval: 907,
+      month: 550,
+      timeToStay: 550,
+      anytime: 550,
+      noReturn: 550
+    };
+    if (!this.options.widths) {
+      this.options.widths = {};
+    }
+    for (var widthName in widths) {
+      if (!this.options.widths[widthName]) {
+        this.options.widths[widthName] = widths[widthName];
+      }
+    }
+  };
   DatePickerModal.prototype.$DatePickerModal_loadModes=function() {"use strict";
     var defaultModes = {
       "single": {
@@ -669,7 +683,8 @@ var moment = (window.moment);
       minValue: this.options.minValue,
       onChange: this.options.onChange,
       onHide: this.options.onHide,
-      modes: this.options.modes
+      modes: this.options.modes,
+      widths: this.options.widths
     });
 
   };
@@ -776,7 +791,8 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
           leftOffset: position.left, 
           maxWidth: pageWidth, 
           modes: this.props.modes, 
-          hide: this.hide//TODO reamove
+          hide: this.hide, //TODO reamove
+          widths: this.props.widths
         })
       )
     );

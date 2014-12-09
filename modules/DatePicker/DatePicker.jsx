@@ -15,16 +15,6 @@ React.initializeTouchEvents(true);
 var moment = require('moment');
 
 
-var widths = {
-  single: 454,
-  interval: 907,
-  month: 550,
-  timeToStay: 550,
-  anytime: 550,
-  noReturn: 550
-};
-
-
 var Handle = React.createClass({
   render: function() {
     return (
@@ -159,23 +149,27 @@ var DatePicker = React.createClass({
 
   calculateStyles: function (mode) {
     var styles;
-    if (this.props.leftOffset + widths[mode] < this.props.maxWidth) {
+    var widths = this.props.widths;
+    var offset = this.props.leftOffset;
+    var maxWidth = this.props.maxWidth;
+
+    if (offset + widths[mode] < maxWidth) {
       //KEEP IT
       styles = {
-        marginLeft: this.props.leftOffset,
+        marginLeft: offset,
         width: widths[mode]
       };
-    } else if (this.props.leftOffset + widths[mode] > this.props.maxWidth && widths[mode] < this.props.maxWidth) {
+    } else if (offset + widths[mode] > maxWidth && widths[mode] < maxWidth) {
       //MOVE IT
-      var missingSpace = this.props.leftOffset + widths[mode] - this.props.maxWidth;
+      var missingSpace = offset + widths[mode] - maxWidth;
       styles = {
-        marginLeft: this.props.leftOffset - missingSpace,
+        marginLeft: offset - missingSpace,
         width: widths[mode]
       };
     } else {
       //MAKE IT SMALLER
       styles = {
-        marginLeft: this.props.leftOffset,
+        marginLeft: offset,
         width: widths[mode]
       };
     }

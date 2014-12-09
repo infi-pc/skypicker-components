@@ -33,9 +33,29 @@ class DatePickerModal {
       moment.locale(options.locale);
     }
     this._loadModes();
+    this._mergeSizes();
     this._createComponent();
   }
 
+  _mergeSizes() {
+    /* default sizes are from whichairline */
+    var widths = {
+      single: 454,
+      interval: 907,
+      month: 550,
+      timeToStay: 550,
+      anytime: 550,
+      noReturn: 550
+    };
+    if (!this.options.widths) {
+      this.options.widths = {};
+    }
+    for (var widthName in widths) {
+      if (!this.options.widths[widthName]) {
+        this.options.widths[widthName] = widths[widthName];
+      }
+    }
+  }
   _loadModes() {
     var defaultModes = {
       "single": {
@@ -91,7 +111,8 @@ class DatePickerModal {
       minValue: this.options.minValue,
       onChange: this.options.onChange,
       onHide: this.options.onHide,
-      modes: this.options.modes
+      modes: this.options.modes,
+      widths: this.options.widths
     });
 
   }

@@ -79,6 +79,7 @@ var DatePickerModalComponent = React.createClass({
           maxWidth={pageWidth}
           modes={this.props.modes}
           hide={this.hide} //TODO reamove
+          widths={this.props.widths}
         ></DatePicker>
       </div>
     );
