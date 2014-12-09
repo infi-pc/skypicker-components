@@ -48,12 +48,12 @@ var DatePicker = React.createClass({
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: tr("Specific"),
-      interval: tr("Interval"),
-      month: tr("Months"),
-      timeToStay: tr("Time to stay"),
-      anytime: tr("Anytime"),
-      noReturn: tr("No return")
+      single: tr("Specific","specific"),
+      interval: tr("Interval","interval"),
+      month: tr("Months","months"),
+      timeToStay: tr("Time to stay","time_to_stay"),
+      anytime: tr("Anytime","anytime"),
+      noReturn: tr("No return","no_return")
     };
     return modeLabels[mode];
   },
@@ -203,7 +203,7 @@ var DatePicker = React.createClass({
     return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} />);
   },
   renderTimeToStay: function () {
-    var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
+    var headline = tr("Stay time from %s to %s days.", "stay_time_from", [this.getValue().minStayDays, this.getValue().maxStayDays] );
     return (
       <div className="time-to-stay">
         <div className="content-headline">{headline}</div>

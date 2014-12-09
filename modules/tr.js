@@ -1,29 +1,25 @@
 
 /* simple function to translate plain texts */
-/* to get text which are not translated on current page, take console.log(window.toTranslate) */
 
-var tr = function (original) {
-  var translates = window.globalTranslates;
+var setupDoc = {
+  "getTranslations": "to get text which are not translated on current page, take console.log(window.toTranslate)",
+  "setupStrategy": "it is necessary set strategy in root of bundle"
+};
+
+var strategy = null;
 
 
-  if (translates && translates[original]) {
-    translated = translates[original]
-  } else {
-    if (!window.toTranslate) {
-      window.toTranslate = {};
-    }
-    window.toTranslate[original] = original;
-    translated = original;
+
+var tr = function (original, key, values) {
+  if (!strategy) {
+    console.error("Translation strategy is not set\n "+setupDoc["setupStrategy"]);
+    return original;
   }
+  return strategy(original, key, values);
+};
 
-  if (arguments.length > 1) {
-    for (var i = 1, j = arguments.length; i < j; i++){
-      translated = translated.replace("%s",arguments[i])
-    }
-  }
-
-
-  return translated;
+tr.setStrategy = function (newStrategy) {
+  strategy = newStrategy;
 };
 
 module.exports = tr;
