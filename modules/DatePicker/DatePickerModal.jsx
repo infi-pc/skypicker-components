@@ -27,6 +27,9 @@ class DatePickerModal {
     if (!options.onHide) {
       options.onHide = function() {};
     }
+    if (!options.appendToElement) {
+      options.appendToElement = document.body;
+    }
     this.value = options.defaultValue;
 
     if (options.locale) {
@@ -97,10 +100,10 @@ class DatePickerModal {
   }
   _createComponent() {
 
-    //TODO make it in plain javascript way and without id
-    this.jqElement = $("<div class=\"datepicker-modal-container-element\"></div>");
-    $("body").append(this.jqElement);
-    this.htmlElement = this.jqElement.get()[0];
+    var div = document.createElement('div');
+    div.setAttribute('class', 'datepicker-modal-container-element');
+    this.options.appendToElement.appendChild(div);
+    this.htmlElement = div;
 
     var root = React.createFactory(DatePickerModalComponent);
 
