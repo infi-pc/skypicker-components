@@ -1,5 +1,5 @@
 
-/* simple function to translate plain texts */
+/* adapter to translate by one of chosen strategy */
 
 var setupDoc = {
   "getTranslations": "to get text which are not translated on current page, take console.log(window.toTranslate)",
