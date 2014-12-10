@@ -279,7 +279,18 @@ $modeSelectorWidth = 170px
       padding-bottom: 100px;
       overflow hidden
       .next, .prev
-        display none
+        position: absolute;
+        border: $borderColor solid 1px
+        height: 30px;
+        width: 30px;
+        top: 0px;
+        margin-top: 20px;
+
+      .next
+        right: 50px;
+
+      .prev
+        right: 10px;
       > div
         overflow-y auto
         overflow-x hidden
