@@ -65,7 +65,26 @@ var Calendar = React.createClass({
 
     return days;
   },
-
+  splitToWeeks: function (days) {
+    var weeks = [];
+    var actualWeek = [];
+    for (var i = 0; i<days.length; i++) {
+      if (i%7 == 0 && i != 0) {
+        weeks.push(actualWeek);
+        actualWeek = [];
+      }
+      actualWeek.push(days[i])
+    }
+    weeks.push(actualWeek);
+    return weeks;
+  },
+  renderWeek: function (week) {
+    return (
+      <div className="week">
+        {week.map(this.renderDay)}
+      </div>
+    )
+  },
   renderDay: function(day) {
     return this.props.getDay(day.date, day.otherMonth);
   },
@@ -73,6 +92,7 @@ var Calendar = React.createClass({
     return <div key={dayName} className="day-name"><span>{ dayName }</span></div>;
   },
   render: function() {
+    var weeks = this.splitToWeeks(this.days());
     return (
       <div className='clndr'>
         <div className='clndr-month'>
@@ -83,7 +103,7 @@ var Calendar = React.createClass({
             {this.dayNames().map(this.renderDayName)}
           </div>
           <div className='days'>
-            {this.days().map(this.renderDay)}
+            {weeks.map(this.renderWeek)}
           </div>
           <div className='clear-both'></div>
         </div>

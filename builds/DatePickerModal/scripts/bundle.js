@@ -1,10 +1,19 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
+
+
+var modulesDir = "./../../modules/";
+
+translationStrategy = require('./../../modules/translationStrategies/waTr.js');
+
+var tr = require('./../../modules/tr.js');
+tr.setStrategy(translationStrategy);
+
 window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
 window.SearchDate = require('./../../modules/containers/SearchDate.js');
 
 
-
-},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":11}],2:[function(require,module,exports){
+},{"./../../modules/DatePicker/DatePickerModal.jsx":6,"./../../modules/containers/SearchDate.js":11,"./../../modules/tr.js":13,"./../../modules/translationStrategies/waTr.js":14}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
@@ -72,7 +81,26 @@ var Calendar = React.createClass({displayName: 'Calendar',
 
     return days;
   },
-
+  splitToWeeks: function (days) {
+    var weeks = [];
+    var actualWeek = [];
+    for (var i = 0; i<days.length; i++) {
+      if (i%7 == 0 && i != 0) {
+        weeks.push(actualWeek);
+        actualWeek = [];
+      }
+      actualWeek.push(days[i])
+    }
+    weeks.push(actualWeek);
+    return weeks;
+  },
+  renderWeek: function (week) {
+    return (
+      React.createElement("div", {className: "week"}, 
+        week.map(this.renderDay)
+      )
+    )
+  },
   renderDay: function(day) {
     return this.props.getDay(day.date, day.otherMonth);
   },
@@ -80,6 +108,7 @@ var Calendar = React.createClass({displayName: 'Calendar',
     return React.createElement("div", {key: dayName, className: "day-name"}, React.createElement("span", null, dayName ));
   },
   render: function() {
+    var weeks = this.splitToWeeks(this.days());
     return (
       React.createElement("div", {className: "clndr"}, 
         React.createElement("div", {className: "clndr-month"}, 
@@ -90,7 +119,7 @@ var Calendar = React.createClass({displayName: 'Calendar',
             this.dayNames().map(this.renderDayName)
           ), 
           React.createElement("div", {className: "days"}, 
-            this.days().map(this.renderDay)
+            weeks.map(this.renderWeek)
           ), 
           React.createElement("div", {className: "clear-both"})
         )
@@ -364,12 +393,12 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
   getModeLabel: function (mode) {
     var modeLabels = {
-      single: tr("Specific"),
-      interval: tr("Interval"),
-      month: tr("Months"),
-      timeToStay: tr("Time to stay"),
-      anytime: tr("Anytime"),
-      noReturn: tr("No return")
+      single: tr("Specific","specific"),
+      interval: tr("Interval","interval"),
+      month: tr("Months","months"),
+      timeToStay: tr("Time to stay","time_to_stay"),
+      anytime: tr("Anytime","anytime"),
+      noReturn: tr("No return","no_return")
     };
     return modeLabels[mode];
   },
@@ -519,7 +548,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     return (React.createElement(MonthMatrix, {minValue: this.props.minValue, onSet: this.setMonth}));
   },
   renderTimeToStay: function () {
-    var headline = tr("Stay time from %s to %s days.", this.getValue().minStayDays, this.getValue().maxStayDays);
+    var headline = tr("Stay time from %s to %s days.", "stay_time_from", [this.getValue().minStayDays, this.getValue().maxStayDays] );
     return (
       React.createElement("div", {className: "time-to-stay"}, 
         React.createElement("div", {className: "content-headline"}, headline), 
@@ -1033,9 +1062,10 @@ var tr = require('./tr.js');
 var Tran = React.createClass({displayName: 'Tran',
   render: function() {
     var original = this.props.children;
+    var key = this.props.key;
     return (
       React.createElement("span", null, 
-				 tr(original) 
+				 tr(original,key) 
       )
     );
   }
@@ -1049,6 +1079,8 @@ var moment = (window.moment);
 var urlDateFormat = "YYYY-MM-DD";
 
 /*
+class SearchDate
+it has state for all modes, bude for
   constructor
   input = plain object or string or just another SearchDate object
  */
@@ -1067,6 +1099,65 @@ SearchDate = function (input) {
   this.final = true;
 };
 
+/* sets mode with checking some internal validity */
+/* but probably valitity should be handled by getters, because it is nice to have internal state for others modes than enabled */
+
+//SearchDate.prototype.setMode = function(mode) {
+//  var previousMode = this.mode;
+//  if (mode == "single") {
+//    this.to = this.from;
+//  } else if (mode == "anytime") {
+//    this.from = moment.utc().add(1, "days");
+//    this.to = moment.utc().add(6, "months");
+//  }
+//  this.mode = mode;
+//};
+
+
+
+SearchDate.prototype.getMode = function(mode) {
+  return this.mode
+};
+
+SearchDate.prototype.getFrom = function(mode) {
+  if (this.mode == "timeToStay" || this.mode == "noReturn") {
+    return null;
+  } else if (this.mode == "anytime") {
+    return moment.utc().add(1,"days");
+  } else {
+    return this.from
+  }
+};
+
+SearchDate.prototype.getTo = function(mode) {
+  if (this.mode == "timeToStay" || this.mode == "noReturn") {
+    return null;
+  } else if (this.mode == "single") {
+    return this.from
+  } else if (this.mode == "anytime") {
+    return moment.utc().add(6,"months");
+  } else {
+    return this.to
+  }
+};
+
+SearchDate.prototype.getMinStayDays = function(mode) {
+  if (this.mode == "timeToStay") {
+    return this.minStayDays;
+  } else {
+    return null;
+  }
+};
+
+SearchDate.prototype.getMaxStayDays = function(mode) {
+  if (this.mode == "timeToStay") {
+    return this.maxStayDays;
+  } else {
+    return null;
+  }
+};
+
+/* wa url */
 SearchDate.prototype.toUrlString = function() {
   return this.mode + "_" + this.from.format(urlDateFormat) + "_" + this.to.format(urlDateFormat);
 };
@@ -1141,12 +1232,35 @@ module.exports = isIE;
 
 },{}],13:[function(require,module,exports){
 
-/* simple function to translate plain texts */
-/* to get text which are not translated on current page, take console.log(window.toTranslate) */
+/* adapter to translate by one of chosen strategy */
 
-var tr = function (original) {
+var setupDoc = {
+  "getTranslations": "to get text which are not translated on current page, take console.log(window.toTranslate)",
+  "setupStrategy": "it is necessary set strategy in root of bundle"
+};
+
+var strategy = null;
+
+
+
+var tr = function (original, key, values) {
+  if (!strategy) {
+    console.error("Translation strategy is not set\n "+setupDoc["setupStrategy"]);
+    return original;
+  }
+  return strategy(original, key, values);
+};
+
+tr.setStrategy = function (newStrategy) {
+  strategy = newStrategy;
+};
+
+module.exports = tr;
+
+},{}],14:[function(require,module,exports){
+
+var tr = function (original,key,values) {
   var translates = window.globalTranslates;
-
 
   if (translates && translates[original]) {
     translated = translates[original]
@@ -1158,13 +1272,11 @@ var tr = function (original) {
     translated = original;
   }
 
-  if (arguments.length > 1) {
-    for (var i = 1, j = arguments.length; i < j; i++){
-      translated = translated.replace("%s",arguments[i])
+  if (values && values.length > 0) {
+    for (var i = 0, j = values.length; i < j; i++){
+      translated = translated.replace("%s",values[i])
     }
   }
-
-
   return translated;
 };
 

@@ -1,0 +1,299 @@
+$mainColor = #2D75CD
+$hoverColor = #6FA6E8
+$borderColor = #cccccc
+
+$calendarWidth= 224px //must be dividable by 7
+$height = 285px
+$modeSelectorWidth = 170px
+
+.wa-date-picker-modal
+  position: absolute
+  top: 0px
+  left: 0px
+  width: 100%
+  padding 0px
+  margin 0px
+  padding-top 0px
+  font-family sans-serif
+
+.wa-date-picker
+  color: #666;
+  overflow: hidden;
+  background-color #fff
+  z-index: 65 /*minimum 64 because of shadow above search form */
+  box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.75);
+  height: $height
+  position relative
+  transition: width 0.5s, margin-left 0.3s
+  & *
+    box-sizing border-box
+
+  .mode-selector
+    font-weight bold
+    width: $modeSelectorWidth
+    height: 100%
+    border-right: $borderColor solid 1px
+    &>div
+      cursor: pointer
+      width: 100%
+      padding: 10px
+      border-bottom: $borderColor solid 1px
+      &:hover
+        color: #FFFFFF
+        background-color: $hoverColor
+      &.active
+        color: #FFFFFF
+        background-color: $mainColor
+
+  .content
+    padding: 6px
+    padding-bottom: 25px;
+    float: left;
+    height: 100%
+    width: 800px
+    position absolute
+    top: 0px
+    left: $modeSelectorWidth
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    -o-user-select: none
+    user-select: none
+    .content-headline
+      font-weight bold
+      font-size 18px
+      margin-top: 5px
+      margin-bottom 10px
+    .calendar-view
+      float: left
+      margin-right: 6px
+      &.main-calendar-view
+        margin-left: 6px
+
+    .prev, .next
+      color: #FFFFFF
+      width: 20px
+      margin-top: 66px;
+      height: 180px;
+      line-height 180px;
+      float: left
+      cursor pointer
+      &:hover
+        background-color #FDFFE4
+      div
+        vertical-align: middle;
+        display inline-block
+        width: 15px
+        height: 68px
+        margin-left: 3px;
+        margin-top: -6px;
+
+    .prev
+      margin-right: 5px;
+    .prev div
+      background: url("../../images/general/calendar-prev.png") no-repeat
+    .next div
+      background: url("../../images/general/calendar-next.png") no-repeat
+
+  .clear-both {
+    clear: both;
+  }
+
+.month-matrix
+  width: 370px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 13px
+  .months
+    border: 1px solid #CCC;
+  .months:after  /* clearfix */
+    content:"";
+    display:table;
+    clear:both;
+
+
+  .month-option
+    cursor pointer
+    margin: 0
+    width: 33.3%;
+    height: 60px;
+    float: left
+    background-color: #FFF;
+    color: #666;
+    line-height: 1em;
+    /*box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.55);*/
+    text-align center
+    &:hover
+      color: #FFFFFF
+      background-color $hoverColor
+    .month-name
+    .month-year
+      font-weight bold
+      display inline-block
+    .month-year
+      font-size 12px
+      padding-top 3px
+    .month-name
+      padding-top 15px
+
+.clndr
+
+  margin: 0 auto;
+  .clndr-month
+    font-size 19px
+    width: 100%
+    height: 44px;
+    padding-left 7px
+    padding-top 15px
+    color: #595C5E
+    font-weight bold
+
+  .clndr-grid
+    width: $calendarWidth;
+    box-sizing: content-box;
+    text-align: center
+    background: yellow
+    border: solid 1px $borderColor;
+    white-space nowrap
+    .day-names  div, .days .week div
+      display: inline-block;
+      width: 14.2857142857%;
+      background: #fff;
+
+    .day-names
+      background-color $mainColor
+      > div
+        font-size 12px
+        height: 22px
+        color: #FFFFFF
+        font-weight bold
+        line-height: 17px;
+        background-color $mainColor
+        span
+          line-height 1em
+          vertical-align bottom
+
+    .days > .week > div
+      cursor: pointer
+      height: 30px;
+      line-height: 30px;
+      &.other
+        color: #b0b0b0;
+
+      &.disabled
+        cursor: default
+
+      &.prev-month, &.next-month, &.disabled
+        color: #DFDFDF;
+
+      &.selected
+        background-color $mainColor
+        color: #FFFFFF
+
+      &:active
+        color: #FFFFFF
+        background-color $hoverColor
+
+      &.over
+        color: #FFFFFF
+        background-color $hoverColor
+        &.selected
+          background-color $mainColor
+
+      &.prev-month.selected
+      &.next-month.selected
+        color: #DFDFDF;
+        background-color: #E8F2FF
+      &.prev-month.over
+      &.next-month.over
+      &.disabled.over
+      &.disabled.selected
+        color: #DFDFDF;
+        background-color: #E8F2FF;
+
+.time-to-stay
+  padding 25px
+  padding-top 13px
+  min-height: 230px
+  .slider
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
+    width: 320px;
+    height: 25px;
+    &.sliderMax
+      margin-top: -25px
+    .handle
+      text-align: center;
+      background-color: #FFFFFF;
+      cursor: pointer;
+      box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.75);
+      position: relative;
+      top: 1px;
+      width: 30px;
+      line-height: 23px;
+  .slider-axe
+    height: 3px
+    background-color #E7E7E7
+    width: 320px
+    margin-top -13px
+    border-radius: 3px;
+
+
+@media(max-width:699px)
+  .wa-date-picker-modal
+    top: 0px !important /* all importants are here because it is rewriting javascript generated inline style */
+    height: 100%
+    z-index: 10000
+
+  .wa-date-picker
+    margin-left: 0px !important
+    width: 100% !important
+    height: 100% !important
+    box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75), 0px 0px 100px 30px rgba(50, 50, 50, 0.1);
+
+    .mode-selector
+      z-index: 10002
+      margin: 4px
+      border: none
+      height: initial;
+      width: 100%;
+      &>div
+        margin: 3px
+        padding: 10px;
+        display: inline-block;
+        width: initial
+        border: $borderColor solid 1px
+
+    .content
+      z-index: 10001
+      position: absolute;
+      top: initial;
+      left: initial;
+      height 100%
+      width: 100%;
+      box-sizing border-box
+      padding-bottom: 100px;
+      overflow hidden
+      .next, .prev
+        display none
+      > div
+        overflow-y auto
+        overflow-x hidden
+        height 100%
+        .calendar-view
+          width: 100%
+          .clndr
+            .clndr-grid
+              width: 100%
+
+    .month-matrix
+      width: 100%
+      padding-left: 2px;
+      padding-right: 2px;
+      .month-option
+        width: 33.3%
+        margin: 0px
