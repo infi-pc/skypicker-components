@@ -33,17 +33,27 @@
       };
     },
 
+    componentDidMount: function() {
+      this.setState({
+        mounted: true
+      })
+    },
+
     getInitialState: function() {
       return {
-        lowerBound: 0,
-        upperBound: 0,
-        handleWidth: 0,
-        sliderMin: 0,
-        sliderMax: 0
+        mounted: false
       };
     },
 
-    componentDidMount: function() {
+    getPositions: function () {
+      if (!this.state.mounted) {
+        return {
+          upperBound: 0,
+          handleWidth: 0,
+          sliderMin: 0,
+          sliderMax: 0
+        };
+      }
       var slider = this.refs.slider.getDOMNode();
       var handle = this.refs.handle.getDOMNode();
       var rect = slider.getBoundingClientRect();
@@ -59,18 +69,20 @@
       }[this.props.orientation];
       var upperBound = slider[size] - handle[size];
 
-
-      this.setState({
+      this.cachedPositions = {
         upperBound: upperBound,
         handleWidth: handle[size],
         sliderMin: rect[position.min],
         sliderMax: rect[position.max] - handle[size]
-      });
+      };
+      return this.cachedPositions;
     },
+
     getOffset: function () {
       var ratio = (this.props.value - this.props.minValue) / (this.props.maxValue - this.props.minValue);
-      return ratio * this.state.upperBound;
+      return ratio * this.getPositions().upperBound;
     },
+
     render: function() {
       var handleStyle = {
         transform: 'translate' + this._axis() + '(' + this.getOffset() + 'px)',
@@ -87,8 +99,6 @@
             userHandle
           )));
     },
-
-
 
     _onClick: function(e) {
       var position = e['page' + this._axis()];
@@ -121,16 +131,18 @@
     _moveHandle: function(position) {
 
       // make center of handle appear under the cursor position
-      position = position - (this.state.handleWidth / 2);
+      var positions = this.getPositions();
+      position = position - (positions.handleWidth / 2);
 
       var lastValue = this.props.value;
 
-      var ratio = (position - this.state.sliderMin) / (this.state.sliderMax - this.state.sliderMin);
+      var ratio = (position - positions.sliderMin) / (positions.sliderMax - positions.sliderMin);
       var value = ratio * (this.props.maxValue - this.props.minValue) + this.props.minValue;
 
       var nextValue = this._trimAlignValue(value);
 
       var changed = nextValue !== lastValue;
+
       if (changed && this.props.onChange) {
         this.props.onChange(nextValue);
       }
