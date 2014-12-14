@@ -16,6 +16,9 @@ $modeSelectorWidth = 170px
   padding-top 0px
   font-family sans-serif
 
+  .close-button
+    display none
+
 .wa-date-picker
   color: #666;
   overflow: hidden;
@@ -91,13 +94,16 @@ $modeSelectorWidth = 170px
     .prev
       margin-right: 5px;
     .prev div
-      background: url("../../images/general/calendar-prev.png") no-repeat
+      sprite($sprite-calendar-prev)
     .next div
-      background: url("../../images/general/calendar-next.png") no-repeat
+      sprite($sprite-calendar-next)
 
-  .clear-both {
-    clear: both;
-  }
+  .clear-both
+    clear: both
+
+
+
+
 
 .month-matrix
   width: 370px;
@@ -116,7 +122,7 @@ $modeSelectorWidth = 170px
     cursor pointer
     margin: 0
     width: 33.3%;
-    height: 60px;
+    height: 80px;
     float: left
     background-color: #FFF;
     color: #666;
@@ -134,7 +140,7 @@ $modeSelectorWidth = 170px
       font-size 12px
       padding-top 3px
     .month-name
-      padding-top 15px
+      padding-top 25px
 
 .clndr
 
@@ -144,6 +150,7 @@ $modeSelectorWidth = 170px
     width: 100%
     height: 44px;
     padding-left 7px
+    padding-right 7px
     padding-top 15px
     color: #595C5E
     font-weight bold
@@ -248,12 +255,22 @@ $modeSelectorWidth = 170px
     top: 0px !important /* all importants are here because it is rewriting javascript generated inline style */
     height: 100%
     z-index: 10000
-
+    padding: 15px;
+    box-sizing: border-box;
+    .close-button
+      display block
+      background-color: #000000
+      width: 30px
+      height: 30px
+      position absolute
+      top: 0px
+      right: 0px
+      z-index: 100
   .wa-date-picker
     margin-left: 0px !important
     width: 100% !important
     height: 100% !important
-    box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75), 0px 0px 100px 30px rgba(50, 50, 50, 0.1);
+    box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75), 0px 0px 100px 30px rgba(50, 50, 50, 0.25);
 
     .mode-selector
       z-index: 10002
@@ -280,17 +297,24 @@ $modeSelectorWidth = 170px
       overflow hidden
       .next, .prev
         position: absolute;
-        border: $borderColor solid 1px
+        /*border: $borderColor solid 1px*/
         height: 30px;
         width: 30px;
         top: 0px;
-        margin-top: 20px;
-
-      .next
-        right: 50px;
-
+        margin-top: 15px;
+        > div
+          display block;
+          margin-left: 7px;
+          margin-top: 3px;
       .prev
-        right: 10px;
+        left: 6px;
+        div
+          sprite($sprite-calendar-prev-small)
+      .next
+        right: 6px;
+        div
+          sprite($sprite-calendar-next-small)
+
       > div
         overflow-y auto
         overflow-x hidden
@@ -298,6 +322,8 @@ $modeSelectorWidth = 170px
         .calendar-view
           width: 100%
           .clndr
+            .clndr-month
+              text-align center
             .clndr-grid
               width: 100%
         .calendar-view-2,

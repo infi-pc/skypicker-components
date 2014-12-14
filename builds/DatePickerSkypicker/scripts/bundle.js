@@ -308,7 +308,18 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
         )
     );
   },
-
+  renderPrev: function () {
+    if (this.state.viewDate.subtract(1, 'months').format("YYYYMM") < moment.utc().format("YYYYMM"))
+      return (React.createElement("div", {className: "prev disabled"}, React.createElement("div", null)));
+    else
+      return (React.createElement("div", {className: "prev", onClick: this.prev}, React.createElement("div", null)));
+  },
+  renderNext: function () {
+    if (this.state.viewDate.add(1, 'months').format("YYYYMM") > moment.utc().add(6,'months').format("YYYYMM"))
+      return (React.createElement("div", {className: "next disabled"}, React.createElement("div", null)));
+    else
+      return (React.createElement("div", {className: "next", onClick: this.next}, React.createElement("div", null)));
+  },
   render: function () {
     var self = this;
     var calendarDates = [];
@@ -328,9 +339,9 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
     });
     return (
       React.createElement("div", null, 
-        React.createElement("div", {className: "prev", onClick: this.prev}, React.createElement("div", null)), 
+         this.renderPrev(), 
         calendars, 
-        React.createElement("div", {className: "next", onClick: this.next}, React.createElement("div", null)), 
+         this.renderNext(), 
         React.createElement("div", {className: "clear-both"})
       )
     )
@@ -467,7 +478,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
   },
 
   changeMinStayDays: function (value) {
-    if (value > this.state.maxStayDays) {
+    if (value > this.getValue().maxStayDays) {
       return;
     }
     this.changeValue({
@@ -478,7 +489,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
   },
 
   changeMaxStayDays: function (value) {
-    if (value < this.state.minStayDays) {
+    if (value < this.getValue().minStayDays) {
       return;
     }
     this.changeValue({
@@ -561,17 +572,17 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
     )
   },
   renderMonth: function () {
-    return (React.createElement(MonthMatrix, {minValue: this.props.minValue, onSet: this.setMonth}));
+    return (React.createElement(MonthMatrix, {minValue: this.props.minValue, onSet: this.setMonth, totalMonths: "6"}));
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", "stay_time_from", [this.getValue().minStayDays, this.getValue().maxStayDays] );
     return (
       React.createElement("div", {className: "time-to-stay"}, 
         React.createElement("div", {className: "content-headline"}, headline), 
-        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().minStayDays, onRelease: this.releaseMinStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
+        React.createElement(Slider, {step: 1, minValue: 0, maxValue: 31, value: this.getValue().minStayDays, onRelease: this.releaseMinStayDays, onChange: this.changeMinStayDays, className: "slider sliderMin horizontal-slider"}, 
           React.createElement(Handle, null)
         ), 
-        React.createElement(Slider, {step: 1, minValue: 1, maxValue: 31, value: this.getValue().maxStayDays, onRelease: this.releaseMaxStayDays, onChange: this.changeMaxStayDays, className: "slider sliderMax horizontal-slider"}, 
+        React.createElement(Slider, {step: 1, minValue: 0, maxValue: 31, value: this.getValue().maxStayDays, onRelease: this.releaseMaxStayDays, onChange: this.changeMaxStayDays, className: "slider sliderMax horizontal-slider"}, 
           React.createElement(Handle, null)
         ), 
         React.createElement("div", {className: "slider-axe"})
@@ -765,7 +776,7 @@ var DatePicker = require("./DatePicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
 var isIE = require('./../tools/isIE.js');
 var moment = (window.moment);
-
+var Tran = require('./../Tran.jsx');
 
 var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalComponent',
   getInitialState: function() {
@@ -830,6 +841,7 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
     }
     return (
       React.createElement("div", {className: "wa-date-picker-modal", style: styles}, 
+        React.createElement("div", {className: "close-button", onclick: this.hide}, React.createElement(Tran, {key: "close"}, "close")), 
         React.createElement(DatePicker, {
           ref: "datePicker", 
           weekOffset: 1, 
@@ -839,7 +851,7 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
           leftOffset: position.left, 
           maxWidth: pageWidth, 
           modes: this.props.modes, 
-          hide: this.hide, //TODO reamove
+          hide: this.hide, 
           widths: this.props.widths
         })
       )
@@ -851,7 +863,7 @@ module.exports = DatePickerModalComponent;
 
 
 
-},{"./../containers/SearchDate.js":12,"./../tools/isIE.js":13,"./DatePicker.jsx":6}],9:[function(require,module,exports){
+},{"./../Tran.jsx":11,"./../containers/SearchDate.js":12,"./../tools/isIE.js":13,"./DatePicker.jsx":6}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
@@ -861,16 +873,16 @@ var Tran = require('./../Tran.jsx');
 var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
   setMonth: function (month) {
-    var that = this;
+    var self = this;
     return function () {
-      that.props.onSet(month);
+      self.props.onSet(month);
     }
   },
   render: function() {
     var self = this;
     var months = [];
     var iMonth = moment.utc();
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < parseInt(self.props.totalMonths,10); i++) {
       months.push( moment.utc(iMonth) );
       iMonth.add(1, "months");
     }

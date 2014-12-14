@@ -4,7 +4,7 @@ var DatePicker = require("./DatePicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
 var isIE = require('./../tools/isIE.js');
 var moment = require('moment');
-
+var Tran = require('./../Tran.jsx');
 
 var DatePickerModalComponent = React.createClass({
   getInitialState: function() {
@@ -69,6 +69,7 @@ var DatePickerModalComponent = React.createClass({
     }
     return (
       <div  className="wa-date-picker-modal" style={styles} >
+        <div className="close-button" onclick={this.hide}><Tran key="close">close</Tran></div>
         <DatePicker
           ref="datePicker"
           weekOffset={1}
@@ -78,7 +79,7 @@ var DatePickerModalComponent = React.createClass({
           leftOffset={position.left}
           maxWidth={pageWidth}
           modes={this.props.modes}
-          hide={this.hide} //TODO reamove
+          hide={this.hide}
           widths={this.props.widths}
         ></DatePicker>
       </div>
