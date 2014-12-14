@@ -11,6 +11,8 @@ var browserify = require('browserify');
 var reactify = require('reactify');
 var connect = require('gulp-connect');
 var argv = require('yargs').argv;
+var karma = require('gulp-karma');
+var open = require("gulp-open");
 
 var globalShim = require('browserify-global-shim').configure({
   'moment': 'moment',
@@ -55,13 +57,13 @@ gulp.task('stylus', function () {
 
 
 gulp.task('browserify', function(){
-  browserifyfunc(false, 'builds/'+contextName+'/scripts');
+  browserifyfunc(false, './contexts/'+contextName+'/root.jsx', 'builds/'+contextName+'/scripts');
 });
 gulp.task('watchify', function () {
-  browserifyfunc(true, '.tmp/scripts');
+  browserifyfunc(true, './contexts/'+contextName+'/root.jsx', '.tmp/scripts');
 });
 
-function browserifyfunc(watch, dir){
+function browserifyfunc(watch, inputFile, outputDir){
   function rebundle (bundler) {
     return bundler.bundle()
       // Log errors if they happen.
@@ -69,20 +71,23 @@ function browserifyfunc(watch, dir){
         gutil.log('Browserify Error', e.message);
       })
       .pipe(source('bundle.js'))
-      .pipe(gulp.dest(dir))
+      .pipe(gulp.dest(outputDir))
       .pipe(connect.reload());
   }
 
   var b;
-  var path = './contexts/'+contextName+'/root.jsx';
   if (watch){
     //console.log(watchify.args);
-    b = watchify(browserify('./contexts/'+contextName+'/root.jsx', watchify.args));
+    var options = {};
+    for (var opt in watchify.args) { options[opt] = watchify.args[opt]; }
+    options.debug = true;
+
+    b = watchify(browserify(inputFile, options));
     b.on('update', function() {
       rebundle(b)
     });
   } else {
-    b = browserify(path, {
+    b = browserify(inputFile, {
       basedir: "."
     });
   }
@@ -95,15 +100,47 @@ function browserifyfunc(watch, dir){
 }
 
 
+gulp.task('browserifyTests', function() {
+  browserifyfunc(false, './tests/units/root.js', '.tmp/tests');
+});
 
-//gulp.task('deploy', function() {
-//  gulp.src('build/**')
-//    .pipe(rsync({
-//      root: './../..',
-//      hostname: 'alpha.whichairline.com',
-//      destination: '/var/www/Whichairline'
-//    }));
-//});
+gulp.task('watchifyTests', function() {
+  browserifyfunc(true, './tests/units/root.js', '.tmp/tests');
+});
+
+/* use if you don't have webstorm */
+gulp.task('runKarma', function() {
+  var files = [
+    'shared/scripts/jquery-2.1.1.js',
+    'shared/scripts/react-0.12.1/build/react-with-addons.js',
+    'shared/scripts/moment-with-locales.js',
+    ".tmp/tests/bundle.js"
+  ];
+  gulp.src(files)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'watch'
+    }));
+});
+/* use if you don't have webstorm */
+gulp.task('openBrowser', function() {
+  var options = {
+    url: "http://localhost:9876/debug.html",
+    app: "chrome"
+  };
+  gulp.src("./just-file.html")
+    .pipe(open("", {
+      url: "http://localhost:9876",
+      app: "chrome"
+    }))
+    .pipe(open("", {
+      url: "http://localhost:9876/debug.html",
+      app: "chrome"
+    }));
+});
+
+
+gulp.task('test', ['watchifyTests']);
 
 gulp.task('serve', ['connect', 'stylus', 'watchify']);
 

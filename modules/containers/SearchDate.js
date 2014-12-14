@@ -39,11 +39,11 @@ SearchDate = function (input) {
 
 
 
-SearchDate.prototype.getMode = function(mode) {
+SearchDate.prototype.getMode = function() {
   return this.mode
 };
 
-SearchDate.prototype.getFrom = function(mode) {
+SearchDate.prototype.getFrom = function() {
   if (this.mode == "timeToStay" || this.mode == "noReturn") {
     return null;
   } else if (this.mode == "anytime") {
@@ -53,7 +53,7 @@ SearchDate.prototype.getFrom = function(mode) {
   }
 };
 
-SearchDate.prototype.getTo = function(mode) {
+SearchDate.prototype.getTo = function() {
   if (this.mode == "timeToStay" || this.mode == "noReturn") {
     return null;
   } else if (this.mode == "single") {
@@ -65,7 +65,15 @@ SearchDate.prototype.getTo = function(mode) {
   }
 };
 
-SearchDate.prototype.getMinStayDays = function(mode) {
+SearchDate.prototype.getDate = function() {
+  if (this.mode == "single") {
+    return this.from
+  } else {
+    return null
+  }
+};
+
+SearchDate.prototype.getMinStayDays = function() {
   if (this.mode == "timeToStay") {
     return this.minStayDays;
   } else {
@@ -73,7 +81,7 @@ SearchDate.prototype.getMinStayDays = function(mode) {
   }
 };
 
-SearchDate.prototype.getMaxStayDays = function(mode) {
+SearchDate.prototype.getMaxStayDays = function() {
   if (this.mode == "timeToStay") {
     return this.maxStayDays;
   } else {
