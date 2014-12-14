@@ -7,16 +7,16 @@ var Tran = require('./../Tran.jsx');
 var MonthMatrix = React.createClass({
 
   setMonth: function (month) {
-    var that = this;
+    var self = this;
     return function () {
-      that.props.onSet(month);
+      self.props.onSet(month);
     }
   },
   render: function() {
     var self = this;
     var months = [];
     var iMonth = moment.utc();
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < parseInt(self.props.totalMonths,10); i++) {
       months.push( moment.utc(iMonth) );
       iMonth.add(1, "months");
     }

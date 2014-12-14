@@ -123,7 +123,18 @@ var CalendarFrame = React.createClass({
         />
     );
   },
-
+  renderPrev: function () {
+    if (this.state.viewDate.subtract(1, 'months').format("YYYYMM") < moment.utc().format("YYYYMM"))
+      return (<div className="prev disabled"><div></div></div>);
+    else
+      return (<div className="prev" onClick={this.prev}><div></div></div>);
+  },
+  renderNext: function () {
+    if (this.state.viewDate.add(1, 'months').format("YYYYMM") > moment.utc().add(6,'months').format("YYYYMM"))
+      return (<div className="next disabled"><div></div></div>);
+    else
+      return (<div className="next" onClick={this.next}><div></div></div>);
+  },
   render: function () {
     var self = this;
     var calendarDates = [];
@@ -143,9 +154,9 @@ var CalendarFrame = React.createClass({
     });
     return (
       <div>
-        <div className="prev" onClick={this.prev}><div></div></div>
+        { this.renderPrev() }
         { calendars }
-        <div className="next" onClick={this.next}><div></div></div>
+        { this.renderNext() }
         <div className='clear-both'></div>
       </ div>
     )

@@ -200,7 +200,7 @@ var DatePicker = React.createClass({
     )
   },
   renderMonth: function () {
-    return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} />);
+    return (<MonthMatrix minValue={this.props.minValue} onSet={this.setMonth} totalMonths="6" />);
   },
   renderTimeToStay: function () {
     var headline = tr("Stay time from %s to %s days.", "stay_time_from", [this.getValue().minStayDays, this.getValue().maxStayDays] );
