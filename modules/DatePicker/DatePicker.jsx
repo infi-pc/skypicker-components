@@ -106,7 +106,7 @@ var DatePicker = React.createClass({
   },
 
   changeMinStayDays: function (value) {
-    if (value > this.state.maxStayDays) {
+    if (value > this.getValue().maxStayDays) {
       return;
     }
     this.changeValue({
@@ -117,7 +117,7 @@ var DatePicker = React.createClass({
   },
 
   changeMaxStayDays: function (value) {
-    if (value < this.state.minStayDays) {
+    if (value < this.getValue().minStayDays) {
       return;
     }
     this.changeValue({
@@ -207,10 +207,10 @@ var DatePicker = React.createClass({
     return (
       <div className="time-to-stay">
         <div className="content-headline">{headline}</div>
-        <Slider step={1} minValue={1} maxValue={31} value={this.getValue().minStayDays} onRelease={this.releaseMinStayDays} onChange={this.changeMinStayDays} className="slider sliderMin horizontal-slider">
+        <Slider step={1} minValue={0} maxValue={31} value={this.getValue().minStayDays} onRelease={this.releaseMinStayDays} onChange={this.changeMinStayDays} className="slider sliderMin horizontal-slider">
           <Handle />
         </Slider>
-        <Slider step={1} minValue={1} maxValue={31} value={this.getValue().maxStayDays} onRelease={this.releaseMaxStayDays} onChange={this.changeMaxStayDays} className="slider sliderMax horizontal-slider">
+        <Slider step={1} minValue={0} maxValue={31} value={this.getValue().maxStayDays} onRelease={this.releaseMaxStayDays} onChange={this.changeMaxStayDays} className="slider sliderMax horizontal-slider">
           <Handle />
         </Slider>
         <div className="slider-axe"></div>
