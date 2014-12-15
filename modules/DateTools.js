@@ -1,3 +1,9 @@
+/*
+  Tools for manipulating with dates
+  some of them are duplicities to moment's functions, but they can be used as faster alternatives
+ */
+
+
 var pad = function(num, size) {
   var s = num + "";
   while (s.length < size) {
@@ -25,6 +31,11 @@ var DateTools = {
   formatWADate: function(date) {
     return date.getFullYear() + "-" + pad(date.getMonth() + 1, 2) + "-" + pad(date.getDate(), 2);
   }
+};
+
+
+DateTools.firstDayOfWeek = function() {
+  return moment.localeData()._week.dow;
 };
 
 module.exports = DateTools;

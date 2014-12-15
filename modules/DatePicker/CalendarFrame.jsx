@@ -5,6 +5,7 @@ var moment = require('moment');
 
 var CalendarDay = require("./CalendarDay.jsx");
 var Calendar = require("./../Calendar.jsx");
+var DateTools = require("./../DateTools.js");
 
 var CalendarFrame = React.createClass({
 
@@ -148,7 +149,7 @@ var CalendarFrame = React.createClass({
       j++;
       return (
         <div key={date.valueOf()} className={'calendar-view calendar-view-'+j}>
-          <Calendar date={date} getDay={self.getDay} />
+          <Calendar date={date} getDay={self.getDay} weekOffset={DateTools.firstDayOfWeek()} />
         </div>
       );
     });
