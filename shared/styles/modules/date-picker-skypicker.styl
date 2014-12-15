@@ -258,14 +258,21 @@ $modeSelectorWidth = 170px
     padding: 15px;
     box-sizing: border-box;
     .close-button
-      display block
-      background-color: #000000
-      width: 30px
-      height: 30px
-      position absolute
-      top: 0px
-      right: 0px
-      z-index: 100
+      display: block;
+      background-color: #FFF;
+      border: 1px solid #CCC;
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      margin: 6px;
+      padding: 10px;
+      font-weight: bold;
+      z-index: 100;
+      cursor: pointer
+      &:hover
+        color: #FFF;
+        background-color: #6FA6E8;
+
   .wa-date-picker
     margin-left: 0px !important
     width: 100% !important
@@ -286,6 +293,7 @@ $modeSelectorWidth = 170px
         border: $borderColor solid 1px
 
     .content
+      padding: 15px
       z-index: 10001
       position: absolute;
       top: initial;
@@ -337,3 +345,8 @@ $modeSelectorWidth = 170px
       .month-option
         width: 33.3%
         margin: 0px
+
+    .time-to-stay
+      padding: 0px;
+      .slider
+        width: 100%;

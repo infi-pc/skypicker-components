@@ -10,7 +10,7 @@ window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx
 window.SearchDate = require('./../../modules/containers/SearchDate.js');
 window.DatePairValidator = require('./../../modules/DatePicker/DatePairValidator.js');
 
-},{"./../../modules/DatePicker/DatePairValidator.js":5,"./../../modules/DatePicker/DatePickerModal.jsx":7,"./../../modules/containers/SearchDate.js":12,"./../../modules/tr.js":14,"./../../modules/translationStrategies/spTr.js":15}],2:[function(require,module,exports){
+},{"./../../modules/DatePicker/DatePairValidator.js":5,"./../../modules/DatePicker/DatePickerModal.jsx":7,"./../../modules/containers/SearchDate.js":13,"./../../modules/tr.js":15,"./../../modules/translationStrategies/spTr.js":16}],2:[function(require,module,exports){
 /** @jsx React.DOM */
 
 /* part is from https://github.com/Hanse/react-calendar/blob/master/src/calendar.js */
@@ -190,6 +190,7 @@ var moment = (window.moment);
 
 var CalendarDay = require("./CalendarDay.jsx");
 var Calendar = require("./../Calendar.jsx");
+var DateTools = require("./../DateTools.js");
 
 var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
 
@@ -333,7 +334,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
       j++;
       return (
         React.createElement("div", {key: date.valueOf(), className: 'calendar-view calendar-view-'+j}, 
-          React.createElement(Calendar, {date: date, getDay: self.getDay})
+          React.createElement(Calendar, {date: date, getDay: self.getDay, weekOffset: DateTools.firstDayOfWeek()})
         )
       );
     });
@@ -350,7 +351,7 @@ var CalendarFrame = React.createClass({displayName: 'CalendarFrame',
 
 module.exports = CalendarFrame;
 
-},{"./../Calendar.jsx":2,"./CalendarDay.jsx":3}],5:[function(require,module,exports){
+},{"./../Calendar.jsx":2,"./../DateTools.js":11,"./CalendarDay.jsx":3}],5:[function(require,module,exports){
 
 exports.validate = function(outbound, inbound) {
   if (!outbound) {
@@ -625,7 +626,7 @@ var DatePicker = React.createClass({displayName: 'DatePicker',
 
 module.exports = DatePicker;
 
-},{"./../containers/SearchDate.js":12,"./../tools/isIE.js":13,"./../tr.js":14,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":9,"./Slider.js":10}],7:[function(require,module,exports){
+},{"./../containers/SearchDate.js":13,"./../tools/isIE.js":14,"./../tr.js":15,"./CalendarFrame.jsx":4,"./MonthMatrix.jsx":9,"./Slider.js":10}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var DatePickerModalComponent = require("./DatePickerModalComponent.jsx");
@@ -769,7 +770,7 @@ var moment = (window.moment);
 module.exports = DatePickerModal;
 
 
-},{"./../containers/SearchDate.js":12,"./DatePickerModalComponent.jsx":8}],8:[function(require,module,exports){
+},{"./../containers/SearchDate.js":13,"./DatePickerModalComponent.jsx":8}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var DatePicker = require("./DatePicker.jsx");
@@ -863,7 +864,7 @@ module.exports = DatePickerModalComponent;
 
 
 
-},{"./../Tran.jsx":11,"./../containers/SearchDate.js":12,"./../tools/isIE.js":13,"./DatePicker.jsx":6}],9:[function(require,module,exports){
+},{"./../Tran.jsx":12,"./../containers/SearchDate.js":13,"./../tools/isIE.js":14,"./DatePicker.jsx":6}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
@@ -913,7 +914,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
 module.exports = MonthMatrix;
 
-},{"./../Tran.jsx":11}],10:[function(require,module,exports){
+},{"./../Tran.jsx":12}],10:[function(require,module,exports){
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['react'], factory);
@@ -1092,6 +1093,49 @@ module.exports = MonthMatrix;
 }));
 
 },{}],11:[function(require,module,exports){
+/*
+  Tools for manipulating with dates
+  some of them are duplicities to moment's functions, but they can be used as faster alternatives
+ */
+
+
+var pad = function(num, size) {
+  var s = num + "";
+  while (s.length < size) {
+    s = "0" + s;
+  }
+  return s;
+};
+
+var DateTools = {
+  today: function() {
+    return new Date();
+  },
+  inHalfAnYear: function() {
+    return new Date((new Date()).setMonth(new Date().getMonth() + 6));
+  },
+  firstDay: function(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  },
+  lastDay: function(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  },
+  formatSPApiDate: function(date) {
+    return pad(date.getDate(), 2) + "/" + pad(date.getMonth() + 1, 2) + "/" + date.getFullYear();
+  },
+  formatWADate: function(date) {
+    return date.getFullYear() + "-" + pad(date.getMonth() + 1, 2) + "-" + pad(date.getDate(), 2);
+  }
+};
+
+
+DateTools.firstDayOfWeek = function() {
+  return moment.localeData()._week.dow;
+};
+
+module.exports = DateTools;
+
+},{}],12:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var React = (window.React);
@@ -1113,7 +1157,7 @@ var Tran = React.createClass({displayName: 'Tran',
 
 module.exports = Tran;
 
-},{"./tr.js":14}],12:[function(require,module,exports){
+},{"./tr.js":15}],13:[function(require,module,exports){
 var moment = (window.moment);
 
 var urlDateFormat = "YYYY-MM-DD";
@@ -1241,7 +1285,7 @@ SearchDate.prototype.mergeInto = function(newValues){
 
 module.exports = SearchDate;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 //EnhanceJS isIE test idea
 
 //detect IE and version number through injected conditional comments (no UA detect, no need for cond. compilation / jscript check)
@@ -1278,7 +1322,7 @@ function isIE(version, comparison) {
 
 module.exports = isIE;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 
 /* adapter to translate by one of chosen strategy */
 
@@ -1305,7 +1349,7 @@ tr.setStrategy = function (newStrategy) {
 
 module.exports = tr;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var tr = function (original,key,values) {
   if (!key) {
     key = original.toLowerCase().trim().replace(" ", "_");
