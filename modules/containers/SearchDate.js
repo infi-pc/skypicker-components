@@ -18,8 +18,8 @@ SearchDate = function (input) {
   this.mode = plain.mode || "single";
   this.from = plain.from || moment.utc();
   this.to = plain.to || moment.utc();
-  this.minStayDays = plain.minStayDays || 2;
-  this.maxStayDays = plain.maxStayDays || 10;
+  this.minStayDays = typeof(plain.minStayDays) != 'undefined'? plain.minStayDays : 2;
+  this.maxStayDays = typeof(plain.maxStayDays) != 'undefined'? plain.maxStayDays : 10;
   this.final = true;
 };
 
