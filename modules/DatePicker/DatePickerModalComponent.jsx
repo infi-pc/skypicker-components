@@ -69,7 +69,7 @@ var DatePickerModalComponent = React.createClass({
     }
     return (
       <div  className="wa-date-picker-modal" style={styles} >
-        <div className="close-button" onclick={this.hide}><Tran key="close">close</Tran></div>
+        <div className="close-button" onclick={this.hide}><Tran tKey="close">close</Tran></div>
         <DatePicker
           ref="datePicker"
           weekOffset={1}

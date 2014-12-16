@@ -8,10 +8,11 @@ var tr = require('./tr.js');
 var Tran = React.createClass({
   render: function() {
     var original = this.props.children;
-    var key = this.props.key;
+    var key = this.props.tKey;
+    var values = this.props.values;
     return (
       <span>
-				{ tr(original,key) }
+				{ tr(original,key,values) }
       </span>
     );
   }

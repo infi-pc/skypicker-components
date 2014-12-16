@@ -842,7 +842,7 @@ var DatePickerModalComponent = React.createClass({displayName: 'DatePickerModalC
     }
     return (
       React.createElement("div", {className: "wa-date-picker-modal", style: styles}, 
-        React.createElement("div", {className: "close-button", onclick: this.hide}, React.createElement(Tran, {key: "close"}, "close")), 
+        React.createElement("div", {className: "close-button", onclick: this.hide}, React.createElement(Tran, {tKey: "close"}, "close")), 
         React.createElement(DatePicker, {
           ref: "datePicker", 
           weekOffset: 1, 
@@ -1146,10 +1146,11 @@ var tr = require('./tr.js');
 var Tran = React.createClass({displayName: 'Tran',
   render: function() {
     var original = this.props.children;
-    var key = this.props.key;
+    var key = this.props.tKey;
+    var values = this.props.values;
     return (
       React.createElement("span", null, 
-				 tr(original,key) 
+				 tr(original,key,values) 
       )
     );
   }
@@ -1178,8 +1179,8 @@ SearchDate = function (input) {
   this.mode = plain.mode || "single";
   this.from = plain.from || moment.utc();
   this.to = plain.to || moment.utc();
-  this.minStayDays = plain.minStayDays || 2;
-  this.maxStayDays = plain.maxStayDays || 10;
+  this.minStayDays = typeof(plain.minStayDays) != 'undefined'? plain.minStayDays : 2;
+  this.maxStayDays = typeof(plain.maxStayDays) != 'undefined'? plain.maxStayDays : 10;
   this.final = true;
 };
 
