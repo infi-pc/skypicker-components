@@ -903,7 +903,7 @@ var MonthMatrix = React.createClass({displayName: 'MonthMatrix',
 
     return ( //onMouseLeave={ this.props.onLeave }
       React.createElement("div", {className: "month-matrix"}, 
-        React.createElement("div", {className: "content-headline"}, React.createElement(Tran, null, "Select month")), 
+        React.createElement("div", {className: "content-headline"}, React.createElement(Tran, {tKey: "select_month"}, "Select month")), 
         React.createElement("div", {className: "months"}, 
           monthsElements
         )
@@ -1355,7 +1355,14 @@ var tr = function (original,key,values) {
   if (!key) {
     key = original.toLowerCase().trim().replace(" ", "_");
   }
-  return $.t('form_search.'+key, {defaultValue: original, postProcess: 'sprintf', sprintf: values});
+  var translated;
+  // prevent throwing exception on wrong sprintf format
+  try {
+    translated = $.t('form_search.'+key, {defaultValue: original, postProcess: 'sprintf', sprintf: values});
+  } catch (e) {
+    translated = original;
+  }
+  return translated
 };
 
 module.exports = tr;

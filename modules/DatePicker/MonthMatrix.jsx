@@ -36,7 +36,7 @@ var MonthMatrix = React.createClass({
 
     return ( //onMouseLeave={ this.props.onLeave }
       <div className="month-matrix">
-        <div className="content-headline"><Tran>Select month</Tran></div>
+        <div className="content-headline"><Tran tKey="select_month">Select month</Tran></div>
         <div className="months">
           {monthsElements}
         </div>
