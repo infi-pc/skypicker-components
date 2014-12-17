@@ -1222,7 +1222,12 @@ SearchDate.prototype.getTo = function() {
   } else if (this.mode == "anytime") {
     return moment.utc().add(6,"months");
   } else {
-    return this.to
+    if (this.to) {
+      return this.to
+    } else {
+      //just for cases when the value is not filled (not complete interval)
+      return this.from
+    }
   }
 };
 
