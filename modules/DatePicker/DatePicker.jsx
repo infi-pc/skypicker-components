@@ -14,7 +14,6 @@ React.initializeTouchEvents(true);
 
 var moment = require('moment');
 
-
 var Handle = React.createClass({
   render: function() {
     return (
@@ -25,14 +24,11 @@ var Handle = React.createClass({
   }
 });
 
-
-
-
 var DatePicker = React.createClass({
 
   getInitialState: function() {
     return {
-      value: this.props.value ? this.props.value : new SearchDate(), //TODO decide if it will be here or in CalendarFrame
+      value: this.props.value ? this.props.value : new SearchDate(),
       viewMode: this.props.value ? this.props.value.mode : "single"
     };
   },
