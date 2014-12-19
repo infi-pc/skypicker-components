@@ -2,7 +2,7 @@
 
 var React = require('react');
 React.initializeTouchEvents(true);
-
+var tr = require('./../../tr.js');
 
 
 var PlacePicker = React.createClass({

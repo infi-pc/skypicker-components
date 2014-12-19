@@ -4,6 +4,49 @@ var ModalPicker = require("./../ModalPicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
 var DatePicker = require('./DatePicker.jsx');
 var moment = require('moment');
+var deepmerge = require('deepmerge');
+
+
+var defaultOptions = {
+  initialValue: new SearchDate(),
+  onHide: function() {},
+  appendToElement: document.body,
+  locale: "en",
+  sizes: {
+    single: {width: 454, height: 200},
+    interval: {width: 907, height: 200, widthCompact: 454},
+    month: {width: 550, height: 200},
+    timeToStay: {width: 550, height: 200},
+    anytime: {width: 550, height: 200},
+    noReturn: {width: 550, height: 200}
+  },
+  modes: {
+    "single": {
+      closeAfter: "select", // select
+      finishAfter: "select" // select
+    },
+    "interval": {
+      closeAfter: "selectComplete", // select
+      finishAfter: "selectComplete" // selectComplete | select
+    },
+    "month": {
+      closeAfter: "select", // select
+      finishAfter: "select" // select
+    },
+    "timeToStay": {
+      closeAfter: "", //TODO on click "ok"
+      finishAfter: "release" // release | select
+    },
+    "anytime": {
+      closeAfter: "select", // select
+      finishAfter: "select" // select
+    },
+    "noReturn": {
+      closeAfter: "select", // select
+      finishAfter: "select" // select
+    }
+  }
+};
 
 /**
  * show modal datepicker (only one important function for DatePicker)
@@ -20,85 +63,13 @@ var moment = require('moment');
 /* responsibility: make simple plain js api */
 class DatePickerModal {
   constructor(options) {
-    this.options = options;
+    this.options = deepmerge(defaultOptions,options);
+    this.value = this.options.initialValue;
+    moment.locale(options.locale);
 
-    if (!options.defaultValue) {
-      options.defaultValue = new SearchDate();
-    }
-    if (!options.onHide) {
-      options.onHide = function() {};
-    }
-    if (!options.appendToElement) {
-      options.appendToElement = document.body;
-    }
-    this.value = options.defaultValue;
-
-    if (options.locale) {
-      moment.locale(options.locale);
-    }
-    this._loadModes();
-    this._mergeSizes();
     this._createComponent();
   }
 
-  _mergeSizes() {
-    /* default sizes */
-    var sizes = {
-      single: {width: 454, height: 200},
-      interval: {width: 907, height: 200, widthCompact: 454},
-      month: {width: 550, height: 200},
-      timeToStay: {width: 550, height: 200},
-      anytime: {width: 550, height: 200},
-      noReturn: {width: 550, height: 200}
-    };
-    if (!this.options.sizes) {
-      this.options.sizes = {};
-    }
-    for (var mode in sizes) {
-      if (!this.options.sizes[mode]) {
-        this.options.sizes[mode] = sizes[mode];
-      }
-    }
-  }
-  _loadModes() {
-    var defaultModes = {
-      "single": {
-        closeAfter: "select", // select
-        finishAfter: "select" // select
-      },
-      "interval": {
-        closeAfter: "selectComplete", // select
-        finishAfter: "selectComplete" // selectComplete | select
-      },
-      "month": {
-        closeAfter: "select", // select
-        finishAfter: "select" // select
-      },
-      "timeToStay": {
-        closeAfter: "", //TODO on click "ok"
-        finishAfter: "release" // release | select
-      },
-      "anytime": {
-        closeAfter: "select", // select
-        finishAfter: "select" // select
-      },
-      "noReturn": {
-        closeAfter: "select", // select
-        finishAfter: "select" // select
-      }
-    };
-    var modes = {};
-    for (var mode in this.options.modes) {
-      if (this.options.modes[mode]) {
-        if (typeof this.options.modes[mode] == 'object') {
-          modes[mode] = this.options.modes[mode]
-        } else {
-          modes[mode] = defaultModes[mode]
-        }
-      }
-    }
-    this.options.modes = modes;
-  }
   _createComponent() {
     var self = this;
 
