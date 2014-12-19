@@ -45,7 +45,10 @@ var DatePicker = React.createClass({
       minValue: null
     };
   },
-
+  componentDidMount: function () {
+    var mode = this.state.viewMode;
+    this.props.onSizeChange(this.props.sizes[mode]);
+  },
   getModeLabel: function (mode) {
     var modeLabels = {
       single: tr("Specific","specific"),
@@ -77,6 +80,8 @@ var DatePicker = React.createClass({
           break;
         default:
       }
+
+      self.props.onSizeChange(self.props.sizes[mode]);
       self.setState({
         viewMode: mode
       });
@@ -147,34 +152,7 @@ var DatePicker = React.createClass({
   //  });
   //},
 
-  calculateStyles: function (mode) {
-    var styles;
-    var widths = this.props.widths;
-    var offset = this.props.leftOffset;
-    var maxWidth = this.props.maxWidth;
 
-    if (offset + widths[mode] < maxWidth) {
-      //KEEP IT
-      styles = {
-        marginLeft: offset,
-        width: widths[mode]
-      };
-    } else if (offset + widths[mode] > maxWidth && widths[mode] < maxWidth) {
-      //MOVE IT
-      var missingSpace = offset + widths[mode] - maxWidth;
-      styles = {
-        marginLeft: offset - missingSpace,
-        width: widths[mode]
-      };
-    } else {
-      //MAKE IT SMALLER
-      styles = {
-        marginLeft: offset,
-        width: widths[mode]
-      };
-    }
-    return styles;
-  },
 
   renderBody: function() {
     var mode = this.state.viewMode;
@@ -225,7 +203,6 @@ var DatePicker = React.createClass({
   },
   render: function() {
     var mode = this.state.viewMode;
-    var styles = this.calculateStyles(mode);
 
     var modeOptions = [];
     for (var imode in this.props.modes) {
@@ -233,11 +210,9 @@ var DatePicker = React.createClass({
         modeOptions.push(<div key={imode} className={ (mode == imode) ? "active" : "" } onClick={ this.switchModeTo(imode) }>{ this.getModeLabel(imode) }</div>)
       }
     }
-    if (isIE(8,'lte')) {
-      styles = {};
-    }
+
     return (
-      <div className={'wa-date-picker '+mode} style={styles}>
+      <div className={'wa-date-picker '+mode}>
         <div className="mode-selector">
           {modeOptions}
         </div>

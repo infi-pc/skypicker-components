@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 
-var DatePickerModalComponent = require("./DatePickerModalComponent.jsx");
+var ModalPicker = require("./../ModalPicker.jsx");
 var SearchDate = require('./../containers/SearchDate.js');
+var DatePicker = require('./DatePicker.jsx');
 var moment = require('moment');
 
 /**
@@ -41,21 +42,21 @@ class DatePickerModal {
   }
 
   _mergeSizes() {
-    /* default sizes are from whichairline */
-    var widths = {
-      single: 454,
-      interval: 907,
-      month: 550,
-      timeToStay: 550,
-      anytime: 550,
-      noReturn: 550
+    /* default sizes */
+    var sizes = {
+      single: {width: 454, height: 200},
+      interval: {width: 907, height: 200, widthCompact: 454},
+      month: {width: 550, height: 200},
+      timeToStay: {width: 550, height: 200},
+      anytime: {width: 550, height: 200},
+      noReturn: {width: 550, height: 200}
     };
-    if (!this.options.widths) {
-      this.options.widths = {};
+    if (!this.options.sizes) {
+      this.options.sizes = {};
     }
-    for (var widthName in widths) {
-      if (!this.options.widths[widthName]) {
-        this.options.widths[widthName] = widths[widthName];
+    for (var mode in sizes) {
+      if (!this.options.sizes[mode]) {
+        this.options.sizes[mode] = sizes[mode];
       }
     }
   }
@@ -99,23 +100,34 @@ class DatePickerModal {
     this.options.modes = modes;
   }
   _createComponent() {
+    var self = this;
 
     var div = document.createElement('div');
     div.setAttribute('class', 'datepicker-modal-container-element');
     this.options.appendToElement.appendChild(div);
     this.htmlElement = div;
 
-    var root = React.createFactory(DatePickerModalComponent);
+    var root = React.createFactory(ModalPicker);
 
     this.component = React.render(root(), this.htmlElement);
     this.component.setProps({
       inputElement: this.options.element,
-      value: this.value,
-      minValue: this.options.minValue,
-      onChange: this.options.onChange,
       onHide: this.options.onHide,
-      modes: this.options.modes,
-      widths: this.options.widths
+
+      getContent: function(onSizeChange) {
+        return React.createElement(DatePicker, {
+          ref: "datePicker",
+          weekOffset: 1,
+          value: self.value,
+          minValue: self.options.minValue,
+          onChange: self.options.onChange,
+          //leftOffset: position.left,
+          //maxWidth: pageWidth,
+          sizes: self.options.sizes,
+          modes: self.options.modes,
+          onSizeChange: onSizeChange
+        })
+      }
     });
 
   }

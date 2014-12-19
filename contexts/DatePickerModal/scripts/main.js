@@ -32,13 +32,13 @@ datePicker1 = new DatePickerModal({
     "anytime": true,
     "noReturn": true
   },
-  widths: {
-    single: 490,
-    interval: 907,
-    month: 550,
-    timeToStay: 550,
-    anytime: 550,
-    noReturn: 550
+  sizes: {
+    single: {width: 490, height: 0},
+    interval: {width: 907, height: 0, widthCompact: 490},
+    month: {width: 550, height: 0},
+    timeToStay: {width: 550, height: 0},
+    anytime: {width: 550, height: 0},
+    noReturn: {width: 550, height: 0}
   },
   minValue: moment().add(5,"days"),
   onChange: function(newDate) {
@@ -50,21 +50,3 @@ datePicker1 = new DatePickerModal({
 $(element1).focus(function() {
   datePicker1.show();
 });
-
-
-//var element2 = document.getElementById("date-picker2");
-//datePicker2 = new DatePickerModal({
-//  element: element,
-//  value: dateModel,
-//  modes: {
-//    "single": true,
-//    "interval": true,
-//    "month": true,
-//    "timeToStay": true,
-//    "anytime": true,
-//    "noReturn": true
-//  },
-//  minValue: moment().add(5,"days")
-//});
-
-
