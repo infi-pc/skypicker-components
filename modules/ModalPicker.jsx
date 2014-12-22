@@ -55,12 +55,7 @@ var ModalPicker = React.createClass({
       windowHeight: $(window).height()
     });
   },
-  onChange: function (value, changeType) {
-    if (this.props.modes[value.mode] && this.props.modes[value.mode].closeAfter == changeType) {
-      this.hide();
-    }
-    this.props.onChange(value, changeType);
-  },
+
 
   componentDidMount: function() {
     document.addEventListener("click", this.clickOutside, false);

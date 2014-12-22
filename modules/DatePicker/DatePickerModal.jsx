@@ -63,11 +63,28 @@ var defaultOptions = {
 /* responsibility: make simple plain js api */
 class DatePickerModal {
   constructor(options) {
+    // Add possibility to options.modes have also boolean values just to indicate that mode should be used
+    if (options.modes) {
+      for (var mode in options.modes) {
+        if (options.modes.hasOwnProperty(mode)) {
+          if (options.modes[mode] === true) {
+            options.modes[mode] = {};
+          }
+        }
+      }
+    }
     this.options = deepmerge(defaultOptions,options);
     this.value = this.options.initialValue;
     moment.locale(options.locale);
 
     this._createComponent();
+  }
+
+  _onChange(value, changeType) {
+    if (this.options.modes[value.mode] && this.options.modes[value.mode].closeAfter == changeType) {
+      this.hide();
+    }
+    this.options.onChange(value, changeType);
   }
 
   _createComponent() {
@@ -91,7 +108,7 @@ class DatePickerModal {
           weekOffset: 1,
           value: self.value,
           minValue: self.options.minValue,
-          onChange: self.options.onChange,
+          onChange: self._onChange.bind(self),
           //leftOffset: position.left,
           //maxWidth: pageWidth,
           sizes: self.options.sizes,
