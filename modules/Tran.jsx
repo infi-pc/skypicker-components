@@ -12,7 +12,7 @@ var Tran = React.createClass({
     var values = this.props.values;
     return (
       <span>
-				{ tr(original,key,values) }
+        { tr(original,key,values) }
       </span>
     );
   }

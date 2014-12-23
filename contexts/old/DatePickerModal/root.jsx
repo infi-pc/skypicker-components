@@ -1,8 +1,6 @@
 
 
 
-var modulesDir = "./../../modules/";
-
 translationStrategy = require('./../../modules/translationStrategies/waTr.js');
 
 var tr = require('./../../modules/tr.js');

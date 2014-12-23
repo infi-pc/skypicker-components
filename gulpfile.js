@@ -22,17 +22,12 @@ var globalShim = require('browserify-global-shim').configure({
 
 //var rsync = require('gulp-rsync');
 
-var contextName = argv.c;
-var config = {
-  app: 'contexts/'+contextName,
-  dist: 'dist'
-};
+var bundleName = argv.b;
 
 gulp.task('connect', function() {
   connect.server({
     root: [
       '.tmp',
-      config.app,
       "shared"
     ],
     port: 9000,
@@ -57,10 +52,10 @@ gulp.task('stylus', function () {
 
 
 gulp.task('browserify', function(){
-  browserifyfunc(false, './contexts/'+contextName+'/root.jsx', 'builds/'+contextName+'/scripts');
+  browserifyfunc(false, './contexts/bundles/'+bundleName+'.jsx', 'builds/'+bundleName);
 });
 gulp.task('watchify', function () {
-  browserifyfunc(true, './contexts/'+contextName+'/root.jsx', '.tmp/scripts');
+  browserifyfunc(true, './contexts/bundles/'+bundleName+'.jsx', '.tmp/builds/'+bundleName);
 });
 
 function browserifyfunc(watch, inputFile, outputDir){
