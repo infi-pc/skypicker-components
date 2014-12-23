@@ -9,7 +9,8 @@ var PlacePicker = React.createClass({
 
   getInitialState: function() {
     return {
-      value: this.props.value
+      value: this.props.value,
+      viewMode: this.props.value ? this.props.value.mode : "all"
     };
   },
 
@@ -58,6 +59,14 @@ var PlacePicker = React.createClass({
     } else {
       throw new Error("no such method: " + methodName)
     }
+  },
+
+  renderAll: function () {
+    return (<div>sss</div>)
+  },
+
+  renderNearby: function () {
+    return (<div>sss</div>)
   },
 
   render: function() {

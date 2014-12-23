@@ -36,6 +36,12 @@ class PlacePickerModal {
 
     this._createComponent();
   }
+  _onChange(value, changeType) {
+    if (this.options.modes[value.mode] && this.options.modes[value.mode].closeAfter == changeType) {
+      this.hide();
+    }
+    this.options.onChange(value, changeType);
+  }
   _createComponent() {
     var self = this;
 
@@ -54,7 +60,7 @@ class PlacePickerModal {
       getContent: function(onSizeChange) {
         return React.createElement(PlacePicker, {
           ref: "datePicker",
-          onChange: self.options.onChange,
+          onChange: self._onChange.bind(self),
           sizes: self.options.sizes,
           modes: self.options.modes,
           onSizeChange: onSizeChange
