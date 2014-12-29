@@ -30,8 +30,11 @@ app.use(express.static(__dirname + '/shared'));
 
 
 app.get('/', function(req, res) {
-  console.log(req.query.context);
-  console.log(req.query.case);
+
+  if (!req.query.context && !req.query.context) {
+    res.send(listContexts());
+    return
+  }
   var currentContext = contextOptions[req.query.context];
   if (!currentContext) {
     res.send(listContexts("no such context"));

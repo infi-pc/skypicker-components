@@ -33,6 +33,14 @@ var DatePicker = React.createClass({
         //var contexts = this.props.contextOptions.map(function() {
         //    return <li></li>
         //});
+        var message;
+        if (this.props.message) {
+            message = (
+                <div className="alert alert-danger">
+                    {this.props.message}
+                </div>
+            );
+        }
 
         return (
             <html>
@@ -43,9 +51,7 @@ var DatePicker = React.createClass({
                 </head>
                 <body>
                     <div>
-                        <div className="alert alert-info">
-                            {this.props.message}
-                        </div>
+                        {message}
                         <ul>
                           {this.renderContexts()}
                         </ul>
