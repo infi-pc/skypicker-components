@@ -1,5 +1,5 @@
 
-var translationStrategy = require('./../../modules/translationStrategies/waTr.js');
-var tr = require('./../../modules/tr.js');
-var DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
-var SearchDate = require('./../../modules/containers/SearchDate.js');
+window.translationStrategy = require('./../../modules/translationStrategies/waTr.js');
+window.tr = require('./../../modules/tr.js');
+window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
+window.SearchDate = require('./../../modules/containers/SearchDate.js');

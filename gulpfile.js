@@ -52,20 +52,23 @@ gulp.task('stylus', function () {
 
 
 gulp.task('browserify', function(){
-  browserifyfunc(false, './contexts/bundles/'+bundleName+'.jsx', 'builds/'+bundleName);
+  browserifyfunc(false, './contexts/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
 });
 gulp.task('watchify', function () {
-  browserifyfunc(true, './contexts/bundles/'+bundleName+'.jsx', '.tmp/builds/'+bundleName);
+  browserifyfunc(true, './contexts/bundles/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
 });
 
-function browserifyfunc(watch, inputFile, outputDir){
+function browserifyfunc(watch, inputFile, outputDir, outputFile){
+  if (!outputFile) {
+    outputFile = "bundle.js";
+  }
   function rebundle (bundler) {
     return bundler.bundle()
       // Log errors if they happen.
       .on('error', function(e) {
         gutil.log('Browserify Error', e.message);
       })
-      .pipe(source('bundle.js'))
+      .pipe(source(outputFile))
       .pipe(gulp.dest(outputDir))
       .pipe(connect.reload());
   }

@@ -16,7 +16,7 @@ function searchDateToString (date) {
   }
 }
 
-module.exports = function () {
+(function () {
 
   tr.setStrategy(translationStrategy);
 
@@ -52,5 +52,6 @@ module.exports = function () {
   $(element1).focus(function() {
     datePicker1.show();
   });
-};
+
+})();
 

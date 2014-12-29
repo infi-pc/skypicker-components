@@ -12,7 +12,7 @@ module.exports = {
       //"/scripts/main.js"  //TODO add to init
     ],
     scripts: [
-      "/bundles/datepicker.js",
+      "/builds/datepicker.js",
       "/scripts/initDatepicker.js"
     ],
     styles: [
