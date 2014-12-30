@@ -10,7 +10,7 @@ var PlacePicker = React.createClass({
   getInitialState: function() {
     return {
       value: this.props.value,
-      viewMode: this.props.value ? this.props.value.mode : "all"
+      viewMode: "all"
     };
   },
 
@@ -62,7 +62,7 @@ var PlacePicker = React.createClass({
   },
 
   renderAll: function () {
-    return (<div>sss</div>)
+    return (<div>{this.props.value.getText()}</div>)
   },
 
   renderNearby: function () {

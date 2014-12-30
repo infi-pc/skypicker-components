@@ -11,3 +11,6 @@ var placePicker = new PlacePickerModal({
 $(element).focus(function() {
   placePicker.show();
 });
+$(element).change(function() {
+  placePicker.setValue(new SearchPlace($(element).val()));
+});

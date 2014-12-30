@@ -2,10 +2,11 @@
 
 var ModalPicker = require("./../ModalPicker.jsx");
 var PlacePicker = require("./components/PlacePicker.jsx");
+var SearchPlace = require("./../containers/SearchPlace.js");
 var deepmerge = require('deepmerge');
 
 var defaultOptions = {
-  initialValue: null,
+  initialValue: new SearchPlace(),
   onHide: function() {},
   appendToElement: document.body,
   locale: "en",
@@ -63,7 +64,8 @@ class PlacePickerModal {
           onChange: self._onChange.bind(self),
           sizes: self.options.sizes,
           modes: self.options.modes,
-          onSizeChange: onSizeChange
+          onSizeChange: onSizeChange,
+          value: self.value
         })
       }
     });
