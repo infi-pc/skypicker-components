@@ -1,3 +1,5 @@
+tr.setStrategy(translationStrategy);
+
 var element = document.getElementById("place-picker");
 
 var placePicker = new PlacePickerModal({

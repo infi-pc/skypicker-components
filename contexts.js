@@ -7,7 +7,7 @@ require('node-jsx').install({harmony: true});
 
 
 var contextOptions = require('./contexts/root.js');
-var BaseTemplate = React.createFactory(require('./contexts/base.jsx'));
+
 
 //var BUNDLE = fs.readFileSync('./browser-bundle.js', {encoding: 'utf8'});
 //var TEMPLATE = fs.readFileSync('./index.html', {encoding: 'utf8'});
@@ -56,7 +56,9 @@ app.get('/', function(req, res) {
     res.send(listContexts("no such case"));
     return
   }
-  var contentTemplate = React.createFactory(require('./contexts/templates/datePicker.jsx'));
+
+  var BaseTemplate = React.createFactory(require('./contexts/'+currentContext.baseTemplate));
+  var contentTemplate = React.createFactory(require('./contexts/'+currentCase.template));
   var baseTemplate = React.createElement(BaseTemplate, {
     "caseName": req.query.case,
     "contextName": req.query.context,

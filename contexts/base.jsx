@@ -20,12 +20,13 @@ var Base = React.createClass({
                 <head lang="en">
                     <meta charSet="UTF-8" />
                     <title>{title}</title>
+                    <script src="http://localhost:35729/livereload.js"></script>
                     {this.renderScripts(context.libs)}
                     {this.renderStyles(oneCase.styles)}
                 </head>
                 <body>
                     {this.props.content}
-                    {this.renderScripts(context.scripts)}
+                    {this.renderScripts(oneCase.scripts)}
                 </body>
             </html>
         );

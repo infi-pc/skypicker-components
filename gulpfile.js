@@ -27,26 +27,11 @@ var globalShim = require('browserify-global-shim').configure({
 
 var bundleName = argv.b;
 
-//gulp.task('connect', function() {
-//  connect.server({
-//    root: [
-//      '.tmp',
-//      "shared"
-//    ],
-//    port: 9000,
-//    livereload: true
-//  });
-//});
-
-
-
-
-
 gulp.task('server', function () {
   console.log("see http://localhost:"+contextsPort+"/");
 
   //app.use(require('connect-livereload')({port: livereloadPort}));
-  livereload.listen();
+  livereload.listen(35729);
   app.listen(contextsPort);
 });
 

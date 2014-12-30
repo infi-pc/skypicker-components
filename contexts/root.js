@@ -8,37 +8,55 @@ module.exports = {
       "/scripts/jquery-2.1.1.js",
       "/scripts/react-0.12.1/build/react-with-addons.js",
       "/scripts/moment-with-locales.js",
+
       //"/scripts/bundle.js", //TODO require
       //"/scripts/main.js"  //TODO add to init
     ],
-    scripts: [
-      "/builds/datepicker.js",
-      "/scripts/initDatepicker.js"
-    ],
-    styles: [
-      "/styles/main.css",
-      "/styles/modules/date-picker-skypicker.css"
-    ],
-    template: "basic.html",
-    html: "templates/datepicker.html",
+    baseTemplate: "base.jsx",
     cases: {
-      skypicker: {
+      "date skypicker": {
         styles: [
           "/styles/main.css",
           "/styles/modules/skypicker.css"
-        ]
+        ],
+        scripts: [
+          "/builds/datepicker.js",
+          "/scripts/initDatepicker.js"
+        ],
+        template: "templates/datepicker.jsx"
       },
-      whichairline: {
+      "date whichairline": {
         styles: [
           "/styles/main.css",
           "/styles/modules/whichairline.css"
-        ]
+        ],
+        scripts: [
+          "/builds/datepicker.js",
+          "/scripts/initDatepicker.js"
+        ],
+        template: "templates/datepicker.jsx"
       },
-      plain: {
+      "place skypicker": {
         styles: [
           "/styles/main.css",
-          "/styles/modules/date-picker-base.css"
-        ]
+          "/styles/modules/skypicker.css"
+        ],
+        scripts: [
+          "/builds/placepicker.js",
+          "/scripts/initPlacepicker.js"
+        ],
+        template: "templates/placepicker.jsx"
+      },
+      "place whichairline": {
+        styles: [
+          "/styles/main.css",
+          "/styles/modules/whichairline.css"
+        ],
+        scripts: [
+          "/builds/placepicker.js",
+          "/scripts/initPlacepicker.js"
+        ],
+        template: "templates/placepicker.jsx"
       }
     }
   }
