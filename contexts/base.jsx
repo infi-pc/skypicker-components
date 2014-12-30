@@ -12,7 +12,6 @@ var Base = React.createClass({
         })
     },
     render: function() {
-        console.log(this.props.context);
         var context = this.props.context;
         var oneCase = context.cases[this.props.caseName];
         var title = this.props.contextName + " - " + this.props.caseName;

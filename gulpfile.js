@@ -9,10 +9,13 @@ var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 var browserify = require('browserify');
 var reactify = require('reactify');
-var connect = require('gulp-connect');
 var argv = require('yargs').argv;
 var karma = require('gulp-karma');
 var open = require("gulp-open");
+var app = require("./contexts.js");
+//var server = require('gulp-express');
+var contextsPort = 9001;
+var livereloadPort = 35729;
 
 var globalShim = require('browserify-global-shim').configure({
   'moment': 'moment',
@@ -24,15 +27,27 @@ var globalShim = require('browserify-global-shim').configure({
 
 var bundleName = argv.b;
 
-gulp.task('connect', function() {
-  connect.server({
-    root: [
-      '.tmp',
-      "shared"
-    ],
-    port: 9000,
-    livereload: true
-  });
+//gulp.task('connect', function() {
+//  connect.server({
+//    root: [
+//      '.tmp',
+//      "shared"
+//    ],
+//    port: 9000,
+//    livereload: true
+//  });
+//});
+
+
+
+
+
+gulp.task('server', function () {
+  console.log("see http://localhost:"+contextsPort+"/");
+
+  //app.use(require('connect-livereload')({port: livereloadPort}));
+  livereload.listen();
+  app.listen(contextsPort);
 });
 
 gulp.task('stylus', function () {
@@ -46,7 +61,7 @@ gulp.task('stylus', function () {
   watch(src)
     .pipe(stylus())
     .pipe(gulp.dest(dest))
-    .pipe(connect.reload());
+    .pipe(livereload());
 
 });
 
@@ -70,7 +85,7 @@ function browserifyfunc(watch, inputFile, outputDir, outputFile){
       })
       .pipe(source(outputFile))
       .pipe(gulp.dest(outputDir))
-      .pipe(connect.reload());
+      .pipe(livereload());
   }
 
   var b;
@@ -140,6 +155,6 @@ gulp.task('openBrowser', function() {
 
 gulp.task('test', ['watchifyTests']);
 
-gulp.task('serve', ['connect', 'stylus', 'watchify']);
+gulp.task('serve', ['server', 'stylus', 'watchify']);
 
 gulp.task('build', ['browserify']);

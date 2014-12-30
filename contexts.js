@@ -2,7 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var React = require('react');
 
-var port = 9001;
+
 require('node-jsx').install({harmony: true});
 
 
@@ -67,6 +67,4 @@ app.get('/', function(req, res) {
   res.send(str);
 });
 
-console.log("see http://localhost:"+port+"/");
-
-app.listen(port);
+module.exports = app;
