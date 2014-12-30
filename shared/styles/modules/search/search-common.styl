@@ -1,0 +1,61 @@
+$height = 285px
+$modeSelectorWidth = 170px
+
+.search-modal
+  position: absolute
+  top: 0px
+  left: 0px
+  width: 100%
+  padding 0px
+  margin 0px
+  padding-top 0px
+  margin-top: -1px
+  font-family sans-serif
+  transition: width 0.5s, margin-left 0.3s
+  .close-button
+    display none
+
+  .mode-selector
+    font-weight bold
+    width: $modeSelectorWidth
+    height: 100%
+    border-right: $borderColor solid 1px
+    &>div
+      cursor: pointer
+      width: 100%
+      padding: 10px
+      border-bottom: $borderColor solid 1px
+      &:hover
+        color: #FFFFFF
+        background-color: $hoverColor
+      &.active
+        color: #FFFFFF
+        background-color: $mainColor
+
+
+@media(max-width:699px)
+  .search-modal
+    top: 0px !important /* all importants are here because it is rewriting javascript generated inline style */
+    margin-left: 0px !important
+    width: 100% !important
+    height: 100% !important
+    z-index: 10000
+    padding: 15px;
+    box-sizing: border-box;
+    .close-button
+      display: block;
+      background-color: #FFF;
+      border: 1px solid #CCC;
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      margin: 6px;
+      padding: 10px;
+      font-weight: bold;
+      z-index: 100;
+      cursor: pointer
+      &:hover
+        color: #FFF;
+        background-color: #6FA6E8;
+    .search-modal-content
+      height: 100%

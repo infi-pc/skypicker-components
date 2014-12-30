@@ -25,13 +25,13 @@ module.exports = {
       skypicker: {
         styles: [
           "/styles/main.css",
-          "/styles/modules/date-picker-skypicker.css"
+          "/styles/modules/skypicker.css"
         ]
       },
       whichairline: {
         styles: [
           "/styles/main.css",
-          "/styles/modules/date-picker.css"
+          "/styles/modules/whichairline.css"
         ]
       },
       plain: {

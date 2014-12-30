@@ -28,7 +28,18 @@ app.use(express.static(__dirname + '/.tmp'));
 app.use(express.static(__dirname + '/contexts'));
 app.use(express.static(__dirname + '/shared'));
 
-
+app.get('/multiView', function(req, res) {
+  var SplitScreen = React.createFactory(require('./contexts/splitScreen.jsx'));
+  var splitScreen = React.createElement(SplitScreen, {
+    "targets": [
+      {"context": "search", "case": "skypicker"},
+      {"context": "search", "case": "whichairline"},
+      {"context": "search", "case": "plain"}
+    ]
+  });
+  var str = React.renderToStaticMarkup(splitScreen);
+  res.send(str);
+});
 app.get('/', function(req, res) {
 
   if (!req.query.context && !req.query.context) {

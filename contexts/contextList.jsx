@@ -1,6 +1,6 @@
 var React = require('react');
 
-var DatePicker = React.createClass({
+var ContextList = React.createClass({
     renderCases: function (contextName, cases) {
         var cases = Object.keys(cases).map(function(name) {
             var oneCase = cases[name];
@@ -61,6 +61,6 @@ var DatePicker = React.createClass({
         );
     }
 });
-module.exports = DatePicker;
+module.exports = ContextList;
 
 
