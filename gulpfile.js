@@ -56,15 +56,19 @@ gulp.task('stylus', function () {
 
   gulp.src(src)
     .pipe(stylus())
-    .pipe(gulp.dest(dest));
-
-  watch(src)
-    .pipe(stylus())
     .pipe(gulp.dest(dest))
     .pipe(livereload());
-
+  //watch(src)
+  //  .pipe(stylus())
+  //  .pipe(gulp.dest(dest))
+  //  .pipe(livereload());
 });
-
+gulp.task('stylusWatch', function () {
+  var src = './shared/styles/modules/**/*.styl';
+  watch(src, function () {
+    gulp.start('stylus');
+  });
+});
 
 gulp.task('browserify', function(){
   browserifyfunc(false, './contexts/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
@@ -155,6 +159,6 @@ gulp.task('openBrowser', function() {
 
 gulp.task('test', ['watchifyTests']);
 
-gulp.task('serve', ['server', 'stylus', 'watchify']);
+gulp.task('serve', ['server', 'stylus', 'stylusWatch', 'watchify']);
 
 gulp.task('build', ['browserify']);

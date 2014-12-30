@@ -1,3 +1,15 @@
+$borderColor = #C4C6C7
+$border = $borderColor 1px solid
+$mainColor = #2D75CD
+$mainFontColor = #666
+$selectColor = #2D75CD
+$selectFontColor = #fff
+$hoverColor = #6FA6E8
+$hoverFontColor = #fff
+$calendarWidth= 224px //must be dividable by 7
 
 @import "./search/date-picker.styl"
 @import "./search/place-picker.styl"
+
+.search-picker
+  z-index: 65 /*minimum 64 because of shadow above search form */

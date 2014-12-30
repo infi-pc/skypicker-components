@@ -19,19 +19,27 @@ $modeSelectorWidth = 170px
     font-weight bold
     width: $modeSelectorWidth
     height: 100%
-    border-right: $borderColor solid 1px
+    border-right: $border
     &>div
       cursor: pointer
       width: 100%
       padding: 10px
-      border-bottom: $borderColor solid 1px
+      border-bottom: $border
       &:hover
-        color: #FFFFFF
+        color: $hoverFontColor
         background-color: $hoverColor
       &.active
-        color: #FFFFFF
-        background-color: $mainColor
+        color: $selectFontColor
+        background-color: $selectColor
 
+.search-picker
+  color: #666;
+  overflow: hidden;
+  background-color #fff
+  z-index: 65 /*minimum 64 because of shadow above search form */
+  border: $border
+  height: $height
+  position relative
 
 @media(max-width:699px)
   .search-modal
@@ -59,3 +67,16 @@ $modeSelectorWidth = 170px
         background-color: #6FA6E8;
     .search-modal-content
       height: 100%
+
+    .mode-selector
+      z-index: 10002
+      margin: 4px
+      border: none
+      height: initial;
+      width: 100%;
+      &>div
+        margin: 3px
+        padding: 10px;
+        display: inline-block;
+        width: initial
+        border: $borderColor solid 1px

@@ -80,7 +80,7 @@ var PlacePicker = React.createClass({
     }
 
     return (
-      <div className={'place-picker '+mode}>
+      <div className={'search-place-picker search-picker '+mode}>
         <div className="mode-selector">
           {modeOptions}
         </div>

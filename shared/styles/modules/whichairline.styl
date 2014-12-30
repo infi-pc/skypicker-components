@@ -1,12 +1,26 @@
+$borderColor = #ffffff
+$border = none
+$mainColor = #4DB8E2
+$mainFontColor = #666
+$selectColor = #4DB8E2
+$selectFontColor = #fff
+$hoverColor = #A1E5FF
+$hoverFontColor = #666
+$calendarWidth= 224px //must be dividable by 7
+
 @import "./search/date-picker.styl"
 @import "./search/place-picker.styl"
 
-.search-modal
-  position: absolute
-
 .search-date-picker
-
   text-transform uppercase
   font-weight bold
   color: #666;
   font-family: 'Open Sans',Arial,Helvetica,sans-serif;
+
+.search-picker
+  box-shadow: 0 2px 5px 0 rgba(50, 50, 50, 0.75);
+  .content
+    background-color $mainColor
+    .clndr .clndr-month
+      color: #fff
+

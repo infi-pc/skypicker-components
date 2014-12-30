@@ -1,19 +1,9 @@
 @import "./search-common.styl"
 
-$mainColor = #2D75CD
-$hoverColor = #6FA6E8
-$borderColor = #cccccc
 
-$calendarWidth= 224px //must be dividable by 7
 
 .search-date-picker
-  color: #666;
-  overflow: hidden;
-  background-color #fff
-  z-index: 65 /*minimum 64 because of shadow above search form */
-  border: #C4C6C7 solid 1px
-  height: $height
-  position relative
+
 
   & *
     box-sizing border-box
@@ -77,7 +67,7 @@ $calendarWidth= 224px //must be dividable by 7
   padding-right: 25px;
   padding-top: 13px
   .months
-    border: 1px solid #CCC;
+    border: $border;
   .months:after  /* clearfix */
     content:"";
     display:table;
@@ -96,7 +86,7 @@ $calendarWidth= 224px //must be dividable by 7
     /*box-shadow: 1px 1px 4px 0px rgba(50, 50, 50, 0.55);*/
     text-align center
     &:hover
-      color: #FFFFFF
+      color: $hoverFontColor
       background-color $hoverColor
     .month-name
     .month-year
@@ -126,7 +116,7 @@ $calendarWidth= 224px //must be dividable by 7
     box-sizing: content-box;
     text-align: center
     background: yellow
-    border: solid 1px $borderColor;
+    border: $border;
     white-space nowrap
     .day-names  div, .days .week div
       display: inline-block;
@@ -140,10 +130,10 @@ $calendarWidth= 224px //must be dividable by 7
         height: 22px
         color: #FFFFFF
         font-weight bold
-        line-height: 17px;
+        line-height: 22px;
         background-color $mainColor
         span
-          line-height 1em
+          line-height 22px;
           vertical-align bottom
 
     .days > .week > div
@@ -160,15 +150,15 @@ $calendarWidth= 224px //must be dividable by 7
         color: #DFDFDF;
 
       &.selected
-        background-color $mainColor
-        color: #FFFFFF
+        background-color $selectColor
+        color: $selectFontColor
 
       &:active
-        color: #FFFFFF
+        color: $hoverFontColor
         background-color $hoverColor
 
       &.over
-        color: #FFFFFF
+        color: $hoverFontColor
         background-color $hoverColor
         &.selected
           background-color $mainColor
@@ -203,7 +193,7 @@ $calendarWidth= 224px //must be dividable by 7
       text-align: center;
       background-color: #FFFFFF;
       cursor: pointer;
-      border: 1px solid $borderColor
+      border: $border
       position: relative;
       top: 1px;
       width: 30px;
@@ -226,19 +216,6 @@ $calendarWidth= 224px //must be dividable by 7
     width: 100% !important
     height: 100% !important
     box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75), 0px 0px 100px 30px rgba(50, 50, 50, 0.25);
-
-    .mode-selector
-      z-index: 10002
-      margin: 4px
-      border: none
-      height: initial;
-      width: 100%;
-      &>div
-        margin: 3px
-        padding: 10px;
-        display: inline-block;
-        width: initial
-        border: $borderColor solid 1px
 
     .content
       padding: 15px

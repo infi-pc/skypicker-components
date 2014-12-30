@@ -208,7 +208,7 @@ var DatePicker = React.createClass({
     }
 
     return (
-      <div className={'search-date-picker '+mode}>
+      <div className={'search-date-picker search-picker '+mode}>
         <div className="mode-selector">
           {modeOptions}
         </div>
