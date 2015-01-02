@@ -48,6 +48,14 @@ var PlacePicker = React.createClass({
     }
   },
 
+  checkDate: function () {
+    if (this.props.value.type == "text") {
+      PlacesAPI.findPlace(this.props.value.getText(), function (results) {
+        console.log(results);
+      });
+    }
+  },
+
   renderBody: function() {
     var mode = this.state.viewMode;
     if (!mode ) {

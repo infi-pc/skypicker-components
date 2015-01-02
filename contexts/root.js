@@ -20,8 +20,7 @@ module.exports = {
           "/styles/modules/skypicker.css"
         ],
         scripts: [
-          "/builds/datepicker.js",
-          "/scripts/initDatepicker.js"
+          "/builds/datepicker.js"
         ],
         template: "templates/datepicker.jsx"
       },
@@ -31,8 +30,7 @@ module.exports = {
           "/styles/modules/whichairline.css"
         ],
         scripts: [
-          "/builds/datepicker.js",
-          "/scripts/initDatepicker.js"
+          "/builds/datepicker.js"
         ],
         template: "templates/datepicker.jsx"
       },
@@ -42,8 +40,7 @@ module.exports = {
           "/styles/modules/skypicker.css"
         ],
         scripts: [
-          "/builds/placepicker.js",
-          "/scripts/initPlacepicker.js"
+          "/builds/placepicker.js"
         ],
         template: "templates/placepicker.jsx"
       },
@@ -53,8 +50,7 @@ module.exports = {
           "/styles/modules/whichairline.css"
         ],
         scripts: [
-          "/builds/placepicker.js",
-          "/scripts/initPlacepicker.js"
+          "/builds/placepicker.js"
         ],
         template: "templates/placepicker.jsx"
       }

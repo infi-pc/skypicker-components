@@ -56,10 +56,10 @@ gulp.task('stylusWatch', function () {
 });
 
 gulp.task('browserify', function(){
-  browserifyfunc(false, './contexts/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
+  browserifyfunc(false, './modules/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
 });
 gulp.task('watchify', function () {
-  browserifyfunc(true, './contexts/bundles/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
+  browserifyfunc(true, './contexts/scripts/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
 });
 
 function browserifyfunc(watch, inputFile, outputDir, outputFile){

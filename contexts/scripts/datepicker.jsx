@@ -1,3 +1,8 @@
+window.translationStrategy = require('./../../modules/translationStrategies/waTr.js');
+window.tr = require('./../../modules/tr.js');
+window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
+window.SearchDate = require('./../../modules/containers/SearchDate.js');
+
 function searchDateToString (date) {
   if (date.mode == "single") {
     return date.from.format("DD.MM.YYYY")
