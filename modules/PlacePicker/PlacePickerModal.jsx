@@ -53,37 +53,40 @@ class PlacePickerModal {
 
     var root = React.createFactory(ModalPicker);
 
-    this.component = React.render(root(), this.htmlElement);
-    this.component.setProps({
+    this.modalComponent = React.render(root(), this.htmlElement);
+
+    this.placePickerComponent = React.createElement(PlacePicker, {
+      ref: "datePicker",
+      onChange: self._onChange.bind(self),
+      sizes: self.options.sizes,
+      modes: self.options.modes,
+      onSizeChange: function () {},
+      value: self.value
+    });
+
+    this.modalComponent.setProps({
       inputElement: this.options.element,
       onHide: this.options.onHide,
 
       getContent: function(onSizeChange) {
-        return React.createElement(PlacePicker, {
-          ref: "datePicker",
-          onChange: self._onChange.bind(self),
-          sizes: self.options.sizes,
-          modes: self.options.modes,
-          onSizeChange: onSizeChange,
-          value: self.value
-        })
+        return self.placePickerComponent;
       }
     });
 
   }
   show() {
-    this.component.setState({
+    this.modalComponent.setState({
       shown: true
     });
   }
   hide() {
-    this.component.hide();
+    this.modalComponent.hide();
   }
   setValue(newValue) {
     this.value = newValue;
-    this.component.setProps({
-      value: this.value
-    });
+    if (this.value) {
+      this.component.setSearchText(this.value.getText());
+    }
   }
 }
 

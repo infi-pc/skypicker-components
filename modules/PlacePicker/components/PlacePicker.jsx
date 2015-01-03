@@ -3,14 +3,17 @@
 var React = require('react');
 React.initializeTouchEvents(true);
 var tr = require('./../../tr.js');
-
+var PlacesAPI = require('./../../APIs/PlacesAPI.jsx');
 
 var PlacePicker = React.createClass({
 
   getInitialState: function() {
     return {
       value: this.props.value,
-      viewMode: "all"
+      viewMode: "all",
+      places: [],
+      apiError: false,
+      loading: false
     };
   },
 
@@ -48,10 +51,30 @@ var PlacePicker = React.createClass({
     }
   },
 
-  checkDate: function () {
-    if (this.props.value.type == "text") {
-      PlacesAPI.findPlace(this.props.value.getText(), function (results) {
-        console.log(results);
+  setSearchText: function (searchText) {
+    if (searchText != this.state.lastSearched) {
+      var placesAPI = new PlacesAPI({lang: this.props.lang});
+      this.setState({
+        loading: true,
+        searchText: searchText
+      });
+      placesAPI.findByName(searchText, (error, results) => {
+        //TODO prevent race condition
+        if (!error) {
+          this.setState({
+            lastSearched: searchText,
+            places: results,
+            apiError: false,
+            loading: false
+          });
+        } else {
+          this.setState({
+            lastSearched: null,
+            places: [],
+            apiError: true,
+            loading: false
+          });
+        }
       });
     }
   },
@@ -70,13 +93,23 @@ var PlacePicker = React.createClass({
   },
 
   renderAll: function () {
-    return (<div>{this.props.value.getText()}</div>)
+    return (
+      <div>
+        <span>{this.state.searchText}</span>
+        {this.renderPlaces()}
+      </div>
+    )
   },
 
   renderNearby: function () {
     return (<div>sss</div>)
   },
 
+  renderPlaces: function () {
+    return this.state.places.map(function (place) {
+      return (<div>{place.name}</div>)
+    });
+  },
   render: function() {
     var mode = this.state.viewMode;
 

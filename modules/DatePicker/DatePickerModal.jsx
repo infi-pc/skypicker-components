@@ -132,8 +132,9 @@ class DatePickerModal {
     if (!this.value) {
       this.value = new SearchDate();
     }
+    //TODO make it right
     this.component.setProps({
-      value: this.value
+      prdlajs: this.value
     });
   }
 }
