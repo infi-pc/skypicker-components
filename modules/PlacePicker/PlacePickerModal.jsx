@@ -8,7 +8,6 @@ var deepmerge = require('deepmerge');
 var defaultOptions = {
   initialValue: new SearchPlace(),
   onHide: function() {},
-  appendToElement: document.body,
   locale: "en",
   sizes: {
     all: {width: 454, height: 200},
@@ -30,65 +29,46 @@ var defaultOptions = {
   }
 };
 
-class PlacePickerModal {
-  constructor(options) {
-    this.options = deepmerge(defaultOptions,options);
-    this.value = this.options.initialValue;
-
-    this._createComponent();
-  }
-  _onChange(value, changeType) {
-    if (this.options.modes[value.mode] && this.options.modes[value.mode].closeAfter == changeType) {
+var PlacePickerModal = React.createClass({
+  getDefaultProps: function () {
+    return {
+      options: {}
+    }
+  },
+  getInitialState: function() {
+    return {
+      contentSize: {}
+    };
+  },
+  onValueChange: function () {
+    if (this.props.options.modes[value.mode] && this.props.options.modes[value.mode].closeAfter == changeType) {
       this.hide();
     }
-    this.options.onChange(value, changeType);
-  }
-  _createComponent() {
-    var self = this;
-
-    var div = document.createElement('div');
-    div.setAttribute('class', 'datepicker-modal-container-element');
-    this.options.appendToElement.appendChild(div);
-    this.htmlElement = div;
-
-    var root = React.createFactory(ModalPicker);
-
-    this.modalComponent = React.render(root(), this.htmlElement);
-
-    this.placePickerComponent = React.createElement(PlacePicker, {
-      ref: "datePicker",
-      onChange: self._onChange.bind(self),
-      sizes: self.options.sizes,
-      modes: self.options.modes,
-      onSizeChange: function () {},
-      value: self.value
+    this.props.options.onChange(value, changeType);
+  },
+  onSizeChange: function (sizes) {
+    this.setState({
+      contentSize: sizes
     });
-
-    this.modalComponent.setProps({
-      inputElement: this.options.element,
-      onHide: this.options.onHide,
-
-      getContent: function(onSizeChange) {
-        return self.placePickerComponent;
-      }
-    });
-
-  }
-  show() {
-    this.modalComponent.setState({
-      shown: true
-    });
-  }
-  hide() {
-    this.modalComponent.hide();
-  }
-  setValue(newValue) {
+  },
+  setValue: function(newValue) {
     this.value = newValue;
     if (this.value) {
       this.component.setSearchText(this.value.getText());
     }
+  },
+  render: function() {
+    var options = deepmerge(defaultOptions,this.props.options);
+    return (
+      <ModalPicker shown={this.props.shown} contentSize={this.state.contentSize} inputElement={options.element} onHide={options.onHide}>
+        <PlacePicker value={this.props.value} ref="placePicker" onChange={this.onValueChange} sizes={options.sizes} modes={options.modes} onSizeChange={this.onSizeChange} >
+        </PlacePicker>
+      </ModalPicker>
+    )
   }
-}
+
+});
+
 
 module.exports = PlacePickerModal;
 

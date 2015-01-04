@@ -10,33 +10,15 @@ var ModalPicker = React.createClass({
 
   getDefaultProps: function() {
     return {
-      getContent: function () {
-        return (<div>Loading...</div>)
-      }
+      shown: false
     };
   },
 
   getInitialState: function() {
     return {
-      shown: false,
-      width: 0,
-      height: 0,
       windowWidth: $(window).width(),
       windowHeight: $(window).height()
     };
-  },
-
-  hide: function () {
-    this.props.onHide();
-    this.setState({
-      shown: false
-    });
-  },
-
-  show: function () {
-    this.setState({
-      shown: true
-    });
   },
 
   clickOutside: function (e) {
@@ -56,7 +38,9 @@ var ModalPicker = React.createClass({
     });
   },
 
-
+  hide: function () {
+    this.props.onHide();
+  },
   componentDidMount: function() {
     document.addEventListener("click", this.clickOutside, false);
     window.addEventListener('resize', this.windowResized);
@@ -74,7 +58,7 @@ var ModalPicker = React.createClass({
     var rect = this.props.inputElement.getBoundingClientRect();
 
     var pageWidth = $(window).width();
-    var width = this.state.width;
+    var width = this.props.contentSize.width;
     var offset = rect.left;
     var top = rect.bottom + window.pageYOffset;
     var maxWidth = pageWidth;
@@ -84,8 +68,8 @@ var ModalPicker = React.createClass({
     if (width > maxWidth) {
       //make smaller version
       addClass = "compact-size";
-      if (this.state.widthCompact) {
-        width = this.state.widthCompact;
+      if (this.props.contentSize.widthCompact) {
+        width = this.props.contentSize.widthCompact;
       }
     }
 
@@ -119,18 +103,9 @@ var ModalPicker = React.createClass({
     if (isIE(8,'lte')) {
       return {};
     }
-
-  },
-  onSizeChange: function (sizes) {
-    this.setState({
-      width: sizes.width,
-      height: sizes.height,
-      widthCompact: sizes.widthCompact,
-      heightCompact: sizes.heightCompact
-    });
   },
   render: function() {
-    if (!this.state.shown) {
+    if (!this.props.shown) {
       return (
         <div></div>
       );
@@ -140,7 +115,7 @@ var ModalPicker = React.createClass({
     return (
       <div className={className} style={styles.outer} >
         <div className="close-button" onclick={this.hide}><Tran tKey="close">close</Tran></div>
-        <div className="search-modal-content" ref="inner">{this.props.getContent(this.onSizeChange)}</div>
+        <div className="search-modal-content" ref="inner">{this.props.children}</div>
       </div>
     );
   }
