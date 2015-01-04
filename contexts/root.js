@@ -53,6 +53,16 @@ module.exports = {
           "/builds/placepicker.js"
         ],
         template: "templates/placepicker.jsx"
+      },
+      "search form": {
+        styles: [
+          "/styles/main.css",
+          "/styles/modules/skypicker.css"
+        ],
+        scripts: [
+          "/builds/searchform.js"
+        ],
+        template: "templates/searchform.jsx"
       }
     }
   }
