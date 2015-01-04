@@ -1,6 +1,6 @@
 window.translationStrategy = require('./../../modules/translationStrategies/waTr.js');
 window.tr = require('./../../modules/tr.js');
-window.DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
+window.ShowDatePicker = require('./../../modules/plainJsAdapters/ShowDatePicker.jsx');
 window.SearchDate = require('./../../modules/containers/SearchDate.js');
 
 function searchDateToString (date) {
@@ -28,7 +28,7 @@ function searchDateToString (date) {
   var selectedDate1 = new SearchDate();
   var element1 = document.getElementById("date-picker");
   var element1json = document.getElementById("date-picker-json");
-  datePicker1 = new DatePickerModal({
+  datePicker1 = new ShowDatePicker({
     element: element1,
     //defaultValue: selectedDate1,
     modes: {

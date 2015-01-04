@@ -1,13 +1,13 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var SearchDate = require('./../containers/SearchDate.js');
+var SearchDate = require('./../../containers/SearchDate.js');
 
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
-var tr = require('./../tr.js');
-var isIE = require('./../tools/isIE.js');
+var tr = require('./../../tr.js');
+var isIE = require('./../../tools/isIE.js');
 
 
 React.initializeTouchEvents(true);

@@ -3,7 +3,7 @@ window.tr = require('./../../modules/tr.js');
 //window.PlacePickerModal = require('./../../modules/PlacePicker/PlacePickerModal.jsx');
 window.SearchPlace = require('./../../modules/containers/SearchPlace.js');
 //
-window.ShowPlacePicker = require('./../../modules/bundles/placepicker.jsx');
+window.ShowPlacePicker = require('./../../modules/plainJsAdapters/ShowPlacePicker.jsx');
 
 console.log("start");
 

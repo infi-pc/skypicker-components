@@ -7,7 +7,6 @@ class ShowPlacePicker {
 
     var div = document.createElement('div');
     div.setAttribute('class', 'datepicker-modal-container-element');
-    //TODO default option to append child
     var appendToElement = options.appendToElement ? options.appendToElement : document.body;
     appendToElement.appendChild(div);
     this.htmlElement = div;

@@ -51,12 +51,13 @@ var PlacePickerModal = React.createClass({
       contentSize: sizes
     });
   },
-  setValue: function(newValue) {
-    this.value = newValue;
-    if (this.value) {
-      this.component.setSearchText(this.value.getText());
-    }
-  },
+  //TODO move
+  //setValue: function(newValue) {
+  //  this.value = newValue;
+  //  if (this.value) {
+  //    this.component.setSearchText(this.value.getText());
+  //  }
+  //},
   render: function() {
     var options = deepmerge(defaultOptions,this.props.options);
     return (
