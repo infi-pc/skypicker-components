@@ -65,9 +65,9 @@ var DatePickerModal = React.createClass({
   onValueChange: function (value, changeType) {
     var options = this.getOptions();
     if (options.modes[value.mode] && options.modes[value.mode].closeAfter == changeType) {
-      this.hide();
+      this.props.onHide();
     }
-    options.onChange(value, changeType);
+    this.props.onChange(value, changeType);
   },
   onSizeChange: function (sizes) {
     this.setState({

@@ -41,7 +41,12 @@ var SearchForm = React.createClass({
     Object.keys(this.components).forEach((key) => {
       this.components[key].setProps({
         inputElement: this.refs[key].getDOMNode(),
-        value: this.state[key]
+        value: this.state[key],
+        onHide: () => {
+          console.log("uhhh");
+          this.showFieldFunc("")();
+        },
+        onChange: this.changeValueFunc(key)
       });
     });
 
@@ -50,13 +55,22 @@ var SearchForm = React.createClass({
   },
   formatDate: function (searchDate) {
     if (!searchDate) return "";
-    return searchDate
+    return searchDate.format();
   },
   formatPlace: function (searchPlace) {
     if (!searchPlace) return "";
     return searchPlace.getText();
   },
-  showField: function (fieldName) {
+  changeValueFunc: function (fieldName) {
+    return (value) => {
+      Object.keys(this.components).forEach((key) => {
+        var addState = {};
+        addState[fieldName] = value;
+        this.setState(addState);
+      });
+    }
+  },
+  showFieldFunc: function (fieldName) {
     return () => {
       Object.keys(this.components).forEach((key) => {
         this.components[key].setProps({
@@ -65,30 +79,58 @@ var SearchForm = React.createClass({
       });
     }
   },
-  render: function() {
-
+  changePlaceTextFunc: function (fieldName) {
+    return (e) => {
+      var addState = {};
+      addState[fieldName] = new SearchPlace(e.target.value);
+      this.setState(addState);
+    }
+  },
+  changeDateTextFunc: function (fieldName) {
+    return () => {
+      //it should do nothing
+    }
+  },
+  componentDidUpdate: function () {
     if (this.modalComponentsLoaded) {
-      this.components.dateFrom.setProps({
-        value: this.state.dateFrom
-      });
-      this.components.dateTo.setProps({
-        value: this.state.dateTo
-      });
-      this.components.origin.setProps({
-        value: this.state.origin
-      });
-      this.components.destination.setProps({
-        value: this.state.destination
+      Object.keys(this.components).forEach((key) => {
+        this.components[key].setProps({
+          value: this.state[key]
+        });
       });
     }
-
-
+  },
+  render: function() {
     return ( //TODO add on change
       <div>
-        <input value={this.formatDate(this.state.dateFrom)} onFocus={this.showField("dateFrom")} type="text" ref="dateFrom" />
-        <input value={this.formatDate(this.state.dateTo)} onFocus={this.showField("dateTo")} type="text" ref="dateTo" />
-        <input value={this.formatPlace(this.state.origin)} onFocus={this.showField("origin")} type="text" ref="origin" />
-        <input value={this.formatPlace(this.state.destination)} onFocus={this.showField("destination")} type="text" ref="destination" />
+        <input
+          value={this.formatPlace(this.state.origin)}
+          onFocus={this.showFieldFunc("origin")}
+          type="text"
+          ref="origin"
+          onChange={this.changePlaceTextFunc("origin")}
+        />
+        <input
+          value={this.formatPlace(this.state.destination)}
+          onFocus={this.showFieldFunc("destination")}
+          type="text"
+          ref="destination"
+          onChange={this.changePlaceTextFunc("destination")}
+        />
+        <input
+          value={this.formatDate(this.state.dateFrom)}
+          onFocus={this.showFieldFunc("dateFrom")}
+          type="text"
+          ref="dateFrom"
+          onChange={this.changeDateTextFunc("dateFrom")}
+        />
+        <input
+          value={this.formatDate(this.state.dateTo)}
+          onFocus={this.showFieldFunc("dateTo")}
+          type="text"
+          ref="dateTo"
+          onChange={this.changeDateTextFunc("dateTo")}
+        />
       </div>
     );
   }

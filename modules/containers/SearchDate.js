@@ -94,6 +94,25 @@ SearchDate.prototype.getMaxStayDays = function() {
   }
 };
 
+SearchDate.prototype.format = function () {
+  if (this.mode == "single") {
+    return this.from.format("l")
+  } else if (this.mode == "timeToStay") {
+    return this.minStayDays+ " - " + this.maxStayDays + " days"
+  } else if (this.mode == "interval" || this.mode == "month") {
+    var toDateString;
+    if (!this.to) {
+      toDateString = "_"
+    } else {
+      toDateString = this.to.format("l")
+    }
+    return this.from.format("l") + " - " + toDateString
+  } else {
+    return this.mode
+  }
+};
+
+
 /* wa url */
 SearchDate.prototype.toUrlString = function() {
   return this.mode + "_" + this.from.format(urlDateFormat) + "_" + this.to.format(urlDateFormat);
