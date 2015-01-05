@@ -91,8 +91,7 @@ var PlacePicker = React.createClass({
 
   renderAll: function () {
     return (
-      <div>
-        <span>{this.props.value.getText()}</span>
+      <div className="places">
         {this.renderPlaces()}
       </div>
     )
@@ -103,7 +102,6 @@ var PlacePicker = React.createClass({
   },
 
   renderPlaces: function () {
-    console.log(this.state.places);
     return this.state.places.map(function (place) {
       return (<Place place={place} />)
     });
