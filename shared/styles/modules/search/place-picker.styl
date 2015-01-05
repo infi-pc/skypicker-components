@@ -5,7 +5,9 @@
       overflow-y scroll
       height: 100%;
       width: 417px;
+
   .place-row
+    position: relative
     height 30px;
     line-height 30px;
     width: 390px
@@ -14,9 +16,12 @@
     cursor pointer
     &:hover, &.selected
       background-color #fff9ce
+
     .name
-      float left
-      width: 300px
+      position: absolute;
+      /*margin-top: 11px;*/
+
     .type
-      float right
+      position: absolute;
+      right: 0px
 

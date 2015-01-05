@@ -7,7 +7,6 @@ var deepmerge = require('deepmerge');
 
 var defaultOptions = {
   initialValue: new SearchPlace(),
-  onHide: function() {},
   locale: "en",
   sizes: {
     all: {width: 600, height: 200},

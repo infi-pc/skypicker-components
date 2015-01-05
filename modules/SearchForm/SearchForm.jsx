@@ -6,6 +6,53 @@ var SearchDate = require('./../containers/SearchDate.js');
 var SearchPlace = require('./../containers/SearchPlace.js');
 
 
+var options = {
+  dateFrom: {
+    modes: {
+      single: true,
+      interval: true,
+      month: true,
+      timeToStay: false,
+      anytime: true,
+      noReturn: false
+    }
+  },
+  dateTo: {
+    modes: {
+      single: true,
+      interval: true,
+      month: true,
+      timeToStay: true,
+      anytime: true,
+      noReturn: true
+    }
+  },
+  origin: {
+    modes: {
+      all: true,
+      nearby: false,
+      cheapest: false,
+      citiesAndAirports: true,
+      countries: true,
+      anywhere: false,
+      radius: true
+    }
+  },
+  destination: {
+    modes: {
+      all: true,
+      nearby: false,
+      cheapest: false,
+      citiesAndAirports: true,
+      countries: true,
+      anywhere: true,
+      radius: true
+    }
+  }
+};
+
+
+
 var SearchForm = React.createClass({
 
   getInitialState: function() {
@@ -45,7 +92,8 @@ var SearchForm = React.createClass({
         onHide: () => {
           this.showFieldFunc("")();
         },
-        onChange: this.changeValueFunc(key)
+        onChange: this.changeValueFunc(key),
+        options: options[key]
       });
     });
 

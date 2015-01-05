@@ -18,6 +18,9 @@ class Place {
       return "unknown";
     }
   }
+  getTypeId() {
+    return this.original.type
+  }
   //fillFromApiObject(apiObj) {
   //  Object.keys(apiObj).forEach((key) => {
   //    this[key] = apiObj[key];

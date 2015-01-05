@@ -83,7 +83,6 @@ var PlacePicker = React.createClass({
   },
 
   adjustScroll: function () {
-    console.log(this.refs.places, this.refs.selectedPlace);
     if (this.refs.places && this.refs.selectedPlace) {
       var placesElement = this.refs.places.getDOMNode();
       var selectedElement = this.refs.selectedPlace.getDOMNode();
@@ -107,7 +106,7 @@ var PlacePicker = React.createClass({
       all: tr("All","all"),
       nearby: tr("Nearby","nearby"),
       cheapest: tr("Cheapest","cheapest"),
-      citiesAndAirports: tr("Time to stay","cities_and_airports"),
+      citiesAndAirports: tr("Cities and airports","cities_and_airports"),
       countries: tr("Countries","countries"),
       anywhere: tr("Anywhere","anywhere"),
       radius: tr("Radius search","radius")
@@ -166,11 +165,7 @@ var PlacePicker = React.createClass({
   },
 
   renderAll: function () {
-    return (
-      <div ref="places" className="places">
-        {this.renderPlaces()}
-      </div>
-    )
+    return this.renderPlaces();
   },
 
   renderNearby: function () {
@@ -181,8 +176,12 @@ var PlacePicker = React.createClass({
     return (<div>sss</div>)
   },
 
+  renderCitiesAndAirports: function () {
+    return this.renderPlaces([Place.TYPE_CITY, Place.TYPE_AIRPORT]);
+  },
+
   renderCountries: function () {
-    return (<div>sss</div>)
+    return this.renderPlaces([Place.TYPE_COUNTRY]);
   },
 
   renderAnywhere: function () {
@@ -193,16 +192,33 @@ var PlacePicker = React.createClass({
     return (<div>sss</div>)
   },
 
-  renderPlaces: function () {
+  filterPlacesByType: function (places , types) {
+    if (types) {
+      return places.filter((place) => {
+        return types.indexOf(place.getType()) != -1;
+      });
+    } else {
+      return places;
+    }
+  },
+
+  renderPlaces: function (types) {
+
     var selected = this.state.places[this.state.keySelectedIndex];
-    return this.state.places.map((place) => {
+    var filteredPlaces = this.filterPlacesByType(this.state.places, types);
+    var limitedPlaces = filteredPlaces.splice(0,50);
+    var placesCode = limitedPlaces.map((place) => {
       if (selected == place) {
         return (<Place ref="selectedPlace" selected={selected == place} onSelect={this.changeValue} place={place} />)
       } else {
         return (<Place onSelect={this.changeValue} place={place} />)
       }
-
     });
+    return (
+      <div ref="places" className="places">
+        {placesCode}
+      </div>
+    )
   },
 
   componentDidUpdate: function (prevProps, prevState) {
