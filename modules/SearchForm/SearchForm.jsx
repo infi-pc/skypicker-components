@@ -43,7 +43,6 @@ var SearchForm = React.createClass({
         inputElement: this.refs[key].getDOMNode(),
         value: this.state[key],
         onHide: () => {
-          console.log("uhhh");
           this.showFieldFunc("")();
         },
         onChange: this.changeValueFunc(key)
