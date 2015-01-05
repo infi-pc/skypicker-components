@@ -42,7 +42,6 @@ TimelineStore.prototype.preload = function (dateFrom, dateTo, callback) {
     }
     callback();
   });
-  console.log("requested");
 };
 
 TimelineStore.prototype.getDay = function (date) {

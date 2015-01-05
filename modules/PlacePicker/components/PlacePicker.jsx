@@ -1,5 +1,8 @@
 /** @jsx React.DOM */
 
+
+var testShit = null;
+
 var React = require('react');
 React.initializeTouchEvents(true);
 var tr = require('./../../tr.js');
@@ -9,9 +12,8 @@ var Place = require('./Place.jsx');
 var PlacePicker = React.createClass({
 
   getInitialState: function() {
-    console.log("new state");
     return {
-      value: this.props.value,
+      lastValue: new SearchPlace(""),
       viewMode: "all",
       places: [],
       apiError: false,
@@ -68,7 +70,6 @@ var PlacePicker = React.createClass({
           loading: false
         });
       } else {
-        console.log("error");
         this.setState({
           places: [],
           apiError: true,
@@ -131,12 +132,11 @@ var PlacePicker = React.createClass({
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    console.log(prevProps.value.getText(), this.props.value.getText());
-    console.log(prevState, this.state);
-
-
-    if (prevProps.value.getText() != this.props.value.getText()) {
+    if (this.state.lastValue.getText() != this.props.value.getText()) {
       this.setSearchText(this.props.value.getText());
+      this.setState({
+        lastValue: this.props.value
+      });
     }
   },
 

@@ -68,7 +68,6 @@ var SkypickerAPI = (function() {
 
     //TODO oneforcity: request.oneForCity ? "1" : "",
 
-    console.log(searchParams);
     superagent
       .get(skypickerApiUrl)
       .query(searchParams)
