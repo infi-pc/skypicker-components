@@ -1,13 +1,28 @@
 class Place {
 
   constructor(plain) {
-    this.fillFromApiObject(plain)
+    this.original = plain;
   }
-  fillFromApiObject(apiObj) {
-    Object.keys(apiObj).forEach((key) => {
-      this[key] = apiObj[key];
-    });
+  getName() {
+    return this.original.value;
   }
+  getType() {
+    var type = this.original.type;
+    if (type == Place.TYPE_AIRPORT) {
+      return "airport";
+    } else if (type == Place.TYPE_COUNTRY) {
+      return "country";
+    } else if (type == Place.TYPE_CITY) {
+      return "city";
+    } else {
+      return "unknown";
+    }
+  }
+  //fillFromApiObject(apiObj) {
+  //  Object.keys(apiObj).forEach((key) => {
+  //    this[key] = apiObj[key];
+  //  });
+  //}
 }
 
 Place.TYPE_AIRPORT = 0;

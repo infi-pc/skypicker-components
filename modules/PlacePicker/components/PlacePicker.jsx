@@ -5,6 +5,7 @@ React.initializeTouchEvents(true);
 var tr = require('./../../tr.js');
 var PlacesAPI = require('./../../APIs/PlacesAPI.jsx');
 
+var Place = require('./Place.jsx');
 var PlacePicker = React.createClass({
 
   getInitialState: function() {
@@ -58,8 +59,6 @@ var PlacePicker = React.createClass({
       searchText: searchText
     });
     placesAPI.findByName(searchText, (error, results) => {
-      console.log(error);
-      console.log(results);
       //TODO prevent race condition
       if (!error) {
         this.setState({
@@ -104,9 +103,9 @@ var PlacePicker = React.createClass({
   },
 
   renderPlaces: function () {
-    //console.log(this.state.places);
+    console.log(this.state.places);
     return this.state.places.map(function (place) {
-      return (<div>{place.name}</div>)
+      return (<Place place={place} />)
     });
   },
 
