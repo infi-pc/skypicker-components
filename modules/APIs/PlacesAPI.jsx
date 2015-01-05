@@ -23,15 +23,14 @@ class PlacesAPI {
       .query(searchParams)
       //.set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Accept', 'application/json')
-      .end( (error, res) => {
-        if (!error) {
-          callback(error, this.convertResults(res.body));
+      .end( (res) => {
+        if (!res.error) {
+          callback(null, this.convertResults(res.body));
         } else {
-          callback(error);
+          callback(res.error);
         }
       });
   }
 }
-
 
 module.exports = PlacesAPI;

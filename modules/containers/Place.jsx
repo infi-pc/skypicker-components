@@ -4,7 +4,7 @@ class Place {
     this.fillFromApiObject(plain)
   }
   fillFromApiObject(apiObj) {
-    Object.keys(apiObj).forEach(function(key) {
+    Object.keys(apiObj).forEach((key) => {
       this[key] = apiObj[key];
     });
   }

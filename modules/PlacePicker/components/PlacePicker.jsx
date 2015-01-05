@@ -52,31 +52,29 @@ var PlacePicker = React.createClass({
   },
 
   setSearchText: function (searchText) {
-    if (searchText != this.state.lastSearched) {
-      var placesAPI = new PlacesAPI({lang: this.props.lang});
-      this.setState({
-        loading: true,
-        searchText: searchText
-      });
-      placesAPI.findByName(searchText, (error, results) => {
-        //TODO prevent race condition
-        if (!error) {
-          this.setState({
-            lastSearched: searchText,
-            places: results,
-            apiError: false,
-            loading: false
-          });
-        } else {
-          this.setState({
-            lastSearched: null,
-            places: [],
-            apiError: true,
-            loading: false
-          });
-        }
-      });
-    }
+    var placesAPI = new PlacesAPI({lang: this.props.lang});
+    this.setState({
+      loading: true,
+      searchText: searchText
+    });
+    placesAPI.findByName(searchText, (error, results) => {
+      console.log(error);
+      console.log(results);
+      //TODO prevent race condition
+      if (!error) {
+        this.setState({
+          places: results,
+          apiError: false,
+          loading: false
+        });
+      } else {
+        this.setState({
+          places: [],
+          apiError: true,
+          loading: false
+        });
+      }
+    });
   },
 
   renderBody: function() {
@@ -95,7 +93,7 @@ var PlacePicker = React.createClass({
   renderAll: function () {
     return (
       <div>
-        <span>{this.state.searchText}</span>
+        <span>{this.props.value.getText()}</span>
         {this.renderPlaces()}
       </div>
     )
@@ -106,10 +104,18 @@ var PlacePicker = React.createClass({
   },
 
   renderPlaces: function () {
+    //console.log(this.state.places);
     return this.state.places.map(function (place) {
       return (<div>{place.name}</div>)
     });
   },
+
+  componentDidUpdate: function (prevProps, prevState) {
+    if (prevProps.value.getText() != this.props.value.getText()) {
+      this.setSearchText(this.props.value.getText());
+    }
+  },
+
   render: function() {
     var mode = this.state.viewMode;
 
