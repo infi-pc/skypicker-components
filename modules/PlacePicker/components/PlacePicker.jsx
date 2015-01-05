@@ -3,12 +3,13 @@
 var React = require('react');
 React.initializeTouchEvents(true);
 var tr = require('./../../tr.js');
-var PlacesAPI = require('./../../APIs/PlacesAPI.jsx');
+var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
 
 var Place = require('./Place.jsx');
 var PlacePicker = React.createClass({
 
   getInitialState: function() {
+    console.log("new state");
     return {
       value: this.props.value,
       viewMode: "all",
@@ -67,6 +68,7 @@ var PlacePicker = React.createClass({
           loading: false
         });
       } else {
+        console.log("error");
         this.setState({
           places: [],
           apiError: true,
@@ -74,6 +76,11 @@ var PlacePicker = React.createClass({
         });
       }
     });
+  },
+
+  changeValue: function (value) {
+
+    this.props.onChange(new SearchPlace(value));
   },
 
   renderBody: function() {
@@ -101,13 +108,33 @@ var PlacePicker = React.createClass({
     return (<div>sss</div>)
   },
 
+  renderCheapest: function () {
+    return (<div>sss</div>)
+  },
+
+  renderCountries: function () {
+    return (<div>sss</div>)
+  },
+
+  renderAnywhere: function () {
+    return (<div>sss</div>)
+  },
+
+  renderRadius: function () {
+    return (<div>sss</div>)
+  },
+
   renderPlaces: function () {
-    return this.state.places.map(function (place) {
-      return (<Place place={place} />)
+    return this.state.places.map((place) => {
+      return (<Place onSelect={this.changeValue} place={place} />)
     });
   },
 
   componentDidUpdate: function (prevProps, prevState) {
+    console.log(prevProps.value.getText(), this.props.value.getText());
+    console.log(prevState, this.state);
+
+
     if (prevProps.value.getText() != this.props.value.getText()) {
       this.setSearchText(this.props.value.getText());
     }

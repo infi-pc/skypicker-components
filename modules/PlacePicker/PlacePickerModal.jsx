@@ -30,6 +30,9 @@ var defaultOptions = {
 };
 
 var PlacePickerModal = React.createClass({
+  getOptions: function() {
+    return deepmerge(defaultOptions,this.props.options);
+  },
   getDefaultProps: function () {
     return {
       options: {}
@@ -40,8 +43,9 @@ var PlacePickerModal = React.createClass({
       contentSize: {}
     };
   },
-  onValueChange: function () {
-    if (this.props.options.modes[value.mode] && this.props.options.modes[value.mode].closeAfter == changeType) {
+  onValueChange: function (value, changeType) {
+    var options = this.getOptions();
+    if (options.modes[value.mode] && options.modes[value.mode].closeAfter == changeType) {
       this.props.onHide();
     }
     this.props.onChange(value, changeType);
@@ -51,15 +55,8 @@ var PlacePickerModal = React.createClass({
       contentSize: sizes
     });
   },
-  //TODO move
-  //setValue: function(newValue) {
-  //  this.value = newValue;
-  //  if (this.value) {
-  //    this.component.setSearchText(this.value.getText());
-  //  }
-  //},
   render: function() {
-    var options = deepmerge(defaultOptions,this.props.options);
+    var options = deepmerge(defaultOptions,this.getOptions());
     return (
       <ModalPicker shown={this.props.shown} contentSize={this.state.contentSize} inputElement={this.props.inputElement} onHide={this.props.onHide}>
         <PlacePicker value={this.props.value} ref="placePicker" onChange={this.onValueChange} sizes={options.sizes} modes={options.modes} onSizeChange={this.onSizeChange} >
