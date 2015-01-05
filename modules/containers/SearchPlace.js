@@ -20,7 +20,14 @@ SearchPlace.prototype.getText = function () {
   } else if (this.mode == "place") {
     return this.value.getName();
   }
+};
 
+SearchPlace.prototype.getPlace = function () {
+  if (this.mode == "place") {
+    return this.value;
+  } else {
+    return null;
+  }
 };
 
 module.exports = SearchPlace;

@@ -5,8 +5,12 @@ var Place = React.createClass({
   },
   render: function () {
     var place = this.props.place;
+    var className = "place-row";
+    if (this.props.selected) {
+      className += " selected";
+    }
     return (
-      <div className="place-row" onClick={this.click}>
+      <div className={className} onClick={this.click}>
         <span className="name">
           {place.getName()}
         </span>

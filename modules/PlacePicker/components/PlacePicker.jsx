@@ -9,6 +9,19 @@ var tr = require('./../../tr.js');
 var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
 
 var Place = require('./Place.jsx');
+
+function findPos(obj) {
+  var curtop = 0;
+  if (obj.offsetParent) {
+    do {
+      curtop += obj.offsetTop;
+    } while (obj = obj.offsetParent);
+    return [curtop];
+  }
+}
+
+
+
 var PlacePicker = React.createClass({
 
   getInitialState: function() {
@@ -16,6 +29,7 @@ var PlacePicker = React.createClass({
       lastValue: new SearchPlace(""),
       viewMode: "all",
       places: [],
+      keySelectedIndex: -1,
       apiError: false,
       loading: false
     };
@@ -28,9 +42,64 @@ var PlacePicker = React.createClass({
       lang: 'en'
     };
   },
+
+  keypress: function (e) {
+    if (e.keyIdentifier == "Up") {
+      this.moveUp();
+    } else if (e.keyIdentifier == "Down") {
+      this.moveDown();
+    } else if (e.keyIdentifier == "Enter") {
+      this.selectFromIndex();
+    }
+  },
+
+  moveUp: function () {
+    if (this.state.keySelectedIndex >= 0) {
+      this.setState({
+        keySelectedIndex: this.state.keySelectedIndex - 1
+      })
+    } else {
+      this.setState({
+        keySelectedIndex: this.state.places.length - 1
+      })
+    }
+  },
+
+  moveDown: function () {
+    var numOfPlaces = this.state.places.length;
+    if (this.state.keySelectedIndex < this.state.places.length) {
+      this.setState({
+        keySelectedIndex: this.state.keySelectedIndex + 1
+      })
+    } else {
+      this.setState({
+        keySelectedIndex: 0
+      })
+    }
+  },
+
+  selectFromIndex: function () {
+    this.changeValue(this.state.places[this.state.keySelectedIndex]);
+  },
+
+  adjustScroll: function () {
+    console.log(this.refs.places, this.refs.selectedPlace);
+    if (this.refs.places && this.refs.selectedPlace) {
+      var placesElement = this.refs.places.getDOMNode();
+      var selectedElement = this.refs.selectedPlace.getDOMNode();
+      placesElement.scrollTop = findPos(selectedElement) - 200;
+    }
+  },
+
   componentDidMount: function () {
     var mode = this.state.viewMode;
     this.props.onSizeChange(this.props.sizes[mode]);
+
+    document.addEventListener("keydown", this.keypress);
+  },
+
+  componentWillUnmount: function() {
+    document.removeEventListener("keydown", this.keypress);
   },
 
   getModeLabel: function (mode) {
@@ -80,7 +149,6 @@ var PlacePicker = React.createClass({
   },
 
   changeValue: function (value) {
-
     this.props.onChange(new SearchPlace(value));
   },
 
@@ -99,7 +167,7 @@ var PlacePicker = React.createClass({
 
   renderAll: function () {
     return (
-      <div className="places">
+      <div ref="places" className="places">
         {this.renderPlaces()}
       </div>
     )
@@ -126,18 +194,28 @@ var PlacePicker = React.createClass({
   },
 
   renderPlaces: function () {
+    var selected = this.state.places[this.state.keySelectedIndex];
     return this.state.places.map((place) => {
-      return (<Place onSelect={this.changeValue} place={place} />)
+      if (selected == place) {
+        return (<Place ref="selectedPlace" selected={selected == place} onSelect={this.changeValue} place={place} />)
+      } else {
+        return (<Place onSelect={this.changeValue} place={place} />)
+      }
+
     });
   },
 
   componentDidUpdate: function (prevProps, prevState) {
     if (this.state.lastValue.getText() != this.props.value.getText()) {
-      this.setSearchText(this.props.value.getText());
+      if (this.props.value.mode == "text") {
+        this.setSearchText(this.props.value.getText());
+      }
       this.setState({
-        lastValue: this.props.value
+        lastValue: this.props.value,
+        keySelectedIndex: -1
       });
     }
+    this.adjustScroll();
   },
 
   render: function() {
