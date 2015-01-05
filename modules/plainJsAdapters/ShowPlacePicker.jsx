@@ -16,7 +16,8 @@ class ShowPlacePicker {
     var root = React.createFactory(PlacePickerModal);
     this.modalComponent = React.render(root(), this.htmlElement);
     this.modalComponent.setProps({
-      options: options
+      options: options,
+      inputElement: options.element
     });
   }
   show() {

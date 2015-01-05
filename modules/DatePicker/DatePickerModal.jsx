@@ -77,7 +77,7 @@ var DatePickerModal = React.createClass({
   render: function() {
     var options = this.getOptions();
     return (
-      <ModalPicker shown={this.props.shown} contentSize={this.state.contentSize} inputElement={options.element} onHide={options.onHide}>
+      <ModalPicker shown={this.props.shown} contentSize={this.state.contentSize} inputElement={this.props.inputElement} onHide={options.onHide}>
         <DatePicker value={this.props.value} ref="placePicker" onChange={this.onValueChange} sizes={options.sizes} modes={options.modes} onSizeChange={this.onSizeChange} >
         </DatePicker>
       </ModalPicker>

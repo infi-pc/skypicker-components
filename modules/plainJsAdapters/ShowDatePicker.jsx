@@ -31,7 +31,8 @@ class ShowDatePicker {
     this.modalComponent = React.render(root(), this.htmlElement);
     this.modalComponent.setProps({
       options: options,
-      value: new SearchDate()
+      value: new SearchDate(),
+      inputElement: options.element
     });
   }
   show() {
