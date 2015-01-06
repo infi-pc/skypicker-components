@@ -63,8 +63,10 @@ var PlacePicker = React.createClass({
     }
   },
 
-  componentDidUpdate: function () {
-    this.checkMode();
+  componentDidUpdate: function (nextProps, nextState) {
+    if (nextProps.value != this.props.value) {
+      this.checkMode();
+    }
   },
 
   selectValue: function (value) {
