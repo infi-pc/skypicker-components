@@ -25,26 +25,11 @@ var defaultOptions = {
       closeAfter: "select", // select
       finishAfter: "select" // select
     },
-    "interval": {
-      closeAfter: "selectComplete", // select
-      finishAfter: "selectComplete" // selectComplete | select
-    },
-    "month": {
-      closeAfter: "select", // select
-      finishAfter: "select" // select
-    },
-    "timeToStay": {
-      closeAfter: "", //TODO on click "ok"
-      finishAfter: "release" // release | select
-    },
-    "anytime": {
-      closeAfter: "select", // select
-      finishAfter: "select" // select
-    },
-    "noReturn": {
-      closeAfter: "select", // select
-      finishAfter: "select" // select
-    }
+    "interval": {},
+    "month": {},
+    "timeToStay": {},
+    "anytime": {},
+    "noReturn": {}
   }
 };
 
@@ -76,8 +61,9 @@ var DatePickerModal = React.createClass({
   },
   render: function() {
     var options = this.getOptions();
+    if (!this.props.shown) {return (<div></div>)}
     return (
-      <ModalPicker shown={this.props.shown} contentSize={this.state.contentSize} inputElement={this.props.inputElement} onHide={this.props.onHide}>
+      <ModalPicker contentSize={this.state.contentSize} inputElement={this.props.inputElement} onHide={this.props.onHide}>
         <DatePicker value={this.props.value} ref="placePicker" onChange={this.onValueChange} sizes={options.sizes} modes={options.modes} onSizeChange={this.onSizeChange} >
         </DatePicker>
       </ModalPicker>

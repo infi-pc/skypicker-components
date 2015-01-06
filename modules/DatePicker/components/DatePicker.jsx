@@ -89,7 +89,6 @@ var DatePicker = React.createClass({
     if (value) {
       newValue.mergeInto(value);
     }
-    newValue.final = !!(this.props.modes[newValue.mode] && this.props.modes[newValue.mode].finishAfter == changeType);
 
     this.props.onChange(newValue,changeType);
   },
@@ -114,7 +113,7 @@ var DatePicker = React.createClass({
       mode: "timeToStay",
       minStayDays: value,
       maxStayDays: this.getValue().maxStayDays
-    }, "select");
+    }, "dragged");
   },
 
   changeMaxStayDays: function (value) {
@@ -125,9 +124,8 @@ var DatePicker = React.createClass({
       mode: "timeToStay",
       minStayDays: this.getValue().minStayDays,
       maxStayDays: value
-    }, "select");
+    }, "dragged");
   },
-
 
   releaseMinStayDays: function () {
     // do not change value, but trigger it with different change type
@@ -135,6 +133,10 @@ var DatePicker = React.createClass({
   },
   releaseMaxStayDays: function () {
     this.changeValue(null, "release");
+  },
+
+  confirmTimeToStay: function () {
+    this.changeValue(this.props.value, "select");
   },
   //setAnytime: function () {
   //  this.changeValue({
@@ -188,6 +190,7 @@ var DatePicker = React.createClass({
           <Handle />
         </Slider>
         <div className="slider-axe"></div>
+        <div className="confirm-time-to-stay-button" onClick={this.confirmTimeToStay}>OK</div>
       </div>
     );
   },

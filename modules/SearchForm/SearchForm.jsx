@@ -4,7 +4,7 @@ var PlacePickerModal = require('./../PlacePicker/PlacePickerModal.jsx');
 
 var SearchDate = require('./../containers/SearchDate.js');
 var SearchPlace = require('./../containers/SearchPlace.js');
-
+var moment = require("moment");
 
 var options = {
   dateFrom: {
@@ -58,9 +58,10 @@ var SearchForm = React.createClass({
   getInitialState: function() {
     return {
       dateFrom: new SearchDate(),
-      dateTo: new SearchDate(),
-      origin: new SearchPlace(),
-      destination: new SearchPlace()
+      dateTo: new SearchDate({from: moment().add(1, "months")}),
+      origin: new SearchPlace("czech"),
+      destination: new SearchPlace("anywhere"),
+      active: "origin"
     };
   },
   getDefaultProps: function() {
@@ -90,7 +91,12 @@ var SearchForm = React.createClass({
         inputElement: this.refs[key].getDOMNode(),
         value: this.state[key],
         onHide: () => {
-          this.showFieldFunc("")();
+          if (this.state.active == key) {
+            console.log("stil weirrd", this.state.active, key);
+            this.setState({
+              active: ""
+            })
+          }
         },
         onChange: this.changeValueFunc(key),
         options: options[key]
@@ -98,7 +104,10 @@ var SearchForm = React.createClass({
     });
 
     this.modalComponentsLoaded = true;
-    //this.props.refs.destination.getDOMNode()
+    this.refreshShown();
+  },
+  componentDidUpdate: function () {
+    this.refreshShown();
   },
   formatDate: function (searchDate) {
     if (!searchDate) return "";
@@ -108,8 +117,36 @@ var SearchForm = React.createClass({
     if (!searchPlace) return "";
     return searchPlace.getText();
   },
+  nextField: function () {
+
+    var order = [
+      "origin",
+      "destination",
+      "dateFrom",
+      "dateTo"
+    ];
+    var index = order.indexOf(this.state.active);
+    var newIndex;
+    if (index >= 0 && index <= 2) {
+      newIndex = index+1
+    } else if (index == 3) {
+      //TODO focus on search btn
+      newIndex = -1
+    }
+    var newActive = order[newIndex];
+    console.log("next is " +  newIndex + " - "+ newActive);
+    this.setState({
+      active: newActive
+    });
+  },
   changeValueFunc: function (fieldName) {
-    return (value) => {
+    return (value, changeType) => {
+      if (changeType == "changeMode") {
+        //this.refs[fieldName].getDOMNode().focus();
+      }
+      if (changeType == "select") {
+        this.nextField();
+      }
       Object.keys(this.components).forEach((key) => {
         var addState = {};
         addState[fieldName] = value;
@@ -120,8 +157,8 @@ var SearchForm = React.createClass({
   showFieldFunc: function (fieldName) {
     return () => {
       Object.keys(this.components).forEach((key) => {
-        this.components[key].setProps({
-          shown: key == fieldName
+        this.setState({
+          active: fieldName
         });
       });
     }
@@ -138,17 +175,29 @@ var SearchForm = React.createClass({
       //it should do nothing
     }
   },
-  componentDidUpdate: function () {
+
+  refreshFocus: function () {
+    var domNode = this.refs[this.state.active].getDOMNode();
+    if (document.activeElement != domNode) {
+      domNode.focus();
+      domNode.select();
+    }
+  },
+
+  refreshShown: function () {
     if (this.modalComponentsLoaded) {
       Object.keys(this.components).forEach((key) => {
         this.components[key].setProps({
-          value: this.state[key]
+          value: this.state[key],
+          shown: key == this.state.active
         });
       });
+      this.refreshFocus();
     }
   },
+
   render: function() {
-    return ( //TODO add on change
+    return (
       <div>
         <input
           value={this.formatPlace(this.state.origin)}

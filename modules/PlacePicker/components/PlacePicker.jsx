@@ -8,13 +8,13 @@ React.initializeTouchEvents(true);
 var tr = require('./../../tr.js');
 
 var Places = require('./Places.jsx');
+var ModalMenuMixin = require('./../../ModalMenuMixin.jsx');
 var Place = require('./../../containers/Place.jsx');
 
 var PlacePicker = React.createClass({
-
+  mixins: [ModalMenuMixin],
   getInitialState: function() {
     return {
-
       viewMode: "all"
     };
   },
@@ -22,7 +22,6 @@ var PlacePicker = React.createClass({
   getDefaultProps: function() {
     return {
       value: null,
-      defaultMode: "single",
       lang: 'en'
     };
   },
@@ -32,6 +31,7 @@ var PlacePicker = React.createClass({
     this.props.onSizeChange(this.props.sizes[mode]);
   },
 
+  //TODO move it to options
   getModeLabel: function (mode) {
     var modeLabels = {
       all: tr("All","all"),
@@ -45,34 +45,12 @@ var PlacePicker = React.createClass({
     return modeLabels[mode];
   },
 
-  switchModeTo: function (mode) {
-    var self = this;
-    return function () {
-      self.setState({
-        viewMode: mode
-      });
-    }
-  },
-
-  changeValue: function (value) {
-    this.props.onChange(value);
-  },
-
-  renderBody: function() {
-    var mode = this.state.viewMode;
-    if (!mode ) {
-      return "";
-    }
-    var methodName = "render"+mode.charAt(0).toUpperCase() + mode.slice(1);
-    if (this[methodName]) {
-      return this[methodName]();
-    } else {
-      throw new Error("no such method: " + methodName)
-    }
+  selectValue: function (value) {
+    this.props.onChange(value, "select");
   },
 
   renderAll: function () {
-    return <Places key="allContent" search={this.props.value} onSelect={this.changeValue} />;
+    return <Places key="allContent" search={this.props.value} onSelect={this.selectValue} />;
   },
 
   renderNearby: function () {
@@ -84,11 +62,11 @@ var PlacePicker = React.createClass({
   },
 
   renderCitiesAndAirports: function () {
-    return <Places key="citiesAndAirportsContent" search={this.props.value} onSelect={this.changeValue} types={[Place.TYPE_CITY, Place.TYPE_AIRPORT]}/>;
+    return <Places key="citiesAndAirportsContent" search={this.props.value} onSelect={this.selectValue} types={[Place.TYPE_CITY, Place.TYPE_AIRPORT]}/>;
   },
 
   renderCountries: function () {
-    return <Places key="countriesContent" search={this.props.value} onSelect={this.changeValue} types={[Place.TYPE_COUNTRY]}/>;
+    return <Places key="countriesContent" search={this.props.value} onSelect={this.selectValue} types={[Place.TYPE_COUNTRY]}/>;
   },
 
   renderAnywhere: function () {
@@ -98,8 +76,6 @@ var PlacePicker = React.createClass({
   renderRadius: function () {
     return (<div>sss</div>)
   },
-
-
 
   render: function() {
     var mode = this.state.viewMode;

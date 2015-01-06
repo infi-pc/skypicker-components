@@ -55,18 +55,18 @@ var CalendarFrame = React.createClass({
     } else if (this.props.selectionMode == "interval") {
       //if interval decide on mode
       if (!this.props.value.from) {
-        this.setValue({mode: "interval", from: date, to: null},"select");
+        this.setValue({mode: "interval", from: date, to: null, final: false},"selectPartial");
       } else if (!this.props.value.to) {
         //if is before, just put start date again
         if (date < this.props.value.from) {
-          this.setValue({mode: "interval", from: date, to: null},"select");
+          this.setValue({mode: "interval", from: date, to: null, final: false},"selectPartial");
         } else {
-          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date},"selectComplete");
+          this.setValue({mode: "interval", from: moment.utc(this.props.value.from), to: date},"select");
         }
 
       } else {
         // if i have chosen both i start to pick new one
-        this.setValue({mode: "interval", from: date, to: null},"select");
+        this.setValue({mode: "interval", from: date, to: null, final: false},"selectPartial");
       }
     }
   },

@@ -106,11 +106,6 @@ var ModalPicker = React.createClass({
     }
   },
   render: function() {
-    if (!this.props.shown) {
-      return (
-        <div></div>
-      );
-    }
     var styles = this.calculateStyles();
     var className = "search-modal " + (styles.addClass ? styles.addClass : "");
     return (

@@ -20,7 +20,7 @@ SearchDate = function (input) {
   this.to = plain.to || moment.utc();
   this.minStayDays = typeof(plain.minStayDays) != 'undefined'? plain.minStayDays : 2;
   this.maxStayDays = typeof(plain.maxStayDays) != 'undefined'? plain.maxStayDays : 10;
-  this.final = true;
+  this.final = typeof(plain.final) != 'undefined'? plain.final : true;
 };
 
 /* sets mode with checking some internal validity */
