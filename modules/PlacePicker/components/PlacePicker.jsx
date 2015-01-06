@@ -11,6 +11,10 @@ var Places = require('./Places.jsx');
 var ModalMenuMixin = require('./../../ModalMenuMixin.jsx');
 var Place = require('./../../containers/Place.jsx');
 
+
+var airportsAndCitiesTypes = [Place.TYPE_CITY, Place.TYPE_AIRPORT];
+var countryTypes = [Place.TYPE_COUNTRY];
+
 var PlacePicker = React.createClass({
   mixins: [ModalMenuMixin],
   getInitialState: function() {
@@ -74,7 +78,7 @@ var PlacePicker = React.createClass({
   },
 
   renderAll: function () {
-    return <Places key="allContent" search={this.props.value} onSelect={this.selectValue} />;
+    return <Places search={this.props.value} onSelect={this.selectValue} />;
   },
 
   renderNearby: function () {
@@ -86,19 +90,19 @@ var PlacePicker = React.createClass({
   },
 
   renderCitiesAndAirports: function () {
-    return <Places key="citiesAndAirportsContent" search={this.props.value} onSelect={this.selectValue} types={[Place.TYPE_CITY, Place.TYPE_AIRPORT]}/>;
+    return <Places search={this.props.value} onSelect={this.selectValue} types={airportsAndCitiesTypes}/>;
   },
 
   renderCountries: function () {
-    return <Places key="countriesContent" search={this.props.value} onSelect={this.selectValue} types={[Place.TYPE_COUNTRY]}/>;
+    return <Places search={this.props.value} onSelect={this.selectValue} types={countryTypes}/>;
   },
 
   renderAnywhere: function () {
-    return (<div>sss</div>)
+    return (<div></div>)
   },
 
   renderRadius: function () {
-    return (<div>sss</div>)
+    return (<div></div>)
   },
 
   render: function() {
@@ -110,7 +114,6 @@ var PlacePicker = React.createClass({
         modeOptions.push(<div key={imode} className={ (mode == imode) ? "active" : "" } onClick={ this.switchModeTo(imode) }>{ this.getModeLabel(imode) }</div>)
       }
     }
-
     return (
       <div className={'search-place-picker search-picker '+mode}>
         <div className="mode-selector">

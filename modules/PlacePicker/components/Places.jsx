@@ -16,6 +16,7 @@ var Places = React.createClass({
   getInitialState: function () {
     return {
       lastSearch: null,
+      lastTypes: null,
       places: [],
       keySelectedIndex: -1,
       apiError: false,
@@ -139,6 +140,12 @@ var Places = React.createClass({
       this.setSearchText(textToSearch);
       this.setState({
         lastSearch: textToSearch,
+        keySelectedIndex: -1
+      });
+    } else if (this.state.lastTypes != this.props.types) {
+      this.setSearchText(textToSearch);
+      this.setState({
+        lastTypes: this.props.types,
         keySelectedIndex: -1
       });
     }
