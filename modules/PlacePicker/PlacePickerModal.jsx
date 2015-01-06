@@ -12,10 +12,10 @@ var defaultOptions = {
     all: {width: 600, height: 200},
     nearby: {width: 600, height: 200},
     cheapest: {width: 600, height: 200},
-    citiesAndAirports: {width: 454, height: 200},
-    countries: {width: 454, height: 200},
-    anywhere: {width: 454, height: 200},
-    radius: {width: 454, height: 200}
+    citiesAndAirports: {width: 600, height: 200},
+    countries: {width: 600, height: 200},
+    anywhere: {width: 169, height: 200},
+    radius: {width: 169, height: 200}
   },
   modes: {
     "all": {},

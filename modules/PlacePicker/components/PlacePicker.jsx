@@ -15,7 +15,7 @@ var PlacePicker = React.createClass({
   mixins: [ModalMenuMixin],
   getInitialState: function() {
     return {
-      viewMode: "all"
+      viewMode: this.getDefaultMode()
     };
   },
 
@@ -24,6 +24,14 @@ var PlacePicker = React.createClass({
       value: null,
       lang: 'en'
     };
+  },
+
+  getDefaultMode: function () {
+    if (this.props.value.mode != "text" || this.props.value.isDefault) {
+      return "countries";
+    } else {
+      return "all";
+    }
   },
 
   componentDidMount: function () {
@@ -43,6 +51,20 @@ var PlacePicker = React.createClass({
       radius: tr("Radius search","radius")
     };
     return modeLabels[mode];
+  },
+
+  checkMode: function () {
+    if (this.props.value.mode == "text" && !this.props.value.isDefault) {
+      if (this.state.viewMode != "all") {
+        this.setState({
+          viewMode: "all"
+        });
+      }
+    }
+  },
+
+  componentDidUpdate: function () {
+    this.checkMode();
   },
 
   selectValue: function (value) {

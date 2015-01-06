@@ -15,7 +15,7 @@ var Places = React.createClass({
 
   getInitialState: function () {
     return {
-      lastSearch: new SearchPlace(""),
+      lastSearch: null,
       places: [],
       keySelectedIndex: -1,
       apiError: false,
@@ -124,13 +124,20 @@ var Places = React.createClass({
     this.props.onSelect( new SearchPlace(value) );
   },
 
+  getTextToSearch: function () {
+    if (this.props.search.mode == "text" && !this.props.search.isDefault) {
+      return this.props.search.getText();
+    } else {
+      return "";
+    }
+  },
+
   checkNewPlaces: function () {
-    if (this.state.lastSearch.getText() != this.props.search.getText()) {
-      if (this.props.search.mode == "text" && !this.props.search.isDefault) {
-        this.setSearchText(this.props.search.getText());
-      }
+    var textToSearch = this.getTextToSearch();
+    if (this.state.lastSearch !== textToSearch) {
+      this.setSearchText(textToSearch);
       this.setState({
-        lastSearch: this.props.search,
+        lastSearch: textToSearch,
         keySelectedIndex: -1
       });
     }

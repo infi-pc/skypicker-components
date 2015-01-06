@@ -17,8 +17,8 @@ var defaultOptions = {
     interval: {width: 907, height: 200, widthCompact: 454},
     month: {width: 550, height: 200},
     timeToStay: {width: 550, height: 200},
-    anytime: {width: 550, height: 200},
-    noReturn: {width: 550, height: 200}
+    anytime: {width: 169, height: 200},
+    noReturn: {width: 169, height: 200}
   },
   modes: {
     "single": {
