@@ -126,7 +126,7 @@ var Places = React.createClass({
 
   checkNewPlaces: function () {
     if (this.state.lastSearch.getText() != this.props.search.getText()) {
-      if (this.props.search.mode == "text") {
+      if (this.props.search.mode == "text" && !this.props.search.isDefault) {
         this.setSearchText(this.props.search.getText());
       }
       this.setState({

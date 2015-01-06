@@ -1,7 +1,7 @@
 /* it has similar modes as PlacePicker, but they are not exactly same */
 /* modes: text, place, anywhere, radius, ... */
 
-SearchPlace = function (input) {
+SearchPlace = function (input, isDefault) {
   if (typeof input == 'undefined') {
     this.mode = "text";
     this.value = "";
@@ -12,6 +12,7 @@ SearchPlace = function (input) {
     this.mode = "place";
     this.value = input;
   }
+  this.isDefault = isDefault; /* this is set only when you want to use text as predefined value */
 };
 
 SearchPlace.prototype.getText = function () {

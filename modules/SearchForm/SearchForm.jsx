@@ -59,8 +59,8 @@ var SearchForm = React.createClass({
     return {
       dateFrom: new SearchDate(),
       dateTo: new SearchDate({from: moment().add(1, "months")}),
-      origin: new SearchPlace("czech"),
-      destination: new SearchPlace("anywhere"),
+      origin: new SearchPlace("czech", true),
+      destination: new SearchPlace("anywhere", true),
       active: "origin"
     };
   },
@@ -163,6 +163,15 @@ var SearchForm = React.createClass({
       });
     }
   },
+  onFocusFunc: function (fieldName) {
+    return () => {
+      this.showFieldFunc(fieldName)();
+      var value = this.state[fieldName];
+      if (value.mode != "text" || value.isDefault) {
+        this.refs[fieldName].getDOMNode().select();
+      }
+    }
+  },
   changePlaceTextFunc: function (fieldName) {
     return (e) => {
       var addState = {};
@@ -180,7 +189,10 @@ var SearchForm = React.createClass({
     var domNode = this.refs[this.state.active].getDOMNode();
     if (document.activeElement != domNode) {
       domNode.focus();
-      domNode.select();
+      var activeValue = this.state[this.state.active];
+      if (activeValue.mode != "text" || activeValue.isDefault) {
+        domNode.select();
+      }
     }
   },
 
@@ -201,28 +213,28 @@ var SearchForm = React.createClass({
       <div>
         <input
           value={this.formatPlace(this.state.origin)}
-          onFocus={this.showFieldFunc("origin")}
+          onFocus={this.onFocusFunc("origin")}
           type="text"
           ref="origin"
           onChange={this.changePlaceTextFunc("origin")}
         />
         <input
           value={this.formatPlace(this.state.destination)}
-          onFocus={this.showFieldFunc("destination")}
+          onFocus={this.onFocusFunc("destination")}
           type="text"
           ref="destination"
           onChange={this.changePlaceTextFunc("destination")}
         />
         <input
           value={this.formatDate(this.state.dateFrom)}
-          onFocus={this.showFieldFunc("dateFrom")}
+          onFocus={this.onFocusFunc("dateFrom")}
           type="text"
           ref="dateFrom"
           onChange={this.changeDateTextFunc("dateFrom")}
         />
         <input
           value={this.formatDate(this.state.dateTo)}
-          onFocus={this.showFieldFunc("dateTo")}
+          onFocus={this.onFocusFunc("dateTo")}
           type="text"
           ref="dateTo"
           onChange={this.changeDateTextFunc("dateTo")}
