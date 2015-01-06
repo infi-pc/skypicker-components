@@ -6,32 +6,16 @@ var testShit = null;
 var React = require('react');
 React.initializeTouchEvents(true);
 var tr = require('./../../tr.js');
-var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
 
-var Place = require('./Place.jsx');
-
-function findPos(obj) {
-  var curtop = 0;
-  if (obj.offsetParent) {
-    do {
-      curtop += obj.offsetTop;
-    } while (obj = obj.offsetParent);
-    return [curtop];
-  }
-}
-
-
+var Places = require('./Places.jsx');
+var Place = require('./../../containers/Place.jsx');
 
 var PlacePicker = React.createClass({
 
   getInitialState: function() {
     return {
-      lastValue: new SearchPlace(""),
-      viewMode: "all",
-      places: [],
-      keySelectedIndex: -1,
-      apiError: false,
-      loading: false
+
+      viewMode: "all"
     };
   },
 
@@ -43,62 +27,9 @@ var PlacePicker = React.createClass({
     };
   },
 
-  keypress: function (e) {
-    if (e.keyIdentifier == "Up") {
-      this.moveUp();
-    } else if (e.keyIdentifier == "Down") {
-      this.moveDown();
-    } else if (e.keyIdentifier == "Enter") {
-      this.selectFromIndex();
-    }
-  },
-
-  moveUp: function () {
-    if (this.state.keySelectedIndex >= 0) {
-      this.setState({
-        keySelectedIndex: this.state.keySelectedIndex - 1
-      })
-    } else {
-      this.setState({
-        keySelectedIndex: this.state.places.length - 1
-      })
-    }
-  },
-
-  moveDown: function () {
-    var numOfPlaces = this.state.places.length;
-    if (this.state.keySelectedIndex < this.state.places.length) {
-      this.setState({
-        keySelectedIndex: this.state.keySelectedIndex + 1
-      })
-    } else {
-      this.setState({
-        keySelectedIndex: 0
-      })
-    }
-  },
-
-  selectFromIndex: function () {
-    this.changeValue(this.state.places[this.state.keySelectedIndex]);
-  },
-
-  adjustScroll: function () {
-    if (this.refs.places && this.refs.selectedPlace) {
-      var placesElement = this.refs.places.getDOMNode();
-      var selectedElement = this.refs.selectedPlace.getDOMNode();
-      placesElement.scrollTop = findPos(selectedElement) - 200;
-    }
-  },
-
   componentDidMount: function () {
     var mode = this.state.viewMode;
     this.props.onSizeChange(this.props.sizes[mode]);
-
-    document.addEventListener("keydown", this.keypress);
-  },
-
-  componentWillUnmount: function() {
-    document.removeEventListener("keydown", this.keypress);
   },
 
   getModeLabel: function (mode) {
@@ -123,32 +54,8 @@ var PlacePicker = React.createClass({
     }
   },
 
-  setSearchText: function (searchText) {
-    var placesAPI = new PlacesAPI({lang: this.props.lang});
-    this.setState({
-      loading: true,
-      searchText: searchText
-    });
-    placesAPI.findByName(searchText, (error, results) => {
-      //TODO prevent race condition
-      if (!error) {
-        this.setState({
-          places: results,
-          apiError: false,
-          loading: false
-        });
-      } else {
-        this.setState({
-          places: [],
-          apiError: true,
-          loading: false
-        });
-      }
-    });
-  },
-
   changeValue: function (value) {
-    this.props.onChange(new SearchPlace(value));
+    this.props.onChange(value);
   },
 
   renderBody: function() {
@@ -165,7 +72,7 @@ var PlacePicker = React.createClass({
   },
 
   renderAll: function () {
-    return this.renderPlaces();
+    return <Places key="allContent" search={this.props.value} onSelect={this.changeValue} />;
   },
 
   renderNearby: function () {
@@ -177,11 +84,11 @@ var PlacePicker = React.createClass({
   },
 
   renderCitiesAndAirports: function () {
-    return this.renderPlaces([Place.TYPE_CITY, Place.TYPE_AIRPORT]);
+    return <Places key="citiesAndAirportsContent" search={this.props.value} onSelect={this.changeValue} types={[Place.TYPE_CITY, Place.TYPE_AIRPORT]}/>;
   },
 
   renderCountries: function () {
-    return this.renderPlaces([Place.TYPE_COUNTRY]);
+    return <Places key="countriesContent" search={this.props.value} onSelect={this.changeValue} types={[Place.TYPE_COUNTRY]}/>;
   },
 
   renderAnywhere: function () {
@@ -192,47 +99,7 @@ var PlacePicker = React.createClass({
     return (<div>sss</div>)
   },
 
-  filterPlacesByType: function (places , types) {
-    if (types) {
-      return places.filter((place) => {
-        return types.indexOf(place.getType()) != -1;
-      });
-    } else {
-      return places;
-    }
-  },
 
-  renderPlaces: function (types) {
-
-    var selected = this.state.places[this.state.keySelectedIndex];
-    var filteredPlaces = this.filterPlacesByType(this.state.places, types);
-    var limitedPlaces = filteredPlaces.splice(0,50);
-    var placesCode = limitedPlaces.map((place) => {
-      if (selected == place) {
-        return (<Place ref="selectedPlace" selected={selected == place} onSelect={this.changeValue} place={place} />)
-      } else {
-        return (<Place onSelect={this.changeValue} place={place} />)
-      }
-    });
-    return (
-      <div ref="places" className="places">
-        {placesCode}
-      </div>
-    )
-  },
-
-  componentDidUpdate: function (prevProps, prevState) {
-    if (this.state.lastValue.getText() != this.props.value.getText()) {
-      if (this.props.value.mode == "text") {
-        this.setSearchText(this.props.value.getText());
-      }
-      this.setState({
-        lastValue: this.props.value,
-        keySelectedIndex: -1
-      });
-    }
-    this.adjustScroll();
-  },
 
   render: function() {
     var mode = this.state.viewMode;

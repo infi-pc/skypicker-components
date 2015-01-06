@@ -1,0 +1,172 @@
+var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
+var PlaceRow = require('./PlaceRow.jsx');
+
+function findPos(obj) {
+  var curtop = 0;
+  if (obj.offsetParent) {
+    do {
+      curtop += obj.offsetTop;
+    } while (obj = obj.offsetParent);
+    return [curtop];
+  }
+}
+
+var Places = React.createClass({
+
+  getInitialState: function () {
+    return {
+      lastSearch: new SearchPlace(""),
+      places: [],
+      keySelectedIndex: -1,
+      apiError: false,
+      loading: false
+    };
+  },
+
+  getDefaultProps: function () {
+    return {
+      places: []
+    };
+  },
+
+  keypress: function (e) {
+    if (e.keyIdentifier == "Up") {
+      this.moveUp();
+    } else if (e.keyIdentifier == "Down") {
+      this.moveDown();
+    } else if (e.keyIdentifier == "Enter") {
+      this.selectFromIndex();
+    }
+  },
+
+  moveUp: function () {
+    if (this.state.keySelectedIndex >= 0) {
+      this.setState({
+        keySelectedIndex: this.state.keySelectedIndex - 1
+      })
+    } else {
+      this.setState({
+        keySelectedIndex: this.state.places.length - 1
+      })
+    }
+  },
+
+  moveDown: function () {
+    var numOfPlaces = this.state.places.length;
+    if (this.state.keySelectedIndex < this.state.places.length) {
+      this.setState({
+        keySelectedIndex: this.state.keySelectedIndex + 1
+      })
+    } else {
+      this.setState({
+        keySelectedIndex: 0
+      })
+    }
+  },
+
+  selectFromIndex: function () {
+    this.select(this.state.places[this.state.keySelectedIndex]);
+  },
+
+  adjustScroll: function () {
+    if (this.refs.places && this.refs.selectedPlace) {
+      var placesElement = this.refs.places.getDOMNode();
+      var selectedElement = this.refs.selectedPlace.getDOMNode();
+      placesElement.scrollTop = findPos(selectedElement) - 200;
+    }
+  },
+  componentDidMount: function () {
+    this.checkNewPlaces();
+    document.addEventListener("keydown", this.keypress);
+  },
+
+  componentWillUnmount: function() {
+    document.removeEventListener("keydown", this.keypress);
+  },
+
+  filterPlacesByType: function (places , types) {
+    if (types) {
+      return places.filter((place) => {
+        return types.indexOf(place.getTypeId()) != -1;
+      });
+    } else {
+      return places;
+    }
+  },
+
+  setSearchText: function (searchText) {
+    var placesAPI = new PlacesAPI({lang: this.props.lang});
+    this.setState({
+      loading: true,
+      searchText: searchText
+    });
+    placesAPI.findByName(searchText, (error, results) => {
+      //TODO prevent race condition
+      if (!error) {
+        var filteredPlaces = this.filterPlacesByType(results, this.props.types);
+        var limitedPlaces = filteredPlaces.slice(0,50);
+        this.setState({
+          places: limitedPlaces,
+          apiError: false,
+          loading: false
+        });
+      } else {
+        this.setState({
+          places: [],
+          apiError: true,
+          loading: false
+        });
+      }
+    });
+  },
+
+  select: function (value) {
+    this.props.onSelect( new SearchPlace(value) );
+  },
+
+  checkNewPlaces: function () {
+    if (this.state.lastSearch.getText() != this.props.search.getText()) {
+      if (this.props.search.mode == "text") {
+        this.setSearchText(this.props.search.getText());
+      }
+      this.setState({
+        lastSearch: this.props.search,
+        keySelectedIndex: -1
+      });
+    }
+  },
+
+  componentDidUpdate: function (prevProps, prevState) {
+    this.checkNewPlaces();
+    this.adjustScroll();
+  },
+
+  renderPlaces: function () {
+    var places = this.state.places;
+    var selected = places[this.state.keySelectedIndex];
+    return places.map((place) => {
+      if (selected == place) {
+        return (<PlaceRow ref="selectedPlace" selected={selected == place} onSelect={this.select} place={place} />)
+      } else {
+        return (<PlaceRow onSelect={this.select} place={place} />)
+      }
+    });
+  },
+
+  render: function () {
+    var loader;
+    if (this.state.loading) {
+      loader = (<div>Loading...</div>)
+    }
+    return (
+      <div ref="places" className="places">
+        {loader}
+        {this.renderPlaces()}
+      </div>
+    )
+  }
+
+});
+
+
+module.exports = Places;

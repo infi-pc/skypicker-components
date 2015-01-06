@@ -1,5 +1,5 @@
 
-var Place = React.createClass({
+var PlaceRow = React.createClass({
   click: function () {
     this.props.onSelect(this.props.place);
   },
@@ -21,4 +21,4 @@ var Place = React.createClass({
     )
   }
 });
- module.exports = Place;
+ module.exports = PlaceRow;
