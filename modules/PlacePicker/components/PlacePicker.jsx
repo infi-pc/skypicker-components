@@ -42,7 +42,7 @@ var PlacePicker = React.createClass({
   //TODO move it to options
   getModeLabel: function (mode) {
     var modeLabels = {
-      all: tr("All","all"),
+      all: tr("All places","all"),
       nearby: tr("Nearby","nearby"),
       cheapest: tr("Cheapest","cheapest"),
       citiesAndAirports: tr("Cities and airports","cities_and_airports"),

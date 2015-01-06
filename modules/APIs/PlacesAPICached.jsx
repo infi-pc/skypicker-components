@@ -9,10 +9,10 @@ class PlacesAPICached {
   }
   findByName(term, callback) {
     if (GlobalPlacesStore[term]) {
-      //setTimeout(function(){
-      //WARNING: callback is called immediately to better UX, but be careful, it should behave in same way as with api
+      //WARNING: callback needs to be called after other code because it should behave in same way as with api
+      setTimeout(function(){
         callback(null, GlobalPlacesStore[term]);
-      //}, 0);
+      }, 0);
     } else {
       this.placesAPI.findByName(term, function (err, places) {
         if (!err) {

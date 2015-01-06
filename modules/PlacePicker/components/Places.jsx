@@ -25,7 +25,6 @@ var Places = React.createClass({
 
   getDefaultProps: function () {
     return {
-      places: []
     };
   },
 
@@ -101,7 +100,9 @@ var Places = React.createClass({
       searchText: searchText
     });
     placesAPI.findByName(searchText, (error, results) => {
-      //TODO prevent race condition
+      if (searchText != this.state.searchText) {
+        return;
+      }
       if (!error) {
         var filteredPlaces = this.filterPlacesByType(results, this.props.types);
         var limitedPlaces = filteredPlaces.slice(0,50);
