@@ -162,14 +162,13 @@ var Places = React.createClass({
   },
 
   render: function () {
-    var loader;
-    if (this.state.loading) {
-      loader = (<div>Loading...</div>)
-    }
+    var loaderClass = "loader " + (this.state.loading ? "loading" : "not-loading");
     return (
-      <div ref="places" className="places">
-        {loader}
-        {this.renderPlaces()}
+      <div>
+        {<div className={loaderClass}>Loading...</div>}
+        <div ref="places" className="places">
+          {this.renderPlaces()}
+        </div>
       </div>
     )
   }

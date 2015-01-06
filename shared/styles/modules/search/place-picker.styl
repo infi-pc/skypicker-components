@@ -1,10 +1,29 @@
 .search-place-picker
   .content
     padding-bottom: 6px;
+    .loader
+      position: absolute
+      height: 100%
+      width: 417px;
+      background-color rgba(255,255,255,0.5)
+      z-index: 1;
+      text-align center
+      padding-top 120px
+      box-sizing border-box
+      overflow hidden
+      transition: opacity .5s;
+      opacity: 1;
+
+      &.not-loading
+        opacity: 0;
+        pointer-events: none;
+
     .places
       overflow-y scroll
       height: 100%;
       width: 417px;
+
+
 
   .place-row
     position: relative
