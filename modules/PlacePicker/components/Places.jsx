@@ -1,5 +1,6 @@
 var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
 var PlaceRow = require('./PlaceRow.jsx');
+var Geolocation = require('./../../Geolocation.jsx');
 
 function findPos(obj) {
   var curtop = 0;
@@ -17,6 +18,7 @@ var Places = React.createClass({
     return {
       lastSearch: null,
       lastTypes: null,
+      lastNearby: null,
       places: [],
       keySelectedIndex: -1,
       apiError: false,
@@ -84,6 +86,11 @@ var Places = React.createClass({
     document.removeEventListener("keydown", this.keypress);
   },
 
+  componentDidUpdate: function (prevProps, prevState) {
+    this.checkNewPlaces();
+    this.adjustScroll();
+  },
+
   filterPlacesByType: function (places , types) {
     if (types) {
       return places.filter((place) => {
@@ -94,12 +101,14 @@ var Places = React.createClass({
     }
   },
 
-  setSearchText: function (searchText) {
+  setSearchText: function (searchText, nearby) {
     var placesAPI = new PlacesAPI({lang: this.props.lang});
+    var bounds = Geolocation.getCurrentBounds();
     this.setState({
       loading: true,
       searchText: searchText
     });
+    //TODO pass bounds into API
     placesAPI.findByName(searchText, (error, results) => {
       if (searchText != this.state.searchText) {
         return;
@@ -148,13 +157,15 @@ var Places = React.createClass({
         lastTypes: this.props.types,
         keySelectedIndex: -1
       });
+    } else if (this.state.lastNearby != this.props.nearby) {
+      this.setSearchText(textToSearch, true);
+      this.setState({
+        lastNearby: this.props.nearby,
+        keySelectedIndex: -1
+      });
     }
   },
 
-  componentDidUpdate: function (prevProps, prevState) {
-    this.checkNewPlaces();
-    this.adjustScroll();
-  },
 
   renderPlaces: function () {
     var places = this.state.places;

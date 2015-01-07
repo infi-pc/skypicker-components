@@ -82,7 +82,7 @@ var PlacePicker = React.createClass({
   },
 
   renderNearby: function () {
-    return (<div>sss</div>)
+    return <Places search={this.props.value} onSelect={this.selectValue} nearby={true}/>;
   },
 
   renderCheapest: function () {

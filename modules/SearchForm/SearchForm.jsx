@@ -30,7 +30,7 @@ var options = {
   origin: {
     modes: {
       all: true,
-      nearby: false,
+      nearby: true,
       cheapest: false,
       citiesAndAirports: true,
       countries: true,
