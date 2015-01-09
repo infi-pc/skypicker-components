@@ -17,7 +17,7 @@ var rename = require("gulp-rename");
 var app = require("./contexts.js");
 //var server = require('gulp-express');
 var contextsPort = 9001;
-var livereloadPort = 35729;
+var livereloadPort = 35730;
 
 var globalShim = require('browserify-global-shim').configure({
   'moment': 'moment',
@@ -29,7 +29,7 @@ var globalShim = require('browserify-global-shim').configure({
 
 var bundleName = argv.bundle;
 
-function browserifyfunc(watch, inputFile, outputDir, outputFile){
+function browserifyfunc(watch, enableLivereload, inputFile, outputDir, outputFile){
   if (!outputFile) {
     outputFile = "bundle.js";
   }
@@ -40,8 +40,8 @@ function browserifyfunc(watch, inputFile, outputDir, outputFile){
         gutil.log('Browserify Error', e.message);
       })
       .pipe(source(outputFile))
-      .pipe(gulp.dest(outputDir))
-    if (watch) {
+      .pipe(gulp.dest(outputDir));
+    if (enableLivereload) {
       return bundle.pipe(livereload());
     } else {
       return bundle;
@@ -77,7 +77,7 @@ gulp.task('server', function () {
   console.log("see http://localhost:"+contextsPort+"/");
 
   //app.use(require('connect-livereload')({port: livereloadPort}));
-  livereload.listen(35729);
+  livereload.listen(livereloadPort);
   app.listen(contextsPort);
 });
 
@@ -100,19 +100,19 @@ gulp.task('stylusWatch', function () {
 });
 
 gulp.task('browserify', function(){
-  browserifyfunc(false, './modules/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
+  browserifyfunc(false, false, './modules/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
 });
 
 gulp.task('watchify', function () {
-  browserifyfunc(true, './contexts/scripts/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
+  browserifyfunc(true, true, './contexts/scripts/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
 });
 
 gulp.task('browserifyTests', function() {
-  browserifyfunc(false, './tests/units/root.js', '.tmp/tests');
+  browserifyfunc(false, false, './tests/units/root.js', '.tmp/tests');
 });
 
 gulp.task('watchifyTests', function() {
-  browserifyfunc(true, './tests/units/root.js', '.tmp/tests');
+  browserifyfunc(true, true, './tests/units/root.js', '.tmp/tests');
 });
 
 gulp.task('export', function () {
@@ -124,14 +124,13 @@ gulp.task('export', function () {
     bundleInProject = "/app/scripts/vendor/widgets";
     cssInProject = "/app/styles"
   }
-  browserifyfunc(false, './exports/'+project+'.jsx', projectPath + bundleInProject, "bundle.js");
+  browserifyfunc(true, false, './exports/'+project+'.jsx', projectPath + bundleInProject, "bundle.js");
 
   watch('./shared/styles/modules/**/*.styl', function () {
     gulp.src("./shared/styles/modules/"+project+".styl")
       .pipe(stylus())
       .pipe(rename("widgets.css"))
       .pipe(gulp.dest(projectPath + cssInProject));
-      //.pipe(livereload());
   });
 });
 
