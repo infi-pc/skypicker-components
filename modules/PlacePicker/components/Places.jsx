@@ -119,7 +119,6 @@ var Places = React.createClass({
       if (searchText != this.state.searchText) {
         return;
       }
-      console.log("ok");
       var filteredPlaces = this.filterPlacesByType(places, this.props.types);
       var limitedPlaces = filteredPlaces.slice(0,50);
       this.setState({
@@ -128,7 +127,7 @@ var Places = React.createClass({
         loading: false
       });
     }).catch((error) => {
-      console.log(error);
+      console.error(error);
       this.setState({
         places: [],
         apiError: true,
