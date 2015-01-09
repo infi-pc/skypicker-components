@@ -5,24 +5,14 @@ install
 
 	npm install
 
-serve all contexts, but for watchify it needs to pick one bundle to watch
+it serves all contexts, but for watchify it needs to pick one bundle to watch
 
-	gulp serve -b <bundle> #available contexts are in contexts folder 
-
-	gulp build -b <bundle>
-
+	gulp serve --bundle <bundle> #available contexts are in contexts folder
 	
-## DatePickerModal
+	gulp serve --bundle datepicker
+	
+	gulp serve --bundle searchform
+	
+## Export to another project
 
-Show running example
-
-	gulp serve -b datepicker 
-
-Builded bundle will be in `builds/DatePickerModal/scripts/bundle.js`
-
-
-
-
-## css editing:
-
-	gulp stylus
+	gulp export --project skypicker --path C:\www\skypicker

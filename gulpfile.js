@@ -12,6 +12,8 @@ var reactify = require('reactify');
 var argv = require('yargs').argv;
 var karma = require('gulp-karma');
 var open = require("gulp-open");
+var rename = require("gulp-rename");
+
 var app = require("./contexts.js");
 //var server = require('gulp-express');
 var contextsPort = 9001;
@@ -25,56 +27,25 @@ var globalShim = require('browserify-global-shim').configure({
 
 //var rsync = require('gulp-rsync');
 
-var bundleName = argv.b;
-
-gulp.task('server', function () {
-  console.log("see http://localhost:"+contextsPort+"/");
-
-  //app.use(require('connect-livereload')({port: livereloadPort}));
-  livereload.listen(35729);
-  app.listen(contextsPort);
-});
-
-gulp.task('stylus', function () {
-  var src = './shared/styles/modules/*.styl';
-  var dest = './.tmp/styles/modules/';
-
-  gulp.src(src)
-    .pipe(stylus())
-    .pipe(gulp.dest(dest))
-    .pipe(livereload());
-  //watch(src)
-  //  .pipe(stylus())
-  //  .pipe(gulp.dest(dest))
-  //  .pipe(livereload());
-});
-gulp.task('stylusWatch', function () {
-  var src = './shared/styles/modules/**/*.styl';
-  watch(src, function () {
-    gulp.start('stylus');
-  });
-});
-
-gulp.task('browserify', function(){
-  browserifyfunc(false, './modules/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
-});
-gulp.task('watchify', function () {
-  browserifyfunc(true, './contexts/scripts/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
-});
+var bundleName = argv.bundle;
 
 function browserifyfunc(watch, inputFile, outputDir, outputFile){
   if (!outputFile) {
     outputFile = "bundle.js";
   }
   function rebundle (bundler) {
-    return bundler.bundle()
+    var bundle = bundler.bundle()
       // Log errors if they happen.
       .on('error', function(e) {
         gutil.log('Browserify Error', e.message);
       })
       .pipe(source(outputFile))
       .pipe(gulp.dest(outputDir))
-      .pipe(livereload());
+    if (watch) {
+      return bundle.pipe(livereload());
+    } else {
+      return bundle;
+    }
   }
 
   var b;
@@ -102,6 +73,40 @@ function browserifyfunc(watch, inputFile, outputDir, outputFile){
 }
 
 
+gulp.task('server', function () {
+  console.log("see http://localhost:"+contextsPort+"/");
+
+  //app.use(require('connect-livereload')({port: livereloadPort}));
+  livereload.listen(35729);
+  app.listen(contextsPort);
+});
+
+gulp.task('stylus', function () {
+  var src = './shared/styles/modules/*.styl';
+  var dest = './.tmp/styles/modules/';
+
+  gulp.src(src)
+    .pipe(stylus())
+    .pipe(gulp.dest(dest))
+    .pipe(livereload());
+
+});
+
+gulp.task('stylusWatch', function () {
+  var src = './shared/styles/modules/**/*.styl';
+  watch(src, function () {
+    gulp.start('stylus');
+  });
+});
+
+gulp.task('browserify', function(){
+  browserifyfunc(false, './modules/bundles/'+bundleName+'.jsx', 'builds', bundleName + ".js");
+});
+
+gulp.task('watchify', function () {
+  browserifyfunc(true, './contexts/scripts/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
+});
+
 gulp.task('browserifyTests', function() {
   browserifyfunc(false, './tests/units/root.js', '.tmp/tests');
 });
@@ -110,37 +115,25 @@ gulp.task('watchifyTests', function() {
   browserifyfunc(true, './tests/units/root.js', '.tmp/tests');
 });
 
-/* use if you don't have webstorm */
-gulp.task('runKarma', function() {
-  var files = [
-    'shared/scripts/jquery-2.1.1.js',
-    'shared/scripts/react-0.12.1/build/react-with-addons.js',
-    'shared/scripts/moment-with-locales.js',
-    ".tmp/tests/bundle.js"
-  ];
-  gulp.src(files)
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'watch'
-    }));
-});
-/* use if you don't have webstorm */
-gulp.task('openBrowser', function() {
-  var options = {
-    url: "http://localhost:9876/debug.html",
-    app: "chrome"
-  };
-  gulp.src("./just-file.html")
-    .pipe(open("", {
-      url: "http://localhost:9876",
-      app: "chrome"
-    }))
-    .pipe(open("", {
-      url: "http://localhost:9876/debug.html",
-      app: "chrome"
-    }));
-});
+gulp.task('export', function () {
+  var bundleInProject, cssInProject;
+  var projectPath = argv.path;
+  var project = argv.project;
 
+  if (project == "skypicker") {
+    bundleInProject = "/app/scripts/vendor/widgets";
+    cssInProject = "/app/styles"
+  }
+  browserifyfunc(false, './exports/'+project+'.jsx', projectPath + bundleInProject, "bundle.js");
+
+  watch('./shared/styles/modules/**/*.styl', function () {
+    gulp.src("./shared/styles/modules/"+project+".styl")
+      .pipe(stylus())
+      .pipe(rename("widgets.css"))
+      .pipe(gulp.dest(projectPath + cssInProject));
+      //.pipe(livereload());
+  });
+});
 
 gulp.task('test', ['watchifyTests']);
 
