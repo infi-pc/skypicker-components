@@ -106,30 +106,35 @@ var SearchForm = React.createClass({
     this.modalComponentsLoaded = true;
     this.refreshShown();
   },
+
   componentDidUpdate: function () {
     this.refreshShown();
   },
-  formatDate: function (searchDate) {
-    if (!searchDate) return "";
-    return searchDate.format();
+
+  getFormattedValue: function (fieldName) {
+    var value = this.state[fieldName];
+    if (!value) return "";
+    if (fieldName == "origin" || fieldName == "destination") {
+      return value.getText();
+    } else {
+      return value.format();
+    }
   },
-  formatPlace: function (searchPlace) {
-    if (!searchPlace) return "";
-    return searchPlace.getText();
-  },
+
   nextField: function () {
 
     var order = [
       "origin",
       "destination",
       "dateFrom",
-      "dateTo"
+      "dateTo",
+      "submitButton"
     ];
     var index = order.indexOf(this.state.active);
     var newIndex;
-    if (index >= 0 && index <= 2) {
+    if (index >= 0 && index <= 3) {
       newIndex = index+1
-    } else if (index == 3) {
+    } else if (index == 4) {
       //TODO focus on search btn
       newIndex = -1
     }
@@ -172,26 +177,32 @@ var SearchForm = React.createClass({
       }
     }
   },
-  changePlaceTextFunc: function (fieldName) {
-    return (e) => {
-      var addState = {};
-      addState[fieldName] = new SearchPlace(e.target.value);
-      this.setState(addState);
-    }
-  },
-  changeDateTextFunc: function (fieldName) {
-    return () => {
-      //it should do nothing
+
+  changeTextFunc: function (fieldName) {
+    if (fieldName == "origin" || fieldName == "destination") {
+      return (e) => {
+        var addState = {};
+        addState[fieldName] = new SearchPlace(e.target.value);
+        this.setState(addState);
+      }
+    } else {
+      return () => {};
     }
   },
 
   refreshFocus: function () {
-    var domNode = this.refs[this.state.active].getDOMNode();
-    if (document.activeElement != domNode) {
-      domNode.focus();
-      var activeValue = this.state[this.state.active];
-      if (activeValue.mode != "text" || activeValue.isDefault) {
-        domNode.select();
+    var domNode;
+    console.log(this.state.active);
+    if (this.state.active) {
+      domNode = this.refs[this.state.active].getDOMNode();
+      if (document.activeElement != domNode) {
+        domNode.focus();
+        if (this.state.active != "submitButton") {
+          var activeValue = this.state[this.state.active];
+          if (activeValue.mode != "text" || activeValue.isDefault) {
+            domNode.select();
+          }
+        }
       }
     }
   },
@@ -207,39 +218,38 @@ var SearchForm = React.createClass({
       this.refreshFocus();
     }
   },
-
+  renderInput: function(type) {
+    return (
+      <fieldset className={type}>
+        <div className="head">
+          <label for={type}>{type}</label>
+          <span className="input-wrapper">
+            <input
+              value={this.getFormattedValue(type)}
+              onFocus={this.onFocusFunc(type)}
+              type="text"
+              id={type}
+              ref={type}
+              onChange={this.changeTextFunc(type)}
+            />
+          </span>
+          <i className="fa fa-spinner"></i>
+          <b className="toggle">
+            <i className="fa fa-caret-down"></i>
+          </b>
+        </div>
+      </fieldset>
+    )
+  },
   render: function() {
     return (
-      <div>
-        <input
-          value={this.formatPlace(this.state.origin)}
-          onFocus={this.onFocusFunc("origin")}
-          type="text"
-          ref="origin"
-          onChange={this.changePlaceTextFunc("origin")}
-        />
-        <input
-          value={this.formatPlace(this.state.destination)}
-          onFocus={this.onFocusFunc("destination")}
-          type="text"
-          ref="destination"
-          onChange={this.changePlaceTextFunc("destination")}
-        />
-        <input
-          value={this.formatDate(this.state.dateFrom)}
-          onFocus={this.onFocusFunc("dateFrom")}
-          type="text"
-          ref="dateFrom"
-          onChange={this.changeDateTextFunc("dateFrom")}
-        />
-        <input
-          value={this.formatDate(this.state.dateTo)}
-          onFocus={this.onFocusFunc("dateTo")}
-          type="text"
-          ref="dateTo"
-          onChange={this.changeDateTextFunc("dateTo")}
-        />
-      </div>
+      <form id="search" action="?">
+        {this.renderInput("origin")}
+        {this.renderInput("destination")}
+        {this.renderInput("dateFrom")}
+        {this.renderInput("dateTo")}
+        <button ref="submitButton" id="search-flights" type="submit" className="btn-search"><span>Search</span><i className="fa fa-search"></i></button>
+      </form>
     );
   }
 });
