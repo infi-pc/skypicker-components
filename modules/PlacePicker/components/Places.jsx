@@ -101,33 +101,39 @@ var Places = React.createClass({
     }
   },
 
-  setSearchText: function (searchText, nearby) {
+  //TODO refactore - nearby should be separate from text
+  setSearchText: function (searchText) {
     var placesAPI = new PlacesAPI({lang: this.props.lang});
-    var bounds = Geolocation.getCurrentBounds();
     this.setState({
       loading: true,
       searchText: searchText
     });
-    //TODO pass bounds into API
-    placesAPI.findByName(searchText, (error, results) => {
+    var callFuncParam;
+    if (this.props.nearby) {
+      callFuncParam = placesAPI.findNearby(Geolocation.getCurrentBounds());
+    } else {
+      callFuncParam = placesAPI.findByName(searchText); //TODO
+    }
+
+    callFuncParam.then((places) => {
       if (searchText != this.state.searchText) {
         return;
       }
-      if (!error) {
-        var filteredPlaces = this.filterPlacesByType(results, this.props.types);
-        var limitedPlaces = filteredPlaces.slice(0,50);
-        this.setState({
-          places: limitedPlaces,
-          apiError: false,
-          loading: false
-        });
-      } else {
-        this.setState({
-          places: [],
-          apiError: true,
-          loading: false
-        });
-      }
+      console.log("ok");
+      var filteredPlaces = this.filterPlacesByType(places, this.props.types);
+      var limitedPlaces = filteredPlaces.slice(0,50);
+      this.setState({
+        places: limitedPlaces,
+        apiError: false,
+        loading: false
+      });
+    }).catch((error) => {
+      console.log(error);
+      this.setState({
+        places: [],
+        apiError: true,
+        loading: false
+      });
     });
   },
 
@@ -158,7 +164,7 @@ var Places = React.createClass({
         keySelectedIndex: -1
       });
     } else if (this.state.lastNearby != this.props.nearby) {
-      this.setSearchText(textToSearch, true);
+      this.setSearchText(textToSearch);
       this.setState({
         lastNearby: this.props.nearby,
         keySelectedIndex: -1
