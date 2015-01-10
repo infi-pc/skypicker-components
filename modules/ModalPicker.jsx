@@ -8,11 +8,11 @@ var Tran = require('./Tran.jsx');
 
 var ModalPicker = React.createClass({
 
-  getDefaultProps: function() {
-    return {
-      shown: false
-    };
-  },
+  //getDefaultProps: function() {
+  //  return {
+  //    shown: false
+  //  };
+  //},
 
   getInitialState: function() {
     return {
@@ -27,7 +27,7 @@ var ModalPicker = React.createClass({
     }
     if ($(this.props.inputElement).is(e.target)) return;
     if ($(this.props.inputElement).has(e.target).length) return;
-    if (!this.props.shown) return;
+    //if (!this.props.shown) return;
     this.hide();
   },
 
