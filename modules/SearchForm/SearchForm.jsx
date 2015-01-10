@@ -88,7 +88,7 @@ var SearchForm = React.createClass({
 
     Object.keys(this.components).forEach((key) => {
       this.components[key].setProps({
-        inputElement: this.refs[key].getDOMNode(),
+        inputElement: this.refs[key + "Outer"].getDOMNode(),
         value: this.state[key],
         onHide: () => {
           if (this.state.active == key) {
@@ -220,7 +220,9 @@ var SearchForm = React.createClass({
   },
   renderInput: function(type) {
     return (
-      <fieldset className={type}>
+      <fieldset
+        className={type}
+        ref={type + "Outer"}>
         <div className="head">
           <label for={type}>{type}</label>
           <span className="input-wrapper">
