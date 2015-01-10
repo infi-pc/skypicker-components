@@ -2,7 +2,7 @@
 
 var React = require('react');
 var SearchDate = require('./../../containers/SearchDate.js');
-
+var ModalMenuMixin = require('./../../ModalMenuMixin.jsx');
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
@@ -25,7 +25,7 @@ var Handle = React.createClass({
 });
 
 var DatePicker = React.createClass({
-
+  mixins: [ModalMenuMixin],
   getInitialState: function() {
     return {
       value: this.props.value ? this.props.value : new SearchDate(),
@@ -138,32 +138,7 @@ var DatePicker = React.createClass({
   confirmTimeToStay: function () {
     this.changeValue(this.props.value, "select");
   },
-  //setAnytime: function () {
-  //  this.changeValue({
-  //    mode: "anytime"
-  //  });
-  //},
-  //
-  //setNoReturn: function () {
-  //  this.changeValue({
-  //    mode: "noReturn"
-  //  });
-  //},
 
-
-
-  renderBody: function() {
-    var mode = this.state.viewMode;
-    if (!mode ) {
-      return "";
-    }
-    var methodName = "render"+mode.charAt(0).toUpperCase() + mode.slice(1);
-    if (this[methodName]) {
-      return this[methodName]();
-    } else {
-      throw new Error("no such method: " + methodName)
-    }
-  },
 
   renderSingle: function () {
     return (

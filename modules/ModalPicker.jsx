@@ -56,6 +56,7 @@ var ModalPicker = React.createClass({
     if (isIE(8,'lte')) {
       return {};
     }
+
     var rect = this.props.inputElement.getBoundingClientRect();
 
     var pageWidth = $(window).width();
@@ -74,7 +75,7 @@ var ModalPicker = React.createClass({
       }
     }
 
-    if (offset + width < maxWidth) {
+    if (offset + width <= maxWidth) {
       //KEEP IT
       outerStyles = {
         marginLeft: offset,

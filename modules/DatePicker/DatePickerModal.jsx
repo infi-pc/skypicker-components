@@ -44,7 +44,7 @@ var DatePickerModal = React.createClass({
   },
   getInitialState: function() {
     return {
-      contentSize: {}
+      contentSize: {width: 169, height: 200} 
     };
   },
   onValueChange: function (value, changeType) {

@@ -57,6 +57,16 @@ var PlacePicker = React.createClass({
     return modeLabels[mode];
   },
 
+  switchModeTo: function (mode) {
+    return () => {
+      this.props.onChange(this.props.value, "changeMode");
+      this.props.onSizeChange(this.props.sizes[mode]);
+      this.setState({
+        viewMode: mode
+      });
+    }
+  },
+
   checkMode: function () {
     if (this.props.value.mode == "text" && !this.props.value.isDefault) {
       if (this.state.viewMode != "all") {
