@@ -92,7 +92,6 @@ var SearchForm = React.createClass({
         value: this.state[key],
         onHide: () => {
           if (this.state.active == key) {
-            console.log("stil weirrd", this.state.active, key);
             this.setState({
               active: ""
             })
@@ -159,18 +158,12 @@ var SearchForm = React.createClass({
       });
     }
   },
-  showFieldFunc: function (fieldName) {
-    return () => {
-      Object.keys(this.components).forEach((key) => {
-        this.setState({
-          active: fieldName
-        });
-      });
-    }
-  },
+
   onFocusFunc: function (fieldName) {
     return () => {
-      this.showFieldFunc(fieldName)();
+      this.setState({
+        active: fieldName
+      });
       var value = this.state[fieldName];
       if (value.mode != "text" || value.isDefault) {
         this.refs[fieldName].getDOMNode().select();
@@ -188,6 +181,21 @@ var SearchForm = React.createClass({
     } else {
       return () => {};
     }
+  },
+
+  onClickOuterFunc: function (type) {
+    return () => {
+      if (type == this.state.active) {
+        this.setState({
+          active: ""
+        });
+      } else {
+        this.onFocusFunc(type)();
+      }
+    }
+  },
+  onClickInner: function (e) {
+    e.stopPropagation();
   },
 
   refreshFocus: function () {
@@ -219,25 +227,33 @@ var SearchForm = React.createClass({
     }
   },
   renderInput: function(type) {
+    var faIconClass = "fa fa-caret-down";
+    if (type == this.state.active) {
+      faIconClass = "fa fa-caret-up"
+    }
     return (
       <fieldset
         className={type}
-        ref={type + "Outer"}>
+        ref={type + "Outer"}
+        onClick={this.onClickOuterFunc(type)}
+      >
         <div className="head">
-          <label for={type}>{type}</label>
+          <label>{type}</label>
           <span className="input-wrapper">
             <input
               value={this.getFormattedValue(type)}
+              onClick={this.onClickInner}
               onFocus={this.onFocusFunc(type)}
               type="text"
-              id={type}
+
               ref={type}
               onChange={this.changeTextFunc(type)}
+              autoComplete="off"
             />
           </span>
           <i className="fa fa-spinner"></i>
           <b className="toggle">
-            <i className="fa fa-caret-down"></i>
+            <i className={faIconClass}></i>
           </b>
         </div>
       </fieldset>
