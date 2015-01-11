@@ -1,10 +1,12 @@
+$placesWidth = 417px;
+
 .search-place-picker
   .content
     padding-bottom: 6px;
     .loader
       position: absolute
       height: 100%
-      width: 417px;
+      width: $placesWidth;
       background-color rgba(255,255,255,0.5)
       z-index: 1;
       text-align center
@@ -13,15 +15,24 @@
       overflow hidden
       transition: opacity .5s;
       opacity: 1;
-
       &.not-loading
         opacity: 0;
         pointer-events: none;
 
+    .no-results
+      position: absolute
+      height: 100%
+      padding-top 120px
+      width: $placesWidth;
+      display: none
+      text-align center
+      &.shown
+        display: block
+
     .places
       overflow-y scroll
       height: 269px;
-      width: 417px;
+      width: $placesWidth;
 
 
 
