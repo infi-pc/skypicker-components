@@ -17,7 +17,7 @@ var SearchDate = require('./../../modules/containers/SearchDate.js');
  */
 
 /* responsibility: make simple plain js api */
-class ShowDatePicker {
+class SpDatePicker {
   constructor(options) {
     var div = document.createElement('div');
     div.setAttribute('class', 'datepicker-modal-container-element');
@@ -52,4 +52,4 @@ class ShowDatePicker {
   }
 }
 
-module.exports = ShowDatePicker;
+module.exports = SpDatePicker;
