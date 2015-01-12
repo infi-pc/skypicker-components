@@ -6,6 +6,9 @@ class Place {
   getName() {
     return this.original.value;
   }
+  getId() {
+    return this.original.id;
+  }
   getType() {
     var type = this.original.type;
     if (type == Place.TYPE_AIRPORT) {

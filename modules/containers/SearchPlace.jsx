@@ -31,6 +31,16 @@ SearchPlace.prototype.getText = function () {
   }
 };
 
+SearchPlace.prototype.getId = function () {
+  if (this.mode == "text") {
+    return null;
+  } else if (this.mode == "anywhere") {
+    return "anywhere";
+  } else if (this.mode == "place") {
+    return this.place.getId();
+  }
+};
+
 SearchPlace.prototype.getPlace = function () {
   if (this.mode == "place") {
     return this.place;
