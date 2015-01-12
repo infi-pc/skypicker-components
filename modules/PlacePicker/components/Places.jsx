@@ -137,7 +137,7 @@ var Places = React.createClass({
   },
 
   select: function (value) {
-    this.props.onSelect( new SearchPlace(value) );
+    this.props.onSelect( new SearchPlace({mode: "place", place: value}) );
   },
 
   getTextToSearch: function () {

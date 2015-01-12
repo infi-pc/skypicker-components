@@ -5,7 +5,7 @@ class SearchFormData {
     this.dateFrom = plain.dateFrom || new SearchDate();
     this.dateTo = plain.dateTo || new SearchDate({from: moment().add(1, "months")});
     this.origin = plain.origin || new SearchPlace("czech", true);
-    this.destination = plain.destination || new SearchPlace("anywhere", true);
+    this.destination = plain.destination || new SearchPlace({mode: "anywhere"}, true);
   }
 
   /* immutable */

@@ -2,33 +2,43 @@
 /* modes: text, place, anywhere, radius, ... */
 
 SearchPlace = function (input, isDefault) {
+  var plain = {};
   if (typeof input == 'undefined') {
-    this.mode = "text";
-    this.value = "";
+    plain.mode = "text";
+    plain.text = "";
   } else if (typeof input == 'string') {
-    this.mode = "text";
-    this.value = input;
-  } else {
-    this.mode = "place";
-    this.value = input;
+    plain.mode = "text";
+    plain.text = input;
+  } else if (typeof input == "object") {
+    plain = input;
   }
+  this.mode = plain.mode || "text";
+  this.text = plain.text || "";
+  this.radius = +plain.radius || 250;
+  this.lat = +plain.lat || 50;
+  this.lng = +plain.lng || 16;
+  this.place = plain.place || null;
   this.isDefault = isDefault; /* this is set only when you want to use text as predefined value */
 };
 
 SearchPlace.prototype.getText = function () {
   if (this.mode == "text") {
-    return this.value;
+    return this.text;
+  } else if (this.mode == "anywhere") {
+    return "Anywhere";
   } else if (this.mode == "place") {
-    return this.value.getName();
+    return this.place.getName();
   }
 };
 
 SearchPlace.prototype.getPlace = function () {
   if (this.mode == "place") {
-    return this.value;
+    return this.place;
   } else {
     return null;
   }
 };
+
+
 
 module.exports = SearchPlace;

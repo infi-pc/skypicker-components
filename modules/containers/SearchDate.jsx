@@ -144,7 +144,20 @@ SearchDate.prototype.mergeInto = function(newValues){
       this[attrname] = newValues[attrname];
     }
   }
-}
+};
+
+/* just helper function if i mode is not set */
+SearchDate.guessModeFromPlain = function (plain) {
+  if (plain.minStayDays && plain.maxStayDays) {
+    return "timeToStay";
+  } else if (!plain.from) {
+    return "noReturn";
+  } else if (plain.from == plain.to) {
+    return "single";
+  } else {
+    return "interval";
+  }
+};
 
 
 module.exports = SearchDate;

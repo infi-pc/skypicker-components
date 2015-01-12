@@ -171,7 +171,7 @@ var SearchForm = React.createClass({
     if (fieldName == "origin" || fieldName == "destination") {
       return (e) => {
         var addState = {};
-        addState[fieldName] = new SearchPlace(e.target.value);
+        this.props.onChange(this.props.data.changeField(fieldName, new SearchPlace(e.target.value)));
         this.setState(addState);
       }
     } else {
