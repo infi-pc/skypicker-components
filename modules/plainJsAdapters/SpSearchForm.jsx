@@ -4,12 +4,19 @@ class SpSearchForm {
   constructor(options) {
     var root = React.createFactory(SearchForm);
     this.modalComponent = React.render(root(), options.element);
+
+    //Just to have it working by default
+    this.modalComponent.setProps({
+      onChange: (value) => {
+        this.setData(value);
+      }
+    });
   }
   onChange(func) {
     this.modalComponent.setProps({
-      onChange: function (value) {
-        func();
-        this.setValue(value);
+      onChange: (value) => {
+        func(value);
+        this.setData(value);
       }
     });
   }

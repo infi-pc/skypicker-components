@@ -10,7 +10,15 @@ var SearchForm = require('./../../modules/SearchForm/SearchForm.jsx');
 var element = document.getElementById("search-form");
 
 var root = React.createFactory(SearchForm);
-this.modalComponent = React.render(root(), element);
+var modalComponent = React.render(root(), element);
+
+modalComponent.setProps({
+  onChange: function (value) {
+    modalComponent.setProps({
+      data: value
+    });
+  }
+});
 
 //this.modalComponent.setProps({
 //  options: options,

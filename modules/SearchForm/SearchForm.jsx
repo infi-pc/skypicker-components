@@ -150,7 +150,7 @@ var SearchForm = React.createClass({
         this.nextField();
       }
       Object.keys(this.components).forEach((key) => {
-        this.props.data.changeField(fieldName, value);
+        this.props.onChange(this.props.data.changeField(fieldName, value));
       });
     }
   },
