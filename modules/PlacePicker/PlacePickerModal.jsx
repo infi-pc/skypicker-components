@@ -2,7 +2,7 @@
 
 var ModalPicker = require("./../ModalPicker.jsx");
 var PlacePicker = require("./components/PlacePicker.jsx");
-var SearchPlace = require("./../containers/SearchPlace.js");
+var SearchPlace = require("./../containers/SearchPlace.jsx");
 var deepmerge = require('deepmerge');
 
 var defaultOptions = {

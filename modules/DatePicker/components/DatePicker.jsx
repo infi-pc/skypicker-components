@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var SearchDate = require('./../../containers/SearchDate.js');
+var SearchDate = require('./../../containers/SearchDate.jsx');
 var ModalMenuMixin = require('./../../ModalMenuMixin.jsx');
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");

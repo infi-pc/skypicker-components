@@ -2,8 +2,9 @@
 var DatePickerModal = require('./../DatePicker/DatePickerModal.jsx');
 var PlacePickerModal = require('./../PlacePicker/PlacePickerModal.jsx');
 
-var SearchDate = require('./../containers/SearchDate.js');
-var SearchPlace = require('./../containers/SearchPlace.js');
+var SearchFormData = require('./../containers/SearchFormData.jsx');
+var SearchDate = require('./../containers/SearchDate.jsx');
+var SearchPlace = require('./../containers/SearchPlace.jsx');
 var moment = require("moment");
 
 var options = {
@@ -57,16 +58,12 @@ var SearchForm = React.createClass({
 
   getInitialState: function() {
     return {
-      dateFrom: new SearchDate(),
-      dateTo: new SearchDate({from: moment().add(1, "months")}),
-      origin: new SearchPlace("czech", true),
-      destination: new SearchPlace("anywhere", true),
       active: "origin"
     };
   },
   getDefaultProps: function() {
     return {
-
+      data: new SearchFormData()
     };
   },
   createModalContainer: function () {
@@ -89,7 +86,7 @@ var SearchForm = React.createClass({
     Object.keys(this.components).forEach((key) => {
       this.components[key].setProps({
         inputElement: this.refs[key + "Outer"].getDOMNode(),
-        value: this.state[key],
+        value: this.props.data[key],
         onHide: () => {
           if (this.state.active == key) {
             this.setState({
@@ -111,7 +108,7 @@ var SearchForm = React.createClass({
   },
 
   getFormattedValue: function (fieldName) {
-    var value = this.state[fieldName];
+    var value = this.props.data[fieldName];
     if (!value) return "";
     if (fieldName == "origin" || fieldName == "destination") {
       return value.getText();
@@ -147,14 +144,13 @@ var SearchForm = React.createClass({
     return (value, changeType) => {
       if (changeType == "changeMode") {
         //this.refs[fieldName].getDOMNode().focus();
+        //TODO return here???
       }
       if (changeType == "select") {
         this.nextField();
       }
       Object.keys(this.components).forEach((key) => {
-        var addState = {};
-        addState[fieldName] = value;
-        this.setState(addState);
+        this.props.data.changeField(fieldName, value);
       });
     }
   },
@@ -164,7 +160,7 @@ var SearchForm = React.createClass({
       this.setState({
         active: fieldName
       });
-      var value = this.state[fieldName];
+      var value = this.props.data[fieldName];
       if (value.mode != "text" || value.isDefault) {
         this.refs[fieldName].getDOMNode().select();
       }
@@ -206,7 +202,7 @@ var SearchForm = React.createClass({
       if (document.activeElement != domNode) {
         domNode.focus();
         if (this.state.active != "submitButton") {
-          var activeValue = this.state[this.state.active];
+          var activeValue = this.props.data[this.state.active];
           if (activeValue.mode != "text" || activeValue.isDefault) {
             domNode.select();
           }
@@ -219,7 +215,7 @@ var SearchForm = React.createClass({
     if (this.modalComponentsLoaded) {
       Object.keys(this.components).forEach((key) => {
         this.components[key].setProps({
-          value: this.state[key],
+          value: this.props.data[key],
           shown: key == this.state.active
         });
       });

@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var ModalPicker = require("./../ModalPicker.jsx");
-var SearchDate = require('./../containers/SearchDate.js');
+var SearchDate = require('./../containers/SearchDate.jsx');
 var DatePicker = require('./components/DatePicker.jsx');
 var moment = require('moment');
 var deepmerge = require('deepmerge');
@@ -44,7 +44,7 @@ var DatePickerModal = React.createClass({
   },
   getInitialState: function() {
     return {
-      contentSize: {width: 169, height: 200} 
+      contentSize: {width: 169, height: 200}
     };
   },
   onValueChange: function (value, changeType) {

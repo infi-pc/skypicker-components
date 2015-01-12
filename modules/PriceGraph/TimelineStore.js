@@ -1,5 +1,5 @@
 var SkypickerAPI = require("./../SkypickerAPI");
-var SearchDate = require("./../containers/SearchDate.js");
+var SearchDate = require("./../containers/SearchDate.jsx");
 var DayData = require("./DayData.js");
 
 var skypickerAPI = new SkypickerAPI({lang: "en"});
