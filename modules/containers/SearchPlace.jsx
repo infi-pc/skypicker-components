@@ -21,6 +21,7 @@ SearchPlace = function (input, isDefault) {
   this.isDefault = isDefault; /* this is set only when you want to use text as predefined value */
 };
 
+/* shown text */
 SearchPlace.prototype.getText = function () {
   if (this.mode == "text") {
     return this.text;
@@ -30,6 +31,18 @@ SearchPlace.prototype.getText = function () {
     return this.place.getName();
   }
 };
+
+/* name of place */
+SearchPlace.prototype.getName = function () {
+  if (this.mode == "text") {
+    return null;
+  } else if (this.mode == "anywhere") {
+    return "anywhere";
+  } else if (this.mode == "place") {
+    return this.place.getName();
+  }
+};
+
 
 SearchPlace.prototype.getId = function () {
   if (this.mode == "text") {
