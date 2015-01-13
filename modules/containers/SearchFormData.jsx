@@ -1,3 +1,6 @@
+var SearchPlace = require('./SearchPlace.jsx');
+
+
 class SearchFormData {
 
   constructor(input) {

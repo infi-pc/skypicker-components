@@ -1,6 +1,7 @@
 var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
 var PlaceRow = require('./PlaceRow.jsx');
 var Geolocation = require('./../../Geolocation.jsx');
+var SearchPlace = require('./../../containers/SearchPlace.jsx');
 
 function findPos(obj) {
   var curtop = 0;
@@ -137,7 +138,7 @@ var Places = React.createClass({
   },
 
   select: function (value) {
-    this.props.onSelect( new SearchPlace({mode: "place", place: value}) );
+    this.props.onSelect( new SearchPlace({mode: "place", value: value}) );
   },
 
   getTextToSearch: function () {

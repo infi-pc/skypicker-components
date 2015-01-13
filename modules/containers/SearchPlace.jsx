@@ -1,7 +1,14 @@
-/* it has similar modes as PlacePicker, but they are not exactly same */
-/* modes: text, place, anywhere, radius, ... */
 
-SearchPlace = function (input, isDefault) {
+var deepmerge = require("deepmerge");
+var Place = require('./Place.jsx');
+
+var defaultValues = {
+  mode: "text", /* modes: text, place, anywhere, radius, ... */
+  value: "",
+  isDefault: false /* this is set only when you want to use text as predefined value */
+};
+
+function makePlain(input) {
   var plain = {};
   if (typeof input == 'undefined') {
     plain.mode = "text";
@@ -12,56 +19,85 @@ SearchPlace = function (input, isDefault) {
   } else if (typeof input == "object") {
     plain = input;
   }
-  this.mode = plain.mode || "text";
-  this.text = plain.text || "";
-  this.radius = +plain.radius || 250;
-  this.lat = +plain.lat || 50;
-  this.lng = +plain.lng || 16;
-  this.place = plain.place || null;
-  this.isDefault = isDefault; /* this is set only when you want to use text as predefined value */
-};
+  return plain
+}
 
-/* shown text */
-SearchPlace.prototype.getText = function () {
-  if (this.mode == "text") {
-    return this.text;
-  } else if (this.mode == "anywhere") {
-    return "Anywhere";
-  } else if (this.mode == "place") {
-    return this.place.getName();
+function validateModes(data) {
+  if (data.mode == "text") {
+    if (typeof data.value != "string") {
+      throw new Error("wrong type");
+    }
   }
-};
-
-/* name of place */
-SearchPlace.prototype.getName = function () {
-  if (this.mode == "text") {
-    return null;
-  } else if (this.mode == "anywhere") {
-    return "anywhere";
-  } else if (this.mode == "place") {
-    return this.place.getName();
+  if (data.mode == "place") {
+    if ( !(data.value instanceof Place) ) {
+      throw new Error("wrong type");
+    }
   }
-};
+}
 
 
-SearchPlace.prototype.getId = function () {
-  if (this.mode == "text") {
-    return null;
-  } else if (this.mode == "anywhere") {
-    return "anywhere";
-  } else if (this.mode == "place") {
-    return this.place.getId();
+class SearchPlace {
+  constructor(input, isDefault) {
+    var plain = makePlain(input);
+    this._data = deepmerge(defaultValues, plain);
+
+    this._data.isDefault = isDefault || this._data.isDefault;
+    validateModes(this._data);
   }
-};
 
-SearchPlace.prototype.getPlace = function () {
-  if (this.mode == "place") {
-    return this.place;
-  } else {
-    return null;
+  getMode() {
+    return this._data.mode;
   }
-};
 
+  getValue() {
+    return this._data.value;
+  }
+
+  /* shown text */
+  getText() {
+    var mode = this.getMode();
+    if (mode == "text") {
+      return this.getValue();
+    } else if (mode == "anywhere") {
+      return "Anywhere";
+    } else if (mode == "place") {
+      return this.getValue().getName();
+    }
+  }
+
+  /* name of place */
+  getName() {
+    var mode = this.getMode();
+    if (mode == "text") {
+      return null;
+    } else if (mode == "anywhere") {
+      return "anywhere";
+    } else if (mode == "place") {
+      return this.getValue().getName();
+    }
+  }
+
+
+  getId() {
+    var mode = this.getMode();
+    if (mode == "text") {
+      return null;
+    } else if (mode == "anywhere") {
+      return "anywhere";
+    } else if (mode == "place") {
+      return this.getValue().getId();
+    }
+  }
+
+  getPlace() {
+    if (this.getMode() == "place") {
+      return this.getValue();
+    } else {
+      return null;
+    }
+  }
+
+}
 
 
 module.exports = SearchPlace;
