@@ -1,16 +1,19 @@
 class Place {
 
   constructor(plain) {
-    this.original = plain;
+    Object.keys(plain).forEach((key) => {
+      this[key] = plain[key];
+    });
+    Object.freeze(this);
   }
   getName() {
-    return this.original.value;
+    return this.value;
   }
   getId() {
-    return this.original.id;
+    return this.id;
   }
   getType() {
-    var type = this.original.type;
+    var type = this.type;
     if (type == Place.TYPE_AIRPORT) {
       return "airport";
     } else if (type == Place.TYPE_COUNTRY) {
@@ -22,7 +25,7 @@ class Place {
     }
   }
   getTypeId() {
-    return this.original.type
+    return this.type
   }
   //fillFromApiObject(apiObj) {
   //  Object.keys(apiObj).forEach((key) => {

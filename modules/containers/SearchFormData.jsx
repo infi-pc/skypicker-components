@@ -9,6 +9,7 @@ class SearchFormData {
     this.dateTo = plain.dateTo || new SearchDate({from: moment().add(1, "months")});
     this.origin = plain.origin || new SearchPlace("", true);
     this.destination = plain.destination || new SearchPlace({mode: ""}, true);
+    Object.freeze(this);
   }
 
   /* immutable */

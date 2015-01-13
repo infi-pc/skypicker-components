@@ -21,6 +21,7 @@ SearchDate = function (input) {
   this.minStayDays = typeof(plain.minStayDays) != 'undefined'? plain.minStayDays : 2;
   this.maxStayDays = typeof(plain.maxStayDays) != 'undefined'? plain.maxStayDays : 10;
   this.final = typeof(plain.final) != 'undefined'? plain.final : true;
+  Object.freeze(this);
 };
 
 /* sets mode with checking some internal validity */

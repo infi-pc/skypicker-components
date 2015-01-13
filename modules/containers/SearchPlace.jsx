@@ -39,59 +39,61 @@ function validateModes(data) {
 class SearchPlace {
   constructor(input, isDefault) {
     var plain = makePlain(input);
-    this._data = deepmerge(defaultValues, plain);
+    this.mode = plain.mode || "text";
+    this.value = plain.value || "";
+    this.isDefault = plain.isDefault || isDefault;
+    validateModes(this);
 
-    this._data.isDefault = isDefault || this._data.isDefault;
-    validateModes(this._data);
+    Object.freeze(this);
   }
 
   getMode() {
-    return this._data.mode;
+    return this.mode;
   }
 
   getValue() {
-    return this._data.value;
+    return this.value;
   }
 
   /* shown text */
   getText() {
-    var mode = this.getMode();
+    var mode = this.mode;
     if (mode == "text") {
       return this.getValue();
     } else if (mode == "anywhere") {
       return "Anywhere";
     } else if (mode == "place") {
-      return this.getValue().getName();
+      return this.value.getName();
     }
   }
 
   /* name of place */
   getName() {
-    var mode = this.getMode();
+    var mode = this.mode;
     if (mode == "text") {
       return null;
     } else if (mode == "anywhere") {
       return "anywhere";
     } else if (mode == "place") {
-      return this.getValue().getName();
+      return this.value.getName();
     }
   }
 
 
   getId() {
-    var mode = this.getMode();
+    var mode = this.mode;
     if (mode == "text") {
       return null;
     } else if (mode == "anywhere") {
       return "anywhere";
     } else if (mode == "place") {
-      return this.getValue().getId();
+      return this.value.getId();
     }
   }
 
   getPlace() {
     if (this.getMode() == "place") {
-      return this.getValue();
+      return this.value;
     } else {
       return null;
     }
