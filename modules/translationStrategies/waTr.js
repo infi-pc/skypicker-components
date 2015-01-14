@@ -1,7 +1,7 @@
 
 var tr = function (original,key,values) {
   var translates = window.globalTranslates;
-
+  var translated;
   if (translates && translates[original]) {
     translated = translates[original]
   } else {

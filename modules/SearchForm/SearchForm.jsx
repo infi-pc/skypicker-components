@@ -196,7 +196,6 @@ var SearchForm = React.createClass({
 
   refreshFocus: function () {
     var domNode;
-    console.log(this.state.active);
     if (this.state.active) {
       domNode = this.refs[this.state.active].getDOMNode();
       if (document.activeElement != domNode) {

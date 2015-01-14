@@ -9,6 +9,8 @@ var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 var browserify = require('browserify');
 var reactify = require('reactify');
+var strictify = require('strictify');
+
 var argv = require('yargs').argv;
 var karma = require('gulp-karma');
 var open = require("gulp-open");
@@ -66,6 +68,8 @@ function browserifyfunc(watch, enableLivereload, inputFile, outputDir, outputFil
   }
 
   b.transform(reactify, {"es6": true});
+  b.transform(strictify);
+
   b.transform(globalShim);
   //b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
 

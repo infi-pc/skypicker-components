@@ -3,7 +3,7 @@ var deepmerge = require("deepmerge");
 var Place = require('./Place.jsx');
 
 var defaultValues = {
-  mode: "text", /* modes: text, place, anywhere, radius, ... */
+  mode: "text", /* modes: text, place, anywhere, radius, id,  ... */
   value: "",
   isDefault: false /* this is set only when you want to use text as predefined value */
 };
@@ -12,10 +12,10 @@ function makePlain(input) {
   var plain = {};
   if (typeof input == 'undefined') {
     plain.mode = "text";
-    plain.text = "";
+    plain.value = "";
   } else if (typeof input == 'string') {
     plain.mode = "text";
-    plain.text = input;
+    plain.value = input;
   } else if (typeof input == "object") {
     plain = input;
   }
@@ -59,11 +59,13 @@ class SearchPlace {
   getText() {
     var mode = this.mode;
     if (mode == "text") {
-      return this.getValue();
+      return this.value;
     } else if (mode == "anywhere") {
       return "Anywhere";
     } else if (mode == "place") {
       return this.value.getName();
+    } else if (mode == "id") {
+      return this.value;
     }
   }
 
@@ -76,6 +78,8 @@ class SearchPlace {
       return "anywhere";
     } else if (mode == "place") {
       return this.value.getName();
+    } else if (mode == "id") {
+      return this.value;
     }
   }
 
@@ -88,6 +92,8 @@ class SearchPlace {
       return "anywhere";
     } else if (mode == "place") {
       return this.value.getId();
+    } else if (mode == "id") {
+      return this.value;
     }
   }
 

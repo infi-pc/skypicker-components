@@ -1,5 +1,5 @@
 var SearchPlace = require('./SearchPlace.jsx');
-
+var SearchDate = require('./SearchDate.jsx');
 
 class SearchFormData {
 

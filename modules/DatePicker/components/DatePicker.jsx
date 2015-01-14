@@ -63,16 +63,12 @@ var DatePicker = React.createClass({
     return function () {
       switch(mode) {
         case "timeToStay":
-          newValue = new SearchDate(self.getValue());
-          newValue.mode = mode;
-          self.changeValue(newValue, "release"); // should by something like change mode, but it finishes value only after release so TODO make it smarter
+          self.changeValue(self.getValue().edit({mode: mode}), "release"); // should by something like change mode, but it finishes value only after release so TODO make it smarter
           break;
 
         case "anytime":
         case "noReturn":
-          newValue = new SearchDate(self.getValue());
-          newValue.mode = mode;
-          self.changeValue(newValue, "select");
+          self.changeValue(self.getValue().edit({mode: mode}), "select");
           break;
         default:
       }
@@ -85,11 +81,8 @@ var DatePicker = React.createClass({
   },
 
   changeValue: function (value,changeType) {
-    var newValue = new SearchDate(this.getValue());
-    if (value) {
-      newValue.mergeInto(value);
-    }
-
+    var newValue = this.getValue().edit(value);
+    console.log(newValue);
     this.props.onChange(newValue,changeType);
   },
 

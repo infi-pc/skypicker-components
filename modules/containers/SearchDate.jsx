@@ -1,4 +1,5 @@
 var moment = require("moment");
+var deepmerge = require("deepmerge");
 
 var urlDateFormat = "YYYY-MM-DD";
 
@@ -8,18 +9,18 @@ it has state for all modes, bude for
   constructor
   input = plain object or string or just another SearchDate object
  */
-SearchDate = function (input) {
+var SearchDate = function (input) {
   var plain = {};
   if (typeof input == "string") {
     plain = this.parseUrlString(input);
   } else if (typeof input == "object") {
     plain = input;
   }
-  this.mode = plain.mode || "single";
-  this.from = plain.from || moment.utc();
-  this.to = plain.to || moment.utc();
-  this.minStayDays = typeof(plain.minStayDays) != 'undefined'? plain.minStayDays : 2;
-  this.maxStayDays = typeof(plain.maxStayDays) != 'undefined'? plain.maxStayDays : 10;
+  this.mode = typeof(plain.mode) != 'undefined' ? plain.mode : "single";
+  this.from = typeof(plain.from) != 'undefined' ? plain.from : moment.utc();
+  this.to = typeof(plain.to) != 'undefined' ? plain.to : moment.utc();
+  this.minStayDays = typeof(plain.minStayDays) != 'undefined' ? plain.minStayDays : 2;
+  this.maxStayDays = typeof(plain.maxStayDays) != 'undefined' ? plain.maxStayDays : 10;
   this.final = typeof(plain.final) != 'undefined'? plain.final : true;
   Object.freeze(this);
 };
@@ -139,12 +140,27 @@ SearchDate.prototype.parseUrlString = function(stringDate) {
   }
 };
 
-SearchDate.prototype.mergeInto = function(newValues){
-  for (var attrname in newValues) {
-    if(newValues.hasOwnProperty(attrname)){
-      this[attrname] = newValues[attrname];
-    }
+SearchDate.prototype.edit = function(newValues){
+  if (!newValues) {
+    return this;
   }
+  var leastOneEdit = false;
+  var newPlain = {};
+  Object.keys(this).forEach((key) => {
+    newPlain[key] = this[key];
+  });
+  Object.keys(newValues).forEach((key) => {
+    if (newPlain[key] !== newValues[key]) {
+      newPlain[key] = newValues[key];
+      leastOneEdit = true;
+    }
+  });
+  if (leastOneEdit) {
+    return new SearchDate(newPlain);
+  } else {
+    return this;
+  }
+
 };
 
 /* just helper function if i mode is not set */

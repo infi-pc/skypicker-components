@@ -25,9 +25,13 @@ class SpSearchForm {
       data: newData
     });
   }
-  //setValue(fieldType, newValue) {
-
+  //getData() {
+  //  return this.modalComponent.props.data;
   //}
+  setField(fieldName, value) {
+    var data = this.modalComponent.props.data;
+    this.setData(data.changeField(fieldName, value));
+  }
 }
 
 module.exports = SpSearchForm;
