@@ -111,11 +111,11 @@ gulp.task('watchify', function () {
   browserifyfunc(true, true, './contexts/scripts/'+bundleName+'.jsx', '.tmp/builds', bundleName + ".js");
 });
 
-gulp.task('browserifyTests', function() {
-  browserifyfunc(false, false, './tests/units/root.js', '.tmp/tests');
-});
+//gulp.task('browserifyTests', function() {
+//  browserifyfunc(false, false, './tests/units/root.js', '.tmp/tests');
+//});
 
-gulp.task('watchifyTests', function() {
+gulp.task('test', function() {
   browserifyfunc(true, true, './tests/units/root.js', '.tmp/tests');
 });
 
@@ -138,7 +138,6 @@ gulp.task('export', function () {
   });
 });
 
-gulp.task('test', ['watchifyTests']);
 
 gulp.task('serve', ['server', 'stylus', 'stylusWatch', 'watchify']);
 
