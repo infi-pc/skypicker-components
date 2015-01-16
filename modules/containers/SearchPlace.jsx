@@ -1,5 +1,4 @@
 
-var deepmerge = require("deepmerge");
 var Place = require('./Place.jsx');
 
 var defaultValues = {
@@ -42,6 +41,8 @@ class SearchPlace {
     this.mode = plain.mode || "text";
     this.value = plain.value || "";
     this.isDefault = plain.isDefault || isDefault;
+    this.error = plain.error || "";
+    this.loading = plain.loading || false;
     validateModes(this);
 
     Object.freeze(this);
@@ -126,7 +127,7 @@ class SearchPlace {
       if (appStateSearch.id == "anywhere") {
         searchPlace = new SearchPlace({mode: "anywhere", isDefault: true});
       } else {
-        searchPlace = new SearchPlace({type: "id", value: appStateSearch.id, isDefault: true});
+        searchPlace = new SearchPlace({mode: "id", value: appStateSearch.id, isDefault: true});
       }
     } else if (appStateSearch.id && appStateSearch.name) {
       var place = new Place({

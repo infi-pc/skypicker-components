@@ -117,7 +117,7 @@ var Places = React.createClass({
     }
 
     callFuncParam.then((places) => {
-      if (searchText != this.state.searchText) {
+      if (searchText != this.state.searchText || !this.isMounted()) {
         return;
       }
       var filteredPlaces = this.filterPlacesByType(places, this.props.types);
