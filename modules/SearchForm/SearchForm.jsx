@@ -247,18 +247,16 @@ var SearchForm = React.createClass({
     if (type == this.state.active) {
       faIconClass = "fa fa-caret-up"
     }
-    var inputStyle = {};
+    var className = type;
     if (this.state.data[type].error) {
-      console.log("yoooo error");
-      inputStyle["backgroundColor"] = "red"; //TODO switch to class
+      className += " error"
     }
     if (this.state.data[type].loading) {
-      console.log("yoooo loading");
-      inputStyle["backgroundColor"] = "yellow"; //TODO switch to class
+      className += " loading"
     }
     return (
       <fieldset
-        className={type}
+        className={className}
         ref={type + "Outer"}
         onClick={this.onClickOuterFunc(type)}
       >
@@ -270,7 +268,6 @@ var SearchForm = React.createClass({
               onClick={this.onClickInner}
               onFocus={this.onFocusFunc(type)}
               type="text"
-              style={inputStyle}
               ref={type}
               onChange={this.changeTextFunc(type)}
               autoComplete="off"
