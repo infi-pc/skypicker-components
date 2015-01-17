@@ -54,6 +54,9 @@ class SearchFormStore {
     }
     return changed;
   }
+  setField(fieldName, value) {
+    return this.setValue(this.data.changeField(fieldName, value));
+  }
   search() {
     var {promise: originPromise, tempValue: origin} = fetchPlace(this.data.origin);
     var {promise: destinationPromise, tempValue: destination} = fetchPlace(this.data.destination);
