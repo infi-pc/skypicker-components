@@ -4,6 +4,9 @@ class Place {
     Object.keys(plain).forEach((key) => {
       this[key] = plain[key];
     });
+    if (typeof this.complete == "undefined") {
+      this.complete = true;
+    }
     Object.freeze(this);
   }
   getName() {
