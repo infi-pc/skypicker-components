@@ -2,7 +2,7 @@
 var PlacePickerModal = require('./../../modules/PlacePicker/PlacePickerModal.jsx');
 
 
-class SpPlacePicker {
+class PlacePickerAdapter {
   constructor(options) {
 
     var div = document.createElement('div');
@@ -37,4 +37,4 @@ class SpPlacePicker {
   }
 }
 
-module.exports = SpPlacePicker;
+module.exports = PlacePickerAdapter;
