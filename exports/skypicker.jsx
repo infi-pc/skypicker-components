@@ -6,6 +6,7 @@ var React = require("react");
 window.Place = require('./../modules/containers/Place.jsx');
 window.SearchDate = require('./../modules/containers/SearchDate.jsx');
 window.SearchPlace = require('./../modules/containers/SearchPlace.jsx');
+window.SearchFormData = require('./../modules/containers/SearchFormData.jsx');
 window.SearchFormStore = require('./../modules/stores/SearchFormStore.jsx');
 window.SearchForm = require('./../modules/plainJsAdapters/SearchFormAdapter.jsx');
 
