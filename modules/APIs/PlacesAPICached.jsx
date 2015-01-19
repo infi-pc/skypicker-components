@@ -26,6 +26,9 @@ class PlacesAPICached {
     return this.callCached(this.placesAPI.findNearby.bind(this.placesAPI), bounds, this.boundsToString(bounds));
   }
 
+  findById(id) {
+    return this.callCached(this.placesAPI.findById.bind(this.placesAPI), id, "id:"+id);
+  }
 }
 
 module.exports = PlacesAPICached;
