@@ -10,7 +10,8 @@ var tr = require('./../../tr.js');
 var Places = require('./Places.jsx');
 var ModalMenuMixin = require('./../../ModalMenuMixin.jsx');
 var Place = require('./../../containers/Place.jsx');
-
+var SearchPlace = require('./../../containers/SearchPlace.jsx');
+var Radius = require('./../../containers/Radius.jsx');
 
 var airportsAndCitiesTypes = [Place.TYPE_CITY, Place.TYPE_AIRPORT];
 var countryTypes = [Place.TYPE_COUNTRY];
@@ -59,7 +60,12 @@ var PlacePicker = React.createClass({
 
   switchModeTo: function (mode) {
     return () => {
-      this.props.onChange(this.props.value, "changeMode");
+      if (mode == "radius") {
+        this.props.onChange(new SearchPlace({mode: "radius", value: new Radius()}), "changeMode");
+      } else {
+        this.props.onChange(this.props.value, "changeMode");
+      }
+
       this.props.onSizeChange(this.props.sizes[mode]);
       this.setState({
         viewMode: mode
