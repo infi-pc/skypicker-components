@@ -1,3 +1,17 @@
+
+var typeIdToString = function(type) {
+  if (type == Place.TYPE_AIRPORT) {
+    return "airport";
+  } else if (type == Place.TYPE_COUNTRY) {
+    return "country";
+  } else if (type == Place.TYPE_CITY) {
+    return "city";
+  } else {
+    return "unknown";
+  }
+};
+
+
 class Place {
 
   constructor(plain) {
@@ -7,6 +21,7 @@ class Place {
     if (typeof this.complete == "undefined") {
       this.complete = true;
     }
+    this.typeString = typeIdToString(this.type);
     Object.freeze(this);
   }
   getName() {
@@ -16,16 +31,7 @@ class Place {
     return this.id;
   }
   getType() {
-    var type = this.type;
-    if (type == Place.TYPE_AIRPORT) {
-      return "airport";
-    } else if (type == Place.TYPE_COUNTRY) {
-      return "country";
-    } else if (type == Place.TYPE_CITY) {
-      return "city";
-    } else {
-      return "unknown";
-    }
+    return this.typeString;
   }
   getTypeId() {
     return this.type
