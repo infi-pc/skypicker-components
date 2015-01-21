@@ -1,5 +1,22 @@
 var SearchPlace = require('./SearchPlace.jsx');
 var SearchDate = require('./SearchDate.jsx');
+var DatePairValidator = require('./../tools/DatePairValidator.jsx');
+
+var dateCorrector = {};
+dateCorrector.correct = function (data, direction) {
+  var error = DatePairValidator.validate(
+    data.dateFrom,
+    data.dateTo
+  );
+  if (error == "crossedDates") {
+    if (direction == "dateFrom") {
+      return data.dateTo = data.dateFrom;
+    } else if (direction == "dateTo") {
+      return data.dateFrom = data.dateTo;
+    }
+  }
+  return data;
+};
 
 class SearchFormData {
 
@@ -21,6 +38,9 @@ class SearchFormData {
       destination: this.destination
     };
     newPlain[type] = value;
+    if (type == "dateTo" || type == "dateFrom") {
+      dateCorrector.correct(newPlain, type);
+    }
     return new SearchFormData(newPlain);
   }
 }
