@@ -2,6 +2,7 @@ var moment = require("moment");
 var deepmerge = require("deepmerge");
 
 var urlDateFormat = "YYYY-MM-DD";
+var tr = require('./../tr.js');
 
 /*
 class SearchDate
@@ -109,6 +110,10 @@ SearchDate.prototype.format = function () {
       toDateString = this.to.format("l")
     }
     return this.from.format("l") + " - " + toDateString
+  } else if (this.mode == "anytime") {
+    return tr("Anytime", "anytime");
+  } else if (this.mode == "noReturn") {
+    return tr("No return", "no_return_label");
   } else {
     return this.mode
   }

@@ -298,7 +298,7 @@ var SearchForm = React.createClass({
         {this.renderInput("destination")}
         {this.renderInput("dateFrom")}
         {this.renderInput("dateTo")}
-        <button onClick={this.search} id="search-flights" ref="submitButton" className="btn-search"><span><Tran tKey="common.search">Search</Tran></span><i className="fa fa-search"></i></button>
+        <button onClick={this.search} id="search-flights" ref="submitButton" className="btn-search"><span><Tran tKey="search">Search</Tran></span><i className="fa fa-search"></i></button>
       </form>
     );
   }
