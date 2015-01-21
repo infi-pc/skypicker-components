@@ -78,7 +78,10 @@ class SearchFormStore {
     var {promise, tempValue} = fetchPlace(this.data[fieldName]);
     this.setField(fieldName, tempValue);
     return promise.then((finalValue) => {
-      this.setField(fieldName, finalValue);
+      /* only if it's is still same value as before, nothing new */
+      if (tempValue == this.data[fieldName]) {
+        this.setField(fieldName, finalValue);
+      }
       return true; //TODO dont know what to return???
     });
   }
