@@ -7,6 +7,9 @@ var SearchFormStore = require('./../stores/SearchFormStore.jsx');
 
 var SearchDate = require('./../containers/SearchDate.jsx');
 var SearchPlace = require('./../containers/SearchPlace.jsx');
+var tr = require('./../tr.js');
+var Tran = require('./../Tran.jsx');
+
 var moment = require("moment");
 
 var options = {
@@ -228,6 +231,16 @@ var SearchForm = React.createClass({
     SearchFormStore.search();
   },
 
+  getFieldLabel: function (mode) {
+    var modeLabels = {
+      origin: tr("From","from"),
+      destination: tr("To","to"),
+      dateFrom: tr("Depart","date"),
+      dateTo: tr("Return","return")
+    };
+    return modeLabels[mode];
+  },
+
   refreshShown: function () {
     if (this.modalComponentsLoaded) {
       Object.keys(this.components).forEach((key) => {
@@ -258,7 +271,7 @@ var SearchForm = React.createClass({
         onClick={this.onClickOuterFunc(type)}
       >
         <div className="head">
-          <label>{type}</label>
+          <label>{this.getFieldLabel(type)}</label>
           <span className="input-wrapper">
             <input
               value={this.getFormattedValue(type)}
@@ -285,7 +298,7 @@ var SearchForm = React.createClass({
         {this.renderInput("destination")}
         {this.renderInput("dateFrom")}
         {this.renderInput("dateTo")}
-        <button onClick={this.search} id="search-flights" ref="submitButton" className="btn-search"><span>Search</span><i className="fa fa-search"></i></button>
+        <button onClick={this.search} id="search-flights" ref="submitButton" className="btn-search"><span><Tran tKey="common.search">Search</Tran></span><i className="fa fa-search"></i></button>
       </form>
     );
   }

@@ -1,5 +1,7 @@
 
 var Place = require('./Place.jsx');
+var tr = require('./../tr.js');
+
 
 var defaultValues = {
   mode: "text", /* modes: text, place, anywhere, radius, ...  !! it is similar as modes in placePicker but not exactly same */
@@ -62,7 +64,7 @@ class SearchPlace {
     if (mode == "text") {
       return this.value;
     } else if (mode == "anywhere") {
-      return "Anywhere";
+      return tr("Anywhere","anywhere");
     } else if (mode == "place") {
       return this.value.getName();
     } else if (mode == "radius") {

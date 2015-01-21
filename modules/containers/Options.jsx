@@ -7,6 +7,14 @@ class Options {
     this.defaultRadius = plain.defaultRadius || new Radius();
     Object.freeze(this);
   }
+  set(key, value) {
+    var newPlain = {
+      language: this.language,
+      defaultRadius: this.defaultRadius
+    };
+    newPlain[key] = value;
+    return new Options(newPlain);
+  }
 }
 
 module.exports = Options;

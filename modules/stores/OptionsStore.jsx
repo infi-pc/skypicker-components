@@ -15,6 +15,9 @@ class OptionsStore {
     }
     return changed;
   }
+  setOption(key, value) {
+    return this.setValue(this.data.set(key, value));
+  }
 }
 
 

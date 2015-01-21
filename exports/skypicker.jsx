@@ -1,4 +1,4 @@
-var translationStrategy = require('./../modules/translationStrategies/waTr.js');
+var translationStrategy = require('./../modules/translationStrategies/spTr.js');
 var tr = require('./../modules/tr.js');
 tr.setStrategy(translationStrategy);
 var React = require("react");
