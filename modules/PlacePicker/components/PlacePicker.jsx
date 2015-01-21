@@ -32,8 +32,19 @@ var PlacePicker = React.createClass({
   },
 
   getDefaultMode: function () {
-    if (this.props.value.mode != "text" || this.props.value.isDefault) {
-      return "countries";
+    //if (this.props.value.mode != "text" || this.props.value.isDefault) {
+    //  return "countries";
+    //} else {
+    //  return "all";
+    //}
+    if (this.props.value.mode == "place") {
+      return "all";
+    } else if (this.props.value.mode == "text") {
+      return "all";
+    } else if (this.props.value.mode == "anywhere") {
+      return "anywhere";
+    } else if (this.props.value.mode == "radius") {
+      return "radius";
     } else {
       return "all";
     }
@@ -61,7 +72,9 @@ var PlacePicker = React.createClass({
   switchModeTo: function (mode) {
     return () => {
       if (mode == "radius") {
-        this.props.onChange(new SearchPlace({mode: "radius", value: new Radius()}), "changeMode");
+        this.props.onChange(new SearchPlace({mode: "radius", value: new Radius()}), "select");
+      } else if (mode == "anywhere") {
+        this.props.onChange(new SearchPlace({mode: "anywhere"}), "select");
       } else {
         this.props.onChange(this.props.value, "changeMode");
       }

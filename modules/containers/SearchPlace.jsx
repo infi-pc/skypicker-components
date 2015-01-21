@@ -2,7 +2,7 @@
 var Place = require('./Place.jsx');
 
 var defaultValues = {
-  mode: "text", /* modes: text, place, anywhere, radius, id,  ... */
+  mode: "text", /* modes: text, place, anywhere, radius, ...  !! it is similar as modes in placePicker but not exactly same */
   value: "",
   isDefault: false /* this is set only when you want to use text as predefined value */
 };
