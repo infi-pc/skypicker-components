@@ -2,6 +2,8 @@ var PlacesAPI = require('./../../APIs/PlacesAPICached.jsx');
 var PlaceRow = require('./PlaceRow.jsx');
 var Geolocation = require('./../../Geolocation.jsx');
 var SearchPlace = require('./../../containers/SearchPlace.jsx');
+var OptionsStore = require('./../../stores/OptionsStore.jsx');
+
 
 function findPos(obj) {
   var curtop = 0;
@@ -104,7 +106,7 @@ var Places = React.createClass({
 
   //TODO refactore - nearby should be separate from text
   setSearchText: function (searchText) {
-    var placesAPI = new PlacesAPI({lang: this.props.lang});
+    var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});
     this.setState({
       loading: true,
       searchText: searchText

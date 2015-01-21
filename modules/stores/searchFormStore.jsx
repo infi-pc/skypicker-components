@@ -4,13 +4,13 @@ var SearchPlace = require('./../containers/SearchPlace.jsx');
 var Place = require('./../containers/Place.jsx');
 var Q = require('q');
 var PlacesAPI = require('./../APIs/PlacesAPICached.jsx');
-
+var OptionsStore = require('./OptionsStore.jsx');
 
 
 
 
 var getFirstFromApi = function (text) {
-  var placesAPI = new PlacesAPI({lang: "en"});//TODO put here options
+  var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});//TODO put here options
   return placesAPI.findByName(text).then((places) => {
     if (places[0]) {
       return new SearchPlace({mode: "place", value: new Place(places[0])});
@@ -23,7 +23,7 @@ var getFirstFromApi = function (text) {
 };
 
 var findByIdFromApi = function (id) {
-  var placesAPI = new PlacesAPI({lang: "en"});//TODO put here options
+  var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});//TODO put here options
   return placesAPI.findById(id).then((place) => {
     if (place) {
       return new SearchPlace({mode: "place", value: place});
@@ -74,16 +74,19 @@ class SearchFormStore {
   }
 
   completeField(fieldName) {
-    console.debug("complete");
-    var {promise, tempValue} = fetchPlace(this.data[fieldName]);
-    this.setField(fieldName, tempValue);
-    return promise.then((finalValue) => {
-      /* only if it's is still same value as before, nothing new */
-      if (tempValue == this.data[fieldName]) {
-        this.setField(fieldName, finalValue);
-      }
-      return true; //TODO dont know what to return???
-    });
+    var fetchInfo = fetchPlace(this.data[fieldName]);
+    if (fetchInfo) {
+      var {promise, tempValue} = fetchInfo;
+      this.setField(fieldName, tempValue);
+      return promise.then((finalValue) => {
+        /* only if it's is still same value as before, nothing new */
+        if (tempValue == this.data[fieldName]) {
+          this.setField(fieldName, finalValue);
+        }
+        return true; //TODO dont know what to return???
+      });
+    }
+    return null;
   }
   triggerSearch() {
     //TODO check if there is every data ok

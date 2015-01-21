@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
-var SearchPlace = require('./../containers/Options.jsx');
+var Options = require('./../containers/Options.jsx');
 
 class OptionsStore {
   constructor() {

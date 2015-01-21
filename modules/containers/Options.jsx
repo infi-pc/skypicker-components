@@ -3,7 +3,7 @@ var Radius = require("./Radius.jsx");
 class Options {
   constructor(plain) {
     plain = plain || {};
-    this.language = plain.language || "en";
+    this.language = plain.language || window.SKYPICKER_LNG.toLowerCase() || "en";
     this.defaultRadius = plain.defaultRadius || new Radius();
     Object.freeze(this);
   }
