@@ -89,7 +89,7 @@ class SearchFormStore {
     //TODO check if there is every data ok
     this.events.emit('search');
   }
-  /* fetche direction and return data with temp value */
+  /* fetch direction and return data with temp value */
   fetchDirection(data, direction) {
     var fetchInfo = fetchPlace(data[direction]);
     if (fetchInfo) {
@@ -125,7 +125,7 @@ class SearchFormStore {
     if (promises.length > 0) {
       var lastData = this.data;
       return Q.all(promises).then((results) => {
-        if (lastData != this.data) return; //some other search has outran me
+        if (lastData != this.data) return; //if some other search has outran me
         var newData = this.data;
         results.forEach((result) => {
           newData = newData.changeField(result.direction, result.value);
@@ -136,6 +136,8 @@ class SearchFormStore {
     } else {
       //TODO check if is not needed next tick
       this.triggerSearch();
+
+      //TODO return some promise??
     }
 
   }
