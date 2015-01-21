@@ -82,7 +82,6 @@ var DatePicker = React.createClass({
 
   changeValue: function (value,changeType) {
     var newValue = this.getValue().edit(value);
-    console.log(newValue);
     this.props.onChange(newValue,changeType);
   },
 

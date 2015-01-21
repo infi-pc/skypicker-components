@@ -75,7 +75,6 @@ var SearchForm = React.createClass({
   },
 
   changeListener: function () {
-    console.log(SearchFormStore.data);
     this.setState({
       data: SearchFormStore.data
     })
@@ -85,7 +84,6 @@ var SearchForm = React.createClass({
     SearchFormStore.events.on('change', this.changeListener);
   },
   componentWillUnmount: function () {
-    console.log("unmount");
     SearchFormStore.events.removeListener('change', this.changeListener);
   },
   componentDidMount: function() {
@@ -151,7 +149,6 @@ var SearchForm = React.createClass({
       newIndex = -1
     }
     var newActive = order[newIndex];
-    console.log("next is " +  newIndex + " - "+ newActive);
     this.setState({
       active: newActive
     });
