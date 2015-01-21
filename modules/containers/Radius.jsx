@@ -15,6 +15,9 @@ class Radius {
   getText() {
     return "" + round(this.lat) + ", " + round(this.lng) + " (" + this.radius + "km)";
   }
+  getUrlString() {
+    return "" + round(this.lat) + "-" + round(this.lng) + "-" + this.radius + "km";
+  }
 }
 
 module.exports = Radius;

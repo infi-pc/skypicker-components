@@ -74,6 +74,11 @@ class SearchPlace {
 
   /* name of place */
   getName() {
+    console.warn("getName shouldn't be used");
+    return this.getUrlString();
+  }
+
+  getUrlString() {
     var mode = this.mode;
     if (mode == "text") {
       return null;
@@ -82,12 +87,11 @@ class SearchPlace {
     } else if (mode == "place") {
       return this.value.getName();
     } else if (mode == "radius") {
-      return this.value.getText();
+      return this.value.getUrlString();
     } else if (mode == "id") {
       return this.value;
     }
   }
-
 
   getId() {
     var mode = this.mode;
