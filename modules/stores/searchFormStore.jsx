@@ -40,15 +40,7 @@ var findByIdFromApi = function (id) {
 /* returns promise, promise resolves true if there is new value */
 var fetchPlace = function(searchPlace) {
   if (searchPlace.mode == "place" && searchPlace.value.complete) {
-    return {
-      promise: Q.Promise((resolve) => {
-        //TODO wait for next tick???
-        setInterval(() => {
-          resolve(searchPlace);
-        }, 0);
-      }),
-      tempValue: searchPlace
-    };
+    return false; /* don't need to async load */
   } else if (searchPlace.mode == "place") {
     return {
       promise: findByIdFromApi(searchPlace.value.id),
@@ -60,6 +52,7 @@ var fetchPlace = function(searchPlace) {
       tempValue: new SearchPlace({mode: "text", value: searchPlace.value, loading: true})
     };
   }
+  return false;
 };
 
 class SearchFormStore {
@@ -79,7 +72,9 @@ class SearchFormStore {
   setField(fieldName, value) {
     return this.setValue(this.data.changeField(fieldName, value));
   }
+
   completeField(fieldName) {
+    console.debug("complete");
     var {promise, tempValue} = fetchPlace(this.data[fieldName]);
     this.setField(fieldName, tempValue);
     return promise.then((finalValue) => {
@@ -87,25 +82,59 @@ class SearchFormStore {
       return true; //TODO dont know what to return???
     });
   }
+  triggerSearch() {
+    //TODO check if there is every data ok
+    this.events.emit('search');
+  }
+  /* fetche direction and return data with temp value */
+  fetchDirection(data, direction) {
+    var fetchInfo = fetchPlace(data[direction]);
+    if (fetchInfo) {
+      return {
+        promise: fetchInfo.promise.then((value) => {
+          return {direction,value}
+        }),
+        newData: data.changeField(direction, fetchInfo.tempValue)
+      };
+    } else {
+        return false;
+    }
+  }
   search() {
-    var {promise: originPromise, tempValue: origin} = fetchPlace(this.data.origin);
-    var {promise: destinationPromise, tempValue: destination} = fetchPlace(this.data.destination);
+    var promises = [];
+    var newTempData = this.data;
+    var originLoadingInfo = this.fetchDirection(newTempData, "origin");
+    if (originLoadingInfo) {
+      promises.push(originLoadingInfo.promise);
+      newTempData = originLoadingInfo.newData;
+    }
+    var destinationLoadingInfo = this.fetchDirection(newTempData, "destination");
+    if (destinationLoadingInfo) {
+      promises.push(destinationLoadingInfo.promise);
+      newTempData = destinationLoadingInfo.newData;
+    }
+    /* if any of these needs loading save temporary objects */
+    if (newTempData != this.data) {
+      this.setValue(newTempData);
+    }
 
-    this.setValue(
-      this.data.changeField("origin", origin).changeField("destination",destination)
-    );
-    var lastData = this.data;
-    return Q.all([originPromise, destinationPromise]).then((results) => {
-      var [origin, destination] = results;
-      if (lastData != this.data) return; //some other search has outran me
 
-      this.setValue(
-        this.data.changeField("origin", origin).changeField("destination",destination)
-      );
-      if (this.data.origin.mode == "place" && this.data.destination.mode == "place") {
-        this.events.emit('search');
-      }
-    });
+    if (promises.length > 0) {
+      var lastData = this.data;
+      return Q.all(promises).then((results) => {
+        if (lastData != this.data) return; //some other search has outran me
+        var newData = this.data;
+        results.forEach((result) => {
+          newData = newData.changeField(result.direction, result.value);
+        });
+        this.setValue(newData);
+        this.triggerSearch();
+      });
+    } else {
+      //TODO check if is not needed next tick
+      this.triggerSearch();
+    }
+
   }
 }
 module.exports = new SearchFormStore();
