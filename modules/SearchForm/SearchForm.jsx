@@ -38,7 +38,7 @@ var options = {
       all: true,
       nearby: true,
       cheapest: false,
-      citiesAndAirports: true,
+      citiesAndAirports: false,
       countries: true,
       anywhere: false,
       radius: true
@@ -49,7 +49,7 @@ var options = {
       all: true,
       nearby: false,
       cheapest: false,
-      citiesAndAirports: true,
+      citiesAndAirports: false,
       countries: true,
       anywhere: true,
       radius: true
