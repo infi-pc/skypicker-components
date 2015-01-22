@@ -13,26 +13,6 @@ var Tran = require('./../Tran.jsx');
 var moment = require("moment");
 
 var options = {
-  dateFrom: {
-    modes: {
-      single: true,
-      interval: true,
-      month: true,
-      timeToStay: false,
-      anytime: true,
-      noReturn: false
-    }
-  },
-  dateTo: {
-    modes: {
-      single: true,
-      interval: true,
-      month: true,
-      timeToStay: true,
-      anytime: true,
-      noReturn: true
-    }
-  },
   origin: {
     modes: {
       all: true,
@@ -53,6 +33,26 @@ var options = {
       countries: true,
       anywhere: true,
       radius: true
+    }
+  },
+  dateFrom: {
+    modes: {
+      single: true,
+      interval: true,
+      month: true,
+      timeToStay: false,
+      anytime: true,
+      noReturn: false
+    }
+  },
+  dateTo: {
+    modes: {
+      single: true,
+      interval: true,
+      month: true,
+      timeToStay: true,
+      anytime: true,
+      noReturn: true
     }
   }
 };

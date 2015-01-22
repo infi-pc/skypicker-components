@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
 
-
 var testShit = null;
 
 var React = require('react');
@@ -32,22 +31,36 @@ var PlacePicker = React.createClass({
   },
 
   getDefaultMode: function () {
+    //FIRST VERSION - ALL AND COUNTRIES
+
     //if (this.props.value.mode != "text" || this.props.value.isDefault) {
     //  return "countries";
     //} else {
     //  return "all";
     //}
-    if (this.props.value.mode == "place") {
-      return "all";
-    } else if (this.props.value.mode == "text") {
-      return "all";
-    } else if (this.props.value.mode == "anywhere") {
-      return "anywhere";
-    } else if (this.props.value.mode == "radius") {
-      return "radius";
+
+    //SECOND VERSION
+
+    //if (this.props.value.mode == "place") {
+    //  return "all";
+    //} else if (this.props.value.mode == "text") {
+    //  return "all";
+    //} else if (this.props.value.mode == "anywhere") {
+    //  return "anywhere";
+    //} else if (this.props.value.mode == "radius") {
+    //  return "radius";
+    //} else {
+    //  return "all";
+    //}
+
+    //THIRD VERSION
+    console.log("default???");
+    if (this.props.value.formMode) {
+      return this.props.value.formMode;
     } else {
       return "all";
     }
+
   },
 
   componentDidMount: function () {
@@ -72,9 +85,9 @@ var PlacePicker = React.createClass({
   switchModeTo: function (mode) {
     return () => {
       if (mode == "radius") {
-        this.props.onChange(new SearchPlace({mode: "radius", value: new Radius()}), "select");
+        this.selectValue(new SearchPlace({mode: "radius", value: new Radius()}));
       } else if (mode == "anywhere") {
-        this.props.onChange(new SearchPlace({mode: "anywhere"}), "select");
+        this.selectValue(new SearchPlace({mode: "anywhere"}));
       } else {
         this.props.onChange(this.props.value, "changeMode");
       }
@@ -103,7 +116,7 @@ var PlacePicker = React.createClass({
   },
 
   selectValue: function (value) {
-    this.props.onChange(value, "select");
+    this.props.onChange(value.set("formMode",this.state.viewMode), "select");
   },
 
   renderAll: function () {

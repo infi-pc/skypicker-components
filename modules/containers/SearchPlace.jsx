@@ -1,7 +1,7 @@
 
 var Place = require('./Place.jsx');
 var tr = require('./../tr.js');
-
+var Immutable = require('./immutable.jsx');
 
 var defaultValues = {
   mode: "text", /* modes: text, place, anywhere, radius, ...  !! it is similar as modes in placePicker but not exactly same */
@@ -37,15 +37,18 @@ function validateModes(data) {
 }
 
 
-class SearchPlace {
+class SearchPlace extends Immutable {
   constructor(input, isDefault) {
     var plain = makePlain(input);
     this.mode = plain.mode || "text";
+    this.formMode = plain.formMode || "all";
     this.value = plain.value || "";
     this.isDefault = plain.isDefault || isDefault;
     this.error = plain.error || "";
     this.loading = plain.loading || false;
+
     validateModes(this);
+
 
     Object.freeze(this);
   }
@@ -116,6 +119,36 @@ class SearchPlace {
     }
   }
 
+  //TODO move this method to parent object Immutable
+  /**
+   * return new object with added changes, if no change return same object
+   * @param newValues
+   * @returns {SearchDate}
+   */
+  edit(newValues){
+    if (!newValues) {
+      return this;
+    }
+    var leastOneEdit = false;
+    var newPlain = {};
+    //Add from this
+    Object.keys(this).forEach((key) => {
+      newPlain[key] = this[key];
+    });
+    //Add from new
+    Object.keys(newValues).forEach((key) => {
+      if (newPlain[key] !== newValues[key]) {
+        newPlain[key] = newValues[key];
+        leastOneEdit = true;
+      }
+    });
+    if (leastOneEdit) {
+      return new SearchPlace(newPlain);
+    } else {
+      return this;
+    }
+
+  };
 }
 
 

@@ -43,7 +43,6 @@ var PlacePickerModal = React.createClass({
     };
   },
   onValueChange: function (value, changeType) {
-    var options = this.getOptions();
     this.props.onChange(value, changeType);
   },
   onSizeChange: function (sizes) {

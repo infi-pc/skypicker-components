@@ -145,15 +145,24 @@ SearchDate.prototype.parseUrlString = function(stringDate) {
   }
 };
 
+
+//TODO move this method to parent object Immutable
+/**
+ * return new object with added changes, if no change return same object
+ * @param newValues
+ * @returns {SearchDate}
+ */
 SearchDate.prototype.edit = function(newValues){
   if (!newValues) {
     return this;
   }
   var leastOneEdit = false;
   var newPlain = {};
+  //Add from this
   Object.keys(this).forEach((key) => {
     newPlain[key] = this[key];
   });
+  //Add from new
   Object.keys(newValues).forEach((key) => {
     if (newPlain[key] !== newValues[key]) {
       newPlain[key] = newValues[key];
