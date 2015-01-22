@@ -129,6 +129,30 @@ gulp.task('export', function () {
 
   browserifyfunc(true, false, './exports/'+project+'.jsx', "./builds/skypicker", "components.js");
 
+  console.log(projectPath);
+
+  var styleFolder = "./shared/styles/modules";
+  function copyCss() {
+    gulp.src(styleFolder+'/**/*.styl', {base: styleFolder})
+      .pipe(gulp.dest(projectPath + '/app/bower_components/skypicker-components/shared/styles/modules'));
+  }
+
+  copyCss();
+  watch(styleFolder+'/**/*.styl', function () {
+    copyCss();
+  });
+
+
+  var jsFolder = "./builds/skypicker";
+  function copyJs() {
+    gulp.src(jsFolder+'/**/*.js', {base: jsFolder})
+      .pipe(gulp.dest(projectPath + '/app/bower_components/skypicker-components/builds/skypicker'));
+  }
+
+  copyJs();
+  watch(jsFolder+'/**/*.js', function () {
+    copyJs();
+  });
 
   //TODO add copying .styl files into bower_components in skypicker
   //watch('./shared/styles/modules/**/*.styl', function () {
