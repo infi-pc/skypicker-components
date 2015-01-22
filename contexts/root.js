@@ -14,46 +14,46 @@ module.exports = {
     ],
     baseTemplate: "base.jsx",
     cases: {
-      "date skypicker": {
-        styles: [
-          "/styles/main.css",
-          "/styles/modules/skypicker.css"
-        ],
-        scripts: [
-          "/builds/datepicker.js"
-        ],
-        template: "templates/datepicker.jsx"
-      },
-      "date whichairline": {
-        styles: [
-          "/styles/main.css",
-          "/styles/modules/whichairline.css"
-        ],
-        scripts: [
-          "/builds/datepicker.js"
-        ],
-        template: "templates/datepicker.jsx"
-      },
-      "place skypicker": {
-        styles: [
-          "/styles/main.css",
-          "/styles/modules/skypicker.css"
-        ],
-        scripts: [
-          "/builds/placepicker.js"
-        ],
-        template: "templates/placepicker.jsx"
-      },
-      "place whichairline": {
-        styles: [
-          "/styles/main.css",
-          "/styles/modules/whichairline.css"
-        ],
-        scripts: [
-          "/builds/placepicker.js"
-        ],
-        template: "templates/placepicker.jsx"
-      },
+      //"date skypicker": {
+      //  styles: [
+      //    "/styles/main.css",
+      //    "/styles/modules/skypicker.css"
+      //  ],
+      //  scripts: [
+      //    "/builds/datepicker.js"
+      //  ],
+      //  template: "templates/datepicker.jsx"
+      //},
+      //"date whichairline": {
+      //  styles: [
+      //    "/styles/main.css",
+      //    "/styles/modules/whichairline.css"
+      //  ],
+      //  scripts: [
+      //    "/builds/datepicker.js"
+      //  ],
+      //  template: "templates/datepicker.jsx"
+      //},
+      //"place skypicker": {
+      //  styles: [
+      //    "/styles/main.css",
+      //    "/styles/modules/skypicker.css"
+      //  ],
+      //  scripts: [
+      //    "/builds/placepicker.js"
+      //  ],
+      //  template: "templates/placepicker.jsx"
+      //},
+      //"place whichairline": {
+      //  styles: [
+      //    "/styles/main.css",
+      //    "/styles/modules/whichairline.css"
+      //  ],
+      //  scripts: [
+      //    "/builds/placepicker.js"
+      //  ],
+      //  template: "templates/placepicker.jsx"
+      //},
       "search form": {
         styles: [
           "/styles/main.css",

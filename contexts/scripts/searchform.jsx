@@ -12,13 +12,7 @@ var element = document.getElementById("search-form");
 var root = React.createFactory(SearchForm);
 var modalComponent = React.render(root(), element);
 
-modalComponent.setProps({
-  onChange: function (value) {
-    modalComponent.setProps({
-      data: value
-    });
-  }
-});
+modalComponent.setProps();
 
 //this.modalComponent.setProps({
 //  options: options,
