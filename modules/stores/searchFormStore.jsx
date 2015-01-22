@@ -43,13 +43,17 @@ var fetchPlace = function(searchPlace) {
     return false; /* don't need to async load */
   } else if (searchPlace.mode == "place") {
     return {
-      promise: findByIdFromApi(searchPlace.value.id),
-      tempValue: new SearchPlace({mode: "place", value: searchPlace.value, loading: true})
+      promise: findByIdFromApi(searchPlace.value.id).then((newSearchPlace) => {
+        return newSearchPlace.set("formMode", searchPlace.formMode)
+      }),
+      tempValue: searchPlace.set("loading", true)//new SearchPlace({mode: "place", value: searchPlace.value, loading: true})
     };
   } else if (searchPlace.mode == "text") {
     return {
-      promise: getFirstFromApi(searchPlace.value),
-      tempValue: new SearchPlace({mode: "text", value: searchPlace.value, loading: true})
+      promise: getFirstFromApi(searchPlace.value).then((newSearchPlace) => {
+        return newSearchPlace.set("formMode", searchPlace.formMode)
+      }),
+      tempValue: searchPlace.set("loading", true)//new SearchPlace({mode: "text", value: searchPlace.value, loading: true})
     };
   }
   return false;
