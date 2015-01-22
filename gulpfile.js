@@ -122,20 +122,21 @@ gulp.task('test', function() {
 gulp.task('export', function () {
   var bundleInProject, cssInProject;
   var projectPath = argv.path;
+  //TODO use path to copying .js and .styl files
+
+
   var project = argv.project;
 
-  if (project == "skypicker") {
-    bundleInProject = "/app/scripts/vendor/widgets";
-    cssInProject = "/app/styles"
-  }
-  browserifyfunc(true, false, './exports/'+project+'.jsx', projectPath + bundleInProject, "bundle.js");
+  browserifyfunc(true, false, './exports/'+project+'.jsx', "./builds/skypicker", "components.js");
 
-  watch('./shared/styles/modules/**/*.styl', function () {
-    gulp.src("./shared/styles/modules/"+project+".styl")
-      .pipe(stylus())
-      .pipe(rename("widgets.css"))
-      .pipe(gulp.dest(projectPath + cssInProject));
-  });
+
+  //TODO add copying .styl files into bower_components in skypicker
+  //watch('./shared/styles/modules/**/*.styl', function () {
+  //  gulp.src("./shared/styles/modules/"+project+".styl")
+  //    .pipe(stylus())
+  //    .pipe(rename("components.css"))
+  //    .pipe(gulp.dest("./builds/skypicker/components" + cssInProject));
+  //});
 });
 
 
