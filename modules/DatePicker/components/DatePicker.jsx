@@ -169,19 +169,9 @@ var DatePicker = React.createClass({
   },
   render: function() {
     var mode = this.state.viewMode;
-
-    var modeOptions = [];
-    for (var imode in this.props.modes) {
-      if (this.props.modes[imode]) {
-        modeOptions.push(<div key={imode} className={ (mode == imode) ? "active" : "" } onClick={ this.switchModeTo(imode) }>{ this.getModeLabel(imode) }</div>)
-      }
-    }
-
     return (
       <div className={'search-date-picker search-picker '+mode}>
-        <div className="mode-selector">
-          {modeOptions}
-        </div>
+        { this.renderMenu() }
         <div className="content">
           { this.renderBody() }
         </div>

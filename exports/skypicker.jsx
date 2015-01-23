@@ -11,5 +11,5 @@ window.SearchDate = Wgts.SearchDate = require('./../modules/containers/SearchDat
 window.SearchPlace = Wgts.SearchPlace = require('./../modules/containers/SearchPlace.jsx');
 window.SearchFormData = Wgts.SearchFormData = require('./../modules/containers/SearchFormData.jsx');
 window.SearchFormStore = Wgts.SearchFormStore = require('./../modules/stores/SearchFormStore.jsx');
-window.SearchForm = Wgts.SearchForm = require('./../modules/plainJsAdapters/SearchFormAdapter.jsx');
+window.SearchFormAdapter = Wgts.SearchFormAdapter = require('./../modules/plainJsAdapters/SearchFormAdapter.jsx');
 

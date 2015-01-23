@@ -63,7 +63,7 @@ var SearchForm = React.createClass({
 
   getInitialState: function() {
     return {
-      active: "origin",
+      active: this.props.defaultActive || "origin",
       data: SearchFormStore.data
     };
   },
@@ -150,18 +150,21 @@ var SearchForm = React.createClass({
       "dateTo",
       "submitButton"
     ];
-    var index = order.indexOf(this.state.active);
-    var newIndex;
-    if (index >= 0 && index <= 3) {
-      newIndex = index+1
-    } else if (index == 4) {
-      //TODO focus on search btn
-      newIndex = -1
+    var newActive;
+    if (this.state.active) {
+      var index = order.indexOf(this.state.active);
+      var newIndex;
+      if (index >= 0 && index <= 3) {
+        newActive = order[index+1];
+      } else if (index == 4) {
+        //TODO focus on search btn
+        newActive = null;
+      } else {
+        newActive = null;
+      }
+    } else {
+      newActive = "origin";
     }
-    var newActive = order[newIndex];
-
-
-
     this.setState({
       active: newActive
     });
