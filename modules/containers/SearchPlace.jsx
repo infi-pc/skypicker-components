@@ -36,12 +36,19 @@ function validateModes(data) {
   }
 }
 
+function getFormModeFromMode(mode) {
+  if (mode == "radius" || mode == "anywhere") {
+    return mode;
+  } else {
+    return "all";
+  }
+}
 
 class SearchPlace extends Immutable {
   constructor(input, isDefault) {
     var plain = makePlain(input);
     this.mode = plain.mode || "text";
-    this.formMode = plain.formMode || "all";
+    this.formMode = plain.formMode || getFormModeFromMode(this.mode);
     this.value = plain.value || "";
     this.isDefault = plain.isDefault || isDefault;
     this.error = plain.error || "";

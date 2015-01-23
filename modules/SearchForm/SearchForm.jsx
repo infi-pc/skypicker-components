@@ -58,12 +58,11 @@ var options = {
 };
 
 
-
 var SearchForm = React.createClass({
 
   getInitialState: function() {
     return {
-      active: this.props.defaultActive || "origin",
+      active: (typeof this.props.defaultActive == "undefined")? "origin" : this.props.defaultActive,
       data: SearchFormStore.data
     };
   },
@@ -177,6 +176,10 @@ var SearchForm = React.createClass({
       }
       if (changeType == "select") {
         this.nextField();
+      } else if (changeType == "selectRadius") {
+        this.setState({
+          active: null
+        });
       }
       Object.keys(this.components).forEach((key) => {
         SearchFormStore.setValue(this.state.data.changeField(fieldName, value));

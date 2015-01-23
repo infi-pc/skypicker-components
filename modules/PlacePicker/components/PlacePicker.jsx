@@ -85,7 +85,7 @@ var PlacePicker = React.createClass({
   switchModeTo: function (mode) {
     return () => {
       if (mode == "radius") {
-        this.selectValue(new SearchPlace({mode: "radius", value: new Radius()}));
+        this.props.onChange(new SearchPlace({mode: "radius", value: new Radius()}), "selectRadius");
       } else if (mode == "anywhere") {
         this.selectValue(new SearchPlace({mode: "anywhere"}));
       } else {
@@ -117,7 +117,7 @@ var PlacePicker = React.createClass({
 
   selectValue: function (value) {
     if (!value) {
-      value = this.props.value; //just same value as, but behave as it was selected
+      value = this.props.value; //if new value is null it meant i want to keep the same, it behaves as it was selected
     }
     this.props.onChange(value.set("formMode",this.state.viewMode), "select");
   },
