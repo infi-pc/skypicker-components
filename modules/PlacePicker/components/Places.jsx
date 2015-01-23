@@ -41,6 +41,7 @@ var Places = React.createClass({
       this.moveDown();
     } else if (e.keyIdentifier == "Enter") {
       this.selectFromIndex();
+      e.preventDefault();
     }
   },
 
@@ -70,7 +71,11 @@ var Places = React.createClass({
   },
 
   selectFromIndex: function () {
-    this.select(this.state.places[this.state.keySelectedIndex]);
+    if (this.state.keySelectedIndex >= 0) {
+      this.select(this.state.places[this.state.keySelectedIndex]);
+    } else {
+      this.moveNext();
+    }
   },
 
   adjustScroll: function () {
@@ -141,6 +146,10 @@ var Places = React.createClass({
 
   select: function (value) {
     this.props.onSelect( new SearchPlace({mode: "place", value: value}) );
+  },
+
+  moveNext: function (value) {
+    this.props.onSelect(null, "next");
   },
 
   getTextToSearch: function () {

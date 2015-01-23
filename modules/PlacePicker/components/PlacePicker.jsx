@@ -116,6 +116,9 @@ var PlacePicker = React.createClass({
   },
 
   selectValue: function (value) {
+    if (!value) {
+      value = this.props.value; //just same value as, but behave as it was selected
+    }
     this.props.onChange(value.set("formMode",this.state.viewMode), "select");
   },
 
