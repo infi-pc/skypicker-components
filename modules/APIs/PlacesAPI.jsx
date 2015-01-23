@@ -11,6 +11,10 @@ var handleError = function (err) {
 };
 
 class PlacesAPI {
+  /**
+   *
+   * @param settings.lang - language in which we get places namas
+   */
   constructor(settings) {
     this.settings = settings;
   }

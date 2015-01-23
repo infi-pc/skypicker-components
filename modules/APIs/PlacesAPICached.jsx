@@ -3,6 +3,9 @@ var Q  = require('q');
 
 var GlobalPromisesStore = {};
 
+/**
+ * Cached PlacesAPI, it should have always same interface as PlacesAPI
+ */
 class PlacesAPICached {
   constructor(settings) {
     this.placesAPI = new PlacesAPI(settings);
