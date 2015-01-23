@@ -120,8 +120,15 @@ var SearchForm = React.createClass({
     this.refreshShown();
   },
 
-  componentDidUpdate: function () {
+  componentDidUpdate: function (prevProps, prevState) {
     this.refreshShown();
+
+    //Complete previous field
+    if (this.state.active != prevState.active) {
+      if (prevState.active == "origin" || prevState.active == "destination") {
+        SearchFormStore.completeField(prevState.active);
+      }
+    }
   },
 
   getFormattedValue: function (fieldName) {
@@ -152,6 +159,9 @@ var SearchForm = React.createClass({
       newIndex = -1
     }
     var newActive = order[newIndex];
+
+
+
     this.setState({
       active: newActive
     });
@@ -208,6 +218,12 @@ var SearchForm = React.createClass({
   },
   onClickInner: function (e) {
     e.stopPropagation();
+  },
+
+  onInputKeyDown: function (e) {
+    if (e.key == "ArrowUp" || e.key == "ArrowDown"  || e.key == "Enter") {
+      e.preventDefault();
+    }
   },
 
   refreshFocus: function () {
@@ -277,6 +293,7 @@ var SearchForm = React.createClass({
               value={this.getFormattedValue(type)}
               onClick={this.onClickInner}
               onFocus={this.onFocusFunc(type)}
+              onKeyDown={this.onInputKeyDown}
               type="text"
               ref={type}
               onChange={this.changeTextFunc(type)}
