@@ -14,7 +14,7 @@ var defaultOptions = {
   locale: "en",
   sizes: {
     single: {width: 454, height: 200},
-    interval: {width: 907, height: 200, widthCompact: 454},
+    interval: {width: 924, height: 200, widthCompact: 454},
     month: {width: 550, height: 200},
     timeToStay: {width: 550, height: 200},
     anytime: {width: 169, height: 200},
