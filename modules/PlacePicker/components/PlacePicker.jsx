@@ -54,7 +54,6 @@ var PlacePicker = React.createClass({
     //}
 
     //THIRD VERSION
-    console.log("default???");
     if (this.props.value.formMode) {
       return this.props.value.formMode;
     } else {

@@ -5,7 +5,6 @@ window.SearchPlace = require('./../../modules/containers/SearchPlace.js');
 //
 window.ShowPlacePicker = require('./../../modules/plainJsAdapters/ShowPlacePicker.jsx');
 
-console.log("start");
 
 tr.setStrategy(translationStrategy);
 
