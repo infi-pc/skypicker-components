@@ -3,8 +3,7 @@ var PlaceRow = require('./PlaceRow.jsx');
 var Geolocation = require('./../../Geolocation.jsx');
 var SearchPlace = require('./../../containers/SearchPlace.jsx');
 var OptionsStore = require('./../../stores/OptionsStore.jsx');
-
-
+var Place = require('./../../containers/Place.jsx');
 function findPos(obj) {
   var curtop = 0;
   if (obj.offsetParent) {
@@ -58,7 +57,6 @@ var Places = React.createClass({
   },
 
   moveDown: function () {
-    var numOfPlaces = this.state.places.length;
     if (this.state.keySelectedIndex < this.state.places.length) {
       this.setState({
         keySelectedIndex: this.state.keySelectedIndex + 1
@@ -94,7 +92,7 @@ var Places = React.createClass({
     document.removeEventListener("keydown", this.keypress);
   },
 
-  componentDidUpdate: function (prevProps, prevState) {
+  componentDidUpdate: function () {
     this.checkNewPlaces();
     this.adjustScroll();
   },
@@ -110,27 +108,33 @@ var Places = React.createClass({
   },
 
   //TODO refactore - nearby should be separate from text
-  setSearchText: function (searchText) {
+  setSearch: function () {
+    var placeSearch = this.makeSearchParams();
     var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});
     this.setState({
       loading: true,
-      searchText: searchText
+      searchText: placeSearch
     });
     var callFuncParam;
-    if (this.props.nearby) {
-      callFuncParam = placesAPI.findNearby(Geolocation.getCurrentBounds());
-    } else {
-      callFuncParam = placesAPI.findByName(searchText); //TODO
-    }
+
+    callFuncParam = placesAPI.findPlaces(placeSearch);
 
     callFuncParam.then((places) => {
-      if (searchText != this.state.searchText || !this.isMounted()) {
+      if (placeSearch != this.state.searchText || !this.isMounted()) {
         return;
       }
-      var filteredPlaces = this.filterPlacesByType(places, this.props.types);
-      var limitedPlaces = filteredPlaces.slice(0,50);
+      places = this.filterPlacesByType(places, this.props.types);
+
+      if (placeSearch.typeID === Place.TYPE_COUNTRY) {
+        places = places.concat().sort((a, b) => { //.concat() is here to make copy of array
+          return (b.value < a.value)? 1 : -1
+        });
+      } else {
+        places = places.slice(0,50);
+      }
+
       this.setState({
-        places: limitedPlaces,
+        places: places,
         apiError: false,
         loading: false
       });
@@ -152,7 +156,7 @@ var Places = React.createClass({
     this.props.onSelect(null, "next");
   },
 
-  getTextToSearch: function () {
+  getSearchText: function () {
     if (this.props.search.mode == "text" && !this.props.search.isDefault) {
       return this.props.search.getText();
     } else {
@@ -160,23 +164,26 @@ var Places = React.createClass({
     }
   },
 
+  makeSearchParams: function () {
+    var params = {};
+    if (this.props.nearby) {
+      params.bounds = Geolocation.getCurrentBounds();
+    } else {
+      params.term = this.getSearchText();
+    }
+    if (this.props.types && this.props.types.length == 1) {
+      params.typeID = this.props.types[0];
+    }
+    return params;
+  },
+
   checkNewPlaces: function () {
-    var textToSearch = this.getTextToSearch();
-    if (this.state.lastSearch !== textToSearch) {
-      this.setSearchText(textToSearch);
+    var searchText = this.getSearchText();
+    if (this.state.lastSearch !== searchText || this.state.lastTypes != this.props.types || this.state.lastNearby != this.props.nearby) {
+      this.setSearch();
       this.setState({
-        lastSearch: textToSearch,
-        keySelectedIndex: -1
-      });
-    } else if (this.state.lastTypes != this.props.types) {
-      this.setSearchText(textToSearch);
-      this.setState({
+        lastSearch: searchText,
         lastTypes: this.props.types,
-        keySelectedIndex: -1
-      });
-    } else if (this.state.lastNearby != this.props.nearby) {
-      this.setSearchText(textToSearch);
-      this.setState({
         lastNearby: this.props.nearby,
         keySelectedIndex: -1
       });
