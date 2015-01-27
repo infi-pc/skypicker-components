@@ -20,7 +20,7 @@ var Calendar = React.createClass({
   dayNames: function () {
     var dayNames = [];
     var date = this.props.date.startOf('month');
-    var diff = date.weekday() - this.props.weekOffset;
+    var diff = date.isoWeekday() - this.props.weekOffset;
     if (diff < 0) diff += 7;
 
     for (var i = 0; i < 7; i++) {
@@ -33,7 +33,7 @@ var Calendar = React.createClass({
   days: function() {
     var days = [];
     var beginDate = this.props.date.startOf('month');
-    var diff = beginDate.weekday() - this.props.weekOffset;
+    var diff = beginDate.isoWeekday() - this.props.weekOffset;
     if (diff < 0) diff += 7;
 
     var i;
