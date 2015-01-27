@@ -55,21 +55,18 @@ var ModalPicker = React.createClass({
   },
 
   calculateStyles: function () {
-    var position = "input"; //OR "body"
-
     if (isIE(8,'lte')) {
       return {};
     }
 
     var rect;
-    if (this.props.inputElement) {
-      this.props.inputElement.getBoundingClientRect();
+    if (this.refs.outer) {
+      rect = this.refs.outer.getDOMNode().getBoundingClientRect();
     }
 
     var pageWidth = $(window).width();
     var width = this.props.contentSize.width;
-    var offset = (position == "input" || !rect)?0:rect.left; //rect.left; for in body
-    var top = (position == "input" || !rect)?45:(rect.bottom + window.pageYOffset);
+    var offset = (!rect)?0:(rect.left + window.pageXOffset);
     var maxWidth = pageWidth;
     var outerStyles;
     var addClass = "";
@@ -81,18 +78,17 @@ var ModalPicker = React.createClass({
         width = this.props.contentSize.widthCompact;
       }
     }
-
     if (offset + width <= maxWidth) {
       //KEEP IT
       outerStyles = {
-        marginLeft: offset,
+        marginLeft: 0,
         width: width
       };
     } else if (offset + width > maxWidth && width < maxWidth) {
       //MOVE IT
       var missingSpace = offset + width - maxWidth;
       outerStyles = {
-        marginLeft: offset - missingSpace,
+        marginLeft: 0 - missingSpace,
         width: width
       };
     } else {
@@ -101,7 +97,6 @@ var ModalPicker = React.createClass({
         width: "100%"
       };
     }
-    outerStyles.top = top + "px";
     return {
       outer: outerStyles,
       addClass: addClass
@@ -120,7 +115,7 @@ var ModalPicker = React.createClass({
     //TODO decide if put there close button or not
     //<div className="close-button" onclick={this.hide}><Tran tKey="close">close</Tran></div>
     return (
-      <div className={className} style={styles.outer} >
+      <div className={className} ref="outer" style={styles.outer} >
         <div className="search-modal-content" ref="inner">{this.props.children}</div>
       </div>
     );
