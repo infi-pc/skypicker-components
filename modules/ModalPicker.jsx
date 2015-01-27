@@ -25,9 +25,11 @@ var ModalPicker = React.createClass({
     if (this.refs.inner) {
       if ($(this.refs.inner.getDOMNode()).has(e.target).length) return;
     }
-    if ($(this.props.inputElement).is(e.target)) return;
-    if ($(this.props.inputElement).has(e.target).length) return;
-    //if (!this.props.shown) return;
+    if (this.props.inputElement) {
+      if ($(this.props.inputElement).is(e.target)) return;
+      if ($(this.props.inputElement).has(e.target).length) return;
+    }
+    if (!this.props.shown) return;
     this.hide();
   },
 
@@ -53,16 +55,21 @@ var ModalPicker = React.createClass({
   },
 
   calculateStyles: function () {
+    var position = "input"; //OR "body"
+
     if (isIE(8,'lte')) {
       return {};
     }
 
-    var rect = this.props.inputElement.getBoundingClientRect();
+    var rect;
+    if (this.props.inputElement) {
+      this.props.inputElement.getBoundingClientRect();
+    }
 
     var pageWidth = $(window).width();
     var width = this.props.contentSize.width;
-    var offset = rect.left;
-    var top = rect.bottom + window.pageYOffset;
+    var offset = (position == "input" || !rect)?0:rect.left; //rect.left; for in body
+    var top = (position == "input" || !rect)?45:(rect.bottom + window.pageYOffset);
     var maxWidth = pageWidth;
     var outerStyles;
     var addClass = "";
@@ -109,9 +116,11 @@ var ModalPicker = React.createClass({
   render: function() {
     var styles = this.calculateStyles();
     var className = "search-modal " + (styles.addClass ? styles.addClass : "");
+
+    //TODO decide if put there close button or not
+    //<div className="close-button" onclick={this.hide}><Tran tKey="close">close</Tran></div>
     return (
       <div className={className} style={styles.outer} >
-        <div className="close-button" onclick={this.hide}><Tran tKey="close">close</Tran></div>
         <div className="search-modal-content" ref="inner">{this.props.children}</div>
       </div>
     );

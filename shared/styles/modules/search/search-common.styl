@@ -34,6 +34,7 @@ $modeSelectorWidth = 170px
         color: $selectFontColor
         background-color: $selectColor
 
+
 .search-picker
   color: #666;
   overflow: hidden;
@@ -47,7 +48,6 @@ $modeSelectorWidth = 170px
     padding-bottom: 25px;
     float: left;
     height: 100%
-    width: 800px
     position absolute
     top: 0px
     left: $modeSelectorWidth
@@ -60,6 +60,7 @@ $modeSelectorWidth = 170px
 @media(max-width:699px)
   .search-picker
     height: 100%;
+    border none
     .content
       padding: 15px
       z-index: 10001
@@ -72,9 +73,11 @@ $modeSelectorWidth = 170px
       padding-bottom: 100px;
       overflow hidden
   .search-modal
-    margin-left: 0px !important /* all importants are here because it is rewriting javascript generated inline style */
+    top: 0px !important /* all importants are here because it is rewriting javascript generated inline style */
+    margin-left: 0px !important
     width: 100% !important
-    height: 460px;
+    position: relative
+    height: 380px;
     z-index: 10000
     box-sizing: border-box;
     .close-button

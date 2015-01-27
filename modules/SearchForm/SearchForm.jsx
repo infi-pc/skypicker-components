@@ -69,10 +69,11 @@ var SearchForm = React.createClass({
   getDefaultProps: function() {
 
   },
-  createModalContainer: function () {
+  createModalContainer: function (fieldName) {
     var div = document.createElement('div');
     div.setAttribute('class', 'modal-container-element');
-    document.body.appendChild(div);
+    //WHERE TO APPEND IT?
+    this.refs[fieldName+"Outer"].getDOMNode().appendChild(div);
     return div;
   },
 
@@ -90,37 +91,37 @@ var SearchForm = React.createClass({
   },
   componentDidMount: function() {
 
-    var datePickerFactory = React.createFactory(DatePickerModal);
-    var placePickerFactory = React.createFactory(PlacePickerModal);
-
-    this.components = {};
-    this.components.dateFrom = React.render(datePickerFactory(), this.createModalContainer());
-    this.components.dateTo = React.render(datePickerFactory(), this.createModalContainer());
-    this.components.origin = React.render(placePickerFactory(), this.createModalContainer());
-    this.components.destination = React.render(placePickerFactory(), this.createModalContainer());
-
-    Object.keys(this.components).forEach((key) => {
-      this.components[key].setProps({
-        inputElement: this.refs[key + "Outer"].getDOMNode(),
-        value: this.state.data[key],
-        onHide: () => {
-          if (this.state.active == key) {
-            this.setState({
-              active: ""
-            })
-          }
-        },
-        onChange: this.changeValueFunc(key),
-        options: options[key]
-      });
-    });
-
-    this.modalComponentsLoaded = true;
-    this.refreshShown();
+    //var datePickerFactory = React.createFactory(DatePickerModal);
+    //var placePickerFactory = React.createFactory(PlacePickerModal);
+    //
+    //this.components = {};
+    //this.components.dateFrom = React.render(datePickerFactory(), this.createModalContainer("dateFrom"));
+    //this.components.dateTo = React.render(datePickerFactory(), this.createModalContainer("dateTo"));
+    //this.components.origin = React.render(placePickerFactory(), this.createModalContainer("origin"));
+    //this.components.destination = React.render(placePickerFactory(), this.createModalContainer("destination"));
+    //
+    //Object.keys(this.components).forEach((key) => {
+    //  this.components[key].setProps({
+    //    inputElement: this.refs[key + "Outer"].getDOMNode(),
+    //    value: this.state.data[key],
+    //    onHide: () => {
+    //      if (this.state.active == key) {
+    //        this.setState({
+    //          active: ""
+    //        })
+    //      }
+    //    },
+    //    onChange: this.changeValueFunc(key),
+    //    options: options[key]
+    //  });
+    //});
+    //
+    //this.modalComponentsLoaded = true;
+    //this.refreshShown();
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    this.refreshShown();
+    //this.refreshShown();
 
     //Complete previous field
     if (this.state.active != prevState.active) {
@@ -181,9 +182,8 @@ var SearchForm = React.createClass({
           active: null
         });
       }
-      Object.keys(this.components).forEach((key) => {
-        SearchFormStore.setValue(this.state.data.changeField(fieldName, value));
-      });
+      SearchFormStore.setValue(this.state.data.changeField(fieldName, value));
+
     }
   },
 
@@ -211,7 +211,7 @@ var SearchForm = React.createClass({
     }
   },
 
-  onClickOuterFunc: function (type) {
+  toggleActive: function (type) {
     return () => {
       if (type == this.state.active) {
         this.setState({
@@ -263,16 +263,42 @@ var SearchForm = React.createClass({
     return modeLabels[mode];
   },
 
-  refreshShown: function () {
-    if (this.modalComponentsLoaded) {
-      Object.keys(this.components).forEach((key) => {
-        this.components[key].setProps({
-          value: this.state.data[key],
-          shown: key == this.state.active
-        });
-      });
-      this.refreshFocus();
+  //refreshShown: function () {
+  //  if (this.modalComponentsLoaded) {
+  //    Object.keys(this.components).forEach((key) => {
+  //      this.components[key].setProps({
+  //        value: this.state.data[key],
+  //        shown: key == this.state.active
+  //      });
+  //    });
+  //    this.refreshFocus();
+  //  }
+  //},
+  renderModal: function (fieldName) {
+
+    var XPickerModal;
+    if (fieldName == "origin" || fieldName == "destination") {
+      XPickerModal = PlacePickerModal;
+    } else {
+      XPickerModal = DatePickerModal;
     }
+    var onHide = () => {
+      if (this.state.active == fieldName) {
+        this.setState({
+          active: ""
+        })
+      }
+    };
+    //var inputElement = this.refs[fieldName + "Outer"]?this.refs[fieldName + "Outer"].getDOMNode():null;
+    return (<XPickerModal
+      inputElement={null}
+      value={this.state.data[fieldName]}
+      onHide={onHide}
+      onChange={this.changeValueFunc(fieldName)}
+      options={options[fieldName]}
+      shown={fieldName == this.state.active}
+    />)
+
   },
   renderInput: function(type) {
     var faIconClass = "fa fa-caret-down";
@@ -290,10 +316,10 @@ var SearchForm = React.createClass({
       <fieldset
         className={className}
         ref={type + "Outer"}
-        onClick={this.onClickOuterFunc(type)}
+
       >
         <div className="head">
-          <label>{this.getFieldLabel(type)}</label>
+          <label onClick={this.toggleActive(type)}>{this.getFieldLabel(type)}</label>
           <span className="input-wrapper">
             <input
               value={this.getFormattedValue(type)}
@@ -304,19 +330,22 @@ var SearchForm = React.createClass({
               ref={type}
               onChange={this.changeTextFunc(type)}
               autoComplete="off"
+              readOnly={(type == "dateFrom" || type == "dateTo")}
             />
           </span>
           <i className="fa fa-spinner"></i>
-          <b className="toggle">
+          <b className="toggle" onClick={this.toggleActive(type)}>
             <i className={faIconClass}></i>
           </b>
         </div>
+        {this.renderModal(type)}
       </fieldset>
     )
   },
   render: function() {
     return (
       <form id="search">
+
         {this.renderInput("origin")}
         {this.renderInput("destination")}
         {this.renderInput("dateFrom")}
