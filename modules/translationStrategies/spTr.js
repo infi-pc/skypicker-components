@@ -5,15 +5,14 @@ var tr = function (original,key,values) {
   var translated;
   // prevent throwing exception on wrong sprintf format
   try {
-    translated = $.t('form_search.'+key, {defaultValue: original, postProcess: 'sprintf', sprintf: values});
+    translated = $.t('form_search.'+key, {postProcess: 'sprintf', sprintf: values});
   } catch (e) {
     translated = original;
   }
-
   //Not nice, TODO make some better solution how to pick prefix and fallback to common
-  if (translated == original) {
+  if (translated == 'form_search.'+key) {
     try {
-      translated = $.t('common.'+key, {defaultValue: original, postProcess: 'sprintf', sprintf: values});
+      translated = $.t('common.'+key, {postProcess: 'sprintf', sprintf: values});
     } catch (e) {
       translated = original;
     }
