@@ -3,7 +3,7 @@
 var isIE = require('./tools/isIE.js');
 var moment = require('moment');
 var Tran = require('./Tran.jsx');
-
+var $ = require('jQuery');
 
 
 var ModalPicker = React.createClass({
@@ -60,13 +60,19 @@ var ModalPicker = React.createClass({
     }
 
     var rect;
+    var marginLeft = 0;
     if (this.refs.outer) {
       rect = this.refs.outer.getDOMNode().getBoundingClientRect();
+      var style = this.refs.outer.getDOMNode().style;
+      if (style.marginLeft) {
+        marginLeft = parseInt(style.marginLeft.substring(0,style.marginLeft.length-2),10);
+        console.log(marginLeft);
+      }
     }
 
     var pageWidth = $(window).width();
     var width = this.props.contentSize.width;
-    var offset = (!rect)?0:(rect.left + window.pageXOffset);
+    var offset = (!rect)?0:(rect.left - marginLeft + window.pageXOffset);
     var maxWidth = pageWidth;
     var outerStyles;
     var addClass = "";
