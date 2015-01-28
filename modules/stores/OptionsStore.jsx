@@ -15,7 +15,21 @@ class OptionsStore {
     }
     return changed;
   }
+
+  /**
+   * Alias for set
+   */
   setOption(key, value) {
+    return this.set(key, value);
+  }
+
+  /**
+   * Set one value to given key
+   * @param key
+   * @param value
+   * @return {*}
+   */
+  set(key, value) {
     return this.setValue(this.data.set(key, value));
   }
 }

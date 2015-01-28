@@ -9,13 +9,15 @@ class Options {
       this.language = plain.language || "en";
     }
 
-    this.defaultRadius = plain.defaultRadius || new Radius();
+    this.defaultRadius = plain.defaultRadius || new Radius(); //TODO radius??
+    this.mapCenter = plain.mapCenter || ""; //TODO map center
     Object.freeze(this);
   }
   set(key, value) {
     var newPlain = {
       language: this.language,
-      defaultRadius: this.defaultRadius
+      defaultRadius: this.defaultRadius,
+      mapCenter: this.mapCenter
     };
     newPlain[key] = value;
     return new Options(newPlain);
