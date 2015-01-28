@@ -22,7 +22,7 @@ var ModalMenuMixin = {
         if (mode == imode) {
           className += " active";
         }
-        modeOptions.push(<div key={imode} className={className} onClick={ this.switchModeTo(imode) }>{ this.getModeLabel(imode) }</div>)
+        modeOptions.push(<div key={imode} className={className} onClick={ this.switchModeToFunc(imode) }>{ this.getModeLabel(imode) }</div>)
       }
     }
     return (

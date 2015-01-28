@@ -57,7 +57,7 @@ var DatePicker = React.createClass({
     return modeLabels[mode];
   },
 
-  switchModeTo: function (mode) {
+  switchModeToFunc: function (mode) {
     var self = this;
     var newValue;
     return function () {

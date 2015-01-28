@@ -65,7 +65,6 @@ var ModalPicker = React.createClass({
       var style = this.refs.outer.getDOMNode().style;
       if (style.marginLeft) {
         marginLeft = parseInt(style.marginLeft.substring(0,style.marginLeft.length-2),10);
-        console.log(marginLeft);
       }
     }
 
