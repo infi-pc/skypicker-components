@@ -18,6 +18,9 @@ $placesWidth = 417px;
       &.not-loading
         opacity: 0;
         pointer-events: none;
+        /* hack for older IEs because pointer events doesn't work */
+        margin-top: -100000px;
+        transition: margin-top 0s .5s;
 
     .no-results
       position: absolute
