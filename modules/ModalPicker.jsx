@@ -29,7 +29,6 @@ var ModalPicker = React.createClass({
       if ($(this.props.inputElement).is(e.target)) return;
       if ($(this.props.inputElement).has(e.target).length) return;
     }
-    if (!this.props.shown) return;
     this.hide();
   },
 

@@ -289,9 +289,12 @@ var SearchForm = React.createClass({
         })
       }
     };
-    //var inputElement = this.refs[fieldName + "Outer"]?this.refs[fieldName + "Outer"].getDOMNode():null;
+    var inputElement = null;
+    if (this.refs[fieldName + "Outer"]) {
+      inputElement = this.refs[fieldName + "Outer"].getDOMNode();
+    }
     return (<XPickerModal
-      inputElement={null}
+      inputElement={inputElement}
       value={this.state.data[fieldName]}
       onHide={onHide}
       onChange={this.changeValueFunc(fieldName)}
@@ -318,7 +321,7 @@ var SearchForm = React.createClass({
         ref={type + "Outer"}
 
       >
-        <div className="head">
+        <div ref={type + "Head"} className="head">
           <label onClick={this.toggleActive(type)}>{this.getFieldLabel(type)}</label>
           <span className="input-wrapper">
             <input
