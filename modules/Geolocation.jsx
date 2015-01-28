@@ -1,4 +1,6 @@
 var LatLon = require('./tools/latlon.js');
+var OptionsStore = require('./stores/OptionsStore.jsx');
+
 
 var options = {
   enableHighAccuracy: false,
@@ -41,7 +43,12 @@ class Geolocation {
     }
   }
   getCurrentBounds() {
-    return this.pointToBounds(50,15);
+    var center = OptionsStore.data.defaultMapCenter;
+    if (center) {
+      return this.pointToBounds(center.lat(),center.lng());
+    } else {
+      return this.pointToBounds(50,15);
+    }
   }
 }
 

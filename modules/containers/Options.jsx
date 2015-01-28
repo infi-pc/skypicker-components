@@ -10,14 +10,14 @@ class Options {
     }
 
     this.defaultRadius = plain.defaultRadius || new Radius(); //TODO radius??
-    this.mapCenter = plain.mapCenter || ""; //TODO map center
+    this.defaultMapCenter = plain.defaultMapCenter || null; //TODO map center
     Object.freeze(this);
   }
   set(key, value) {
     var newPlain = {
       language: this.language,
       defaultRadius: this.defaultRadius,
-      mapCenter: this.mapCenter
+      defaultMapCenter: this.defaultMapCenter
     };
     newPlain[key] = value;
     return new Options(newPlain);
