@@ -4,6 +4,7 @@ var React = require('react');
 var moment = require('moment');
 
 var CalendarDay = require("./CalendarDay.jsx");
+var DaysInWeek = require("./SelectDaysInWeek.jsx");
 var Calendar = require("./../../Calendar.jsx");
 var DateTools = require("./../../DateTools.js");
 
@@ -159,6 +160,7 @@ var CalendarFrame = React.createClass({
         { calendars }
         { this.renderNext() }
         <div className='clear-both'></div>
+        <DaysInWeek />
       </ div>
     )
   }
