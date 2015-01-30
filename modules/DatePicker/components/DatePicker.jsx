@@ -7,6 +7,7 @@ var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
 var tr = require('./../../tr.js');
+var Tran = require('./../../Tran.jsx');
 var isIE = require('./../../tools/isIE.js');
 
 
@@ -157,7 +158,7 @@ var DatePicker = React.createClass({
           <Handle />
         </Slider>
         <div className="slider-axe"></div>
-        <div className="confirm-time-to-stay-button" onClick={this.confirmTimeToStay}>OK</div>
+        <div className="btn confirm-time-to-stay-button" onClick={this.confirmTimeToStay}><Tran tKey="ok">OK</Tran></div>
       </div>
     );
   },

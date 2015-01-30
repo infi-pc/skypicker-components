@@ -85,7 +85,8 @@
 
     render: function() {
       var handleStyle = {
-        transform: 'translate' + this._axis() + '(' + this.getOffset() + 'px)',
+        //transform: 'translate' + this._axis() + '(' +  + 'px)',
+        marginLeft: this.getOffset() + 'px',
         // let this element be the same size as its children.
         display: 'inline-block'
       };

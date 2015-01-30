@@ -91,37 +91,10 @@ var SearchForm = React.createClass({
   },
   componentDidMount: function() {
 
-    //var datePickerFactory = React.createFactory(DatePickerModal);
-    //var placePickerFactory = React.createFactory(PlacePickerModal);
-    //
-    //this.components = {};
-    //this.components.dateFrom = React.render(datePickerFactory(), this.createModalContainer("dateFrom"));
-    //this.components.dateTo = React.render(datePickerFactory(), this.createModalContainer("dateTo"));
-    //this.components.origin = React.render(placePickerFactory(), this.createModalContainer("origin"));
-    //this.components.destination = React.render(placePickerFactory(), this.createModalContainer("destination"));
-    //
-    //Object.keys(this.components).forEach((key) => {
-    //  this.components[key].setProps({
-    //    inputElement: this.refs[key + "Outer"].getDOMNode(),
-    //    value: this.state.data[key],
-    //    onHide: () => {
-    //      if (this.state.active == key) {
-    //        this.setState({
-    //          active: ""
-    //        })
-    //      }
-    //    },
-    //    onChange: this.changeValueFunc(key),
-    //    options: options[key]
-    //  });
-    //});
-    //
-    //this.modalComponentsLoaded = true;
-    //this.refreshShown();
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    //this.refreshShown();
+    this.refreshFocus();
 
     //Complete previous field
     if (this.state.active != prevState.active) {
@@ -263,17 +236,6 @@ var SearchForm = React.createClass({
     return modeLabels[mode];
   },
 
-  //refreshShown: function () {
-  //  if (this.modalComponentsLoaded) {
-  //    Object.keys(this.components).forEach((key) => {
-  //      this.components[key].setProps({
-  //        value: this.state.data[key],
-  //        shown: key == this.state.active
-  //      });
-  //    });
-  //    this.refreshFocus();
-  //  }
-  //},
   renderModal: function (fieldName) {
 
     var XPickerModal;
