@@ -21,6 +21,9 @@ class Place {
     Object.keys(plain).forEach((key) => {
       this[key] = plain[key];
     });
+    if (!this.value) {
+      this.value = "";
+    }
     if (typeof this.complete == "undefined") {
       this.complete = true;
     }
