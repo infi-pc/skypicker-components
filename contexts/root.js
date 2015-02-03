@@ -9,6 +9,7 @@ module.exports = {
       "/scripts/react-0.12.1/build/react-with-addons.js",
       "/scripts/moment-with-locales.js",
 
+      "//maps.googleapis.com/maps/api/js?key=AIzaSyAyTAYTOgwyK88nltrL2n0ow2J6MXPlK-s"
       //"/scripts/bundle.js", //TODO require
       //"/scripts/main.js"  //TODO add to init
     ],
@@ -63,6 +64,18 @@ module.exports = {
           "/builds/searchform.js"
         ],
         template: "templates/searchform.jsx"
+      },
+      "map": {
+        libs: [
+
+        ],
+        styles: [
+          "/styles/map.css"
+        ],
+        scripts: [
+          "/builds/map.js"
+        ],
+        template: "templates/map.jsx"
       }
     }
   }

@@ -22,12 +22,13 @@ class PlacesAPI {
   /**
    * find places according to given attributes
    * @param placeSearch.term - string to search
-   * @param placeSearch.typeId -- type id
+   * @param placeSearch.typeID -- type id
    * @param placeSearch.bounds
    * @return promise
    */
   findPlaces(placeSearch) {
     var params = {};
+    placeSearch = placeSearch || {};
     if (placeSearch.term) {
       params.term = placeSearch.term;
     }

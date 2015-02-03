@@ -27,6 +27,14 @@ class Place {
     if (typeof this.complete == "undefined") {
       this.complete = true;
     }
+
+    // create short name
+    if (this.type == Place.TYPE_CITY) {
+      this.shortName = this.value.replace(/\s*\(.+\)/, '');
+    } else {
+      this.shortName = this.value;
+    }
+
     this.typeString = Place.typeIdToString(this.type);
     Object.freeze(this);
   }

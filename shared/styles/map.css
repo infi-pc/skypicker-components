@@ -1,0 +1,28 @@
+
+#map-canvas {
+  width: 100%;
+  height: 100%;
+}
+.places-overlay {
+  position: relative;
+}
+.places-overlay > div {
+  position: absolute;
+}
+
+.city-label {
+  margin-left: -7px;
+  margin-top: -7px;
+  z-index: 1000000000;
+  cursor: pointer
+}
+.city-label > div{
+  position: absolute;
+  top: -8px;
+  left: 15px;
+  white-space: nowrap;
+  z-index: 1000000000;
+}
+.city-label .city-label-title {
+  font-weight: bold;
+}
