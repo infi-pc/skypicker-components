@@ -1,5 +1,7 @@
 {
   "name": "skypicker-components",
+  "version": "1.0.0",
+  "main": "builds/skypicker/components.js",
   "devDependencies": {
     "apache-server-configs": "^2.7.1",
     "browserify": "latest",
@@ -55,6 +57,8 @@
     "moment": "^2.8.3",
     "react": "^0.12.1"
   },
-  "version": "1.0.0",
-  "main": "builds/skypicker/components.js"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/infi-pc/skypicker-components.git"
+  }
 }
