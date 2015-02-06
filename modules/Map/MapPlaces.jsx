@@ -148,7 +148,6 @@ var MapPlaces = React.createClass({
     })
   },
   render: function () {
-
     return (
       <div className="places-overlay">
         {this.renderPlaces()}

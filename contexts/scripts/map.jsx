@@ -1,5 +1,7 @@
 window.react = require('react');
 window.MapOverlay = require('./../../modules/Map/MapOverlay.jsx');
+var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
+
 
 function initialize() {
   var styles = [
@@ -55,10 +57,15 @@ function initialize() {
     mapOptions);
 
   var overlay = new MapOverlay(map);
+
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
+
+SearchFormStore.events.on("change", function () {
+  document.getElementById('output').innerHTML = JSON.stringify(SearchFormStore.data);
+});
 
 
 //var element = document.getElementById("map");

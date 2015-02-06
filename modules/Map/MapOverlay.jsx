@@ -11,15 +11,10 @@ MapOverlay.prototype = new google.maps.OverlayView();
 MapOverlay.prototype.onAdd = function () {
   var div = document.createElement('div');
   var panes = this.getPanes();
-  panes.overlayMouseTarget.appendChild(div);// overlayLayer
+  panes.overlayMouseTarget.appendChild(div);// overlayLayer, overlayMouseTarget //https://developers.google.com/maps/documentation/javascript/customoverlays
 
   var root = React.createFactory(MapPlaces);
   this.placesComponent = React.render(root(), div);
-
-  google.maps.event.addDomListener(div, 'click', function() {
-    console.log("click??");
-    //google.maps.event.trigger(me, 'click');
-  });
 
   google.maps.event.addListener(this.map, 'idle', ()=> {
     console.log("idle");

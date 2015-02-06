@@ -1,3 +1,7 @@
+var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
+var SearchPlace = require('./../../modules/containers/SearchPlace.jsx');
+
+
 var PlaceLabel = React.createClass({
 
   getDefaultProps: function () {
@@ -10,15 +14,24 @@ var PlaceLabel = React.createClass({
       active: false
     }
   },
-  //componentDidMount: function () {
-  //
-  //},
 
-  onClick: function () {
-    console.log("activate");
-    this.setState({
-      active: true
-    })
+
+  componentDidMount: function () {
+    google.maps.event.addDomListener(this.refs.label.getDOMNode(), 'contextmenu', this.onRightClick);
+  },
+
+  componentWillUnmount: function () {
+    google.maps.event.clearListeners(this.refs.label.getDOMNode(), 'contextmenu');
+    //google.maps.event.removeDomListener(this.refs.label.getDOMNode(), 'contextmenu', this.onRightClick);
+  },
+
+
+
+  onRightClick: function (e) {
+    SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.place}));
+  },
+  onClick: function (e) {
+    SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.place}));
   },
   render: function () {
     var fullLabel, image;
@@ -37,7 +50,7 @@ var PlaceLabel = React.createClass({
       image = <img src="/images/markers/cityWithPrice.png" />
     }
     return (
-      <div style={this.props.style} className="city-label" onClick={this.onClick}>
+      <div ref="label" style={this.props.style} className="city-label" onClick={this.onClick}>
         {image}
         {fullLabel}
       </div>
