@@ -28,8 +28,13 @@ function initialize() {
       "featureType": "administrative.country",
       "elementType": "labels",
       "stylers": [
-        { "visibility": "simplified" },
-        { "color": "#808080" }
+        { "visibility": "off" }
+      ]
+    },{
+      "featureType": "administrative.country",
+      "elementType": "borders",
+      "stylers": [
+        { "color": "#cccccc" }
       ]
     },{
       "featureType": "water",

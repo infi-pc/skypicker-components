@@ -26,3 +26,27 @@
 .city-label .city-label-title {
   font-weight: bold;
 }
+
+
+
+#output-background {
+  position: absolute;
+  top: 20px;
+  left: 100px;
+  width: 400px;
+  height: 200px;
+  /*-webkit-filter: blur(20px);*/
+  /*-moz-filter: blur(20px);*/
+  /*-o-filter: blur(20px);*/
+  /*-ms-filter: blur(20px);*/
+  /*filter: blur(20px);*/
+  opacity: 0.6;
+  background-color: #ffffff;
+}
+#output {
+  position: absolute;
+  top: 20px;
+  left: 100px;
+  width: 400px;
+  height: 200px;
+}

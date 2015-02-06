@@ -127,6 +127,7 @@ var MapPlaces = React.createClass({
       };
       labels.push(label);
     });
+    console.log(labels);
     return labels;
   },
 
@@ -143,7 +144,7 @@ var MapPlaces = React.createClass({
         top: label.position.y,
         left: label.position.x
       };
-      return (<PlaceLabel style={labelStyle} place={label.place} showFullLabel={label.showFullLabel} />)
+      return (<PlaceLabel key={label.place.id} style={labelStyle} place={label.place} showFullLabel={label.showFullLabel} />)
     })
   },
   render: function () {
