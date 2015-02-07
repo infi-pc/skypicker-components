@@ -34,7 +34,9 @@ class MapPlacesIndex {
   }
 
   getById(id) {
-    return this.mapPlacesIndex[id].mapPlace;
+    if (this.mapPlacesIndex[id]) {
+      return this.mapPlacesIndex[id].mapPlace;
+    }
   }
 
   getByBounds(latLngBounds) {
@@ -60,7 +62,11 @@ class MapPlacesIndex {
     });
   }
 
-
+  cleanPrices() {
+    Object.keys(this.mapPlacesIndex).forEach((id) => {
+      this.mapPlacesIndex[id].mapPlace = this.mapPlacesIndex[id].mapPlace.set("price", null);
+    });
+  }
   /**
    * Edit
    * @param mapPlace

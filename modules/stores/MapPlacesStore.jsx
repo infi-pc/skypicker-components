@@ -4,6 +4,7 @@ var MapPlace = require('./../containers/MapPlace.jsx');
 var SearchFormStore  = require('./../stores/SearchFormStore.jsx');
 var Quadtree = require('./../tools/quadtree.js');
 var PlacesAPI = require('./../APIs/PlacesAPI.jsx');
+var FlightsAPI = require('./../APIs/FlightsAPI.jsx');
 var Place = require('./../containers/Place.jsx');
 
 
@@ -58,7 +59,27 @@ class MapPlacesStore {
   }
 
   loadPrices() {
-
+    //TODO clean could be ommited on some cases (new data)
+    this.mapPlacesIndex.cleanPrices();
+    //TODO also other origin types
+    if (SearchFormStore.data.origin.mode == "place") {
+      var origin = SearchFormStore.data.origin;
+      var flightsAPI = new FlightsAPI({lang: "en"});
+      flightsAPI.findFlights({
+        origin: origin.value.id,
+        destination: "anywhere",
+        outboundDate: SearchFormStore.data.dateFrom,
+        inboundDate: SearchFormStore.data.dateTo
+      }).then((flights) => {
+        flights.forEach((flight) => {
+          var mapPlace = this.mapPlacesIndex.getById(flight.mapIdto);
+          if (mapPlace) {
+            this.mapPlacesIndex.editPlace(mapPlace.set("price",flight.price));
+          }
+        });
+        this.events.emit("placesChanged");
+      });
+    }
   }
 
   checkSelected() {

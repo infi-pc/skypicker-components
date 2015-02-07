@@ -35,13 +35,16 @@ var PlaceLabel = React.createClass({
   },
   render: function () {
     var mapPlace = this.props.mapPlace;
-
-    var fullLabel, image;
+    var style = this.props.style;
+    var fullLabel, image, price;
+    if (mapPlace.price) {
+      price = <span>{mapPlace.price}EUR</span>
+    }
     if (this.props.showFullLabel) {
       fullLabel = (
         <div>
           <span className="city-label-title">{mapPlace.place.shortName}</span><br/>
-          <span>199 US$</span>
+          {price}
         </div>
       );
       image = <img src="/images/markers/city.png" />
@@ -55,7 +58,7 @@ var PlaceLabel = React.createClass({
       image = <img src="/images/markers/cityWithPrice.png" />
     }
     return (
-      <div ref="label" style={this.props.style} className="city-label" onClick={this.onClick}>
+      <div ref="label" style={style} className="city-label" onClick={this.onClick}>
         {image}
         {fullLabel}
       </div>
