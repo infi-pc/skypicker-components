@@ -1,4 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
+var MapPlacesIndex = require('./MapPlacesIndex.jsx');
 var MapPlace = require('./../containers/MapPlace.jsx');
 var SearchFormStore  = require('./../stores/SearchFormStore.jsx');
 var Quadtree = require('./../tools/quadtree.js');
@@ -16,76 +17,86 @@ function isCollide(a, b) {
   );
 }
 
-function boundsToSelector(latLngBounds) {
-  var bounds = latLngBounds;
-  //if map has 180lng view scope than show only the bigger part of shown planet
-  if (bounds.eLng - bounds.wLng < 0) {
-    // what is more far from zero, it is smaller
-    if (Math.abs(bounds.eLng) > Math.abs(bounds.wLng)) {
-      bounds.eLng = 180;
-    } else {
-      bounds.wLng = -180;
-    }
-  }
 
-  return {
-    x: bounds.wLng + 180,
-    y: bounds.sLat + 90,
-    w: bounds.eLng - bounds.wLng,
-    h: bounds.nLat - bounds.sLat
-  };
-}
 
 
 class MapPlacesStore {
   constructor() {
+    this.mapPlacesIndex = new MapPlacesIndex();
     this.events = new EventEmitter();
-    this.mapPlacesIndex = {};
 
-    this.pointsTree = Quadtree.init({
-      x: 0,
-      y: 0,
-      w: 360,
-      h: 180,
-      maxDepth : 12
-    });
+    this.selectedOriginId = null; //it is here so i can fastly deselect the last place
+    this.selectedDestinationId = null;
+
+
     this.labelsBoundsTree = Quadtree.init({
       x: 0,
       y: 0,
-      w: 5000, //max screen size
-      h: 5000, //max screen size
+      w: 5000, //big enough screen size
+      h: 5000,
       maxDepth : 20
     });
-
+    SearchFormStore.events.on("change", () => {
+      this.loadPrices();
+      this.checkSelected();
+      this.events.emit("placesChanged");
+    });
     this.loadPlaces();
   }
 
   loadPlaces() {
     var placesAPI = new PlacesAPI({lang: "en"});
     placesAPI.findPlaces({typeID: Place.TYPE_CITY}).then((places) => {
-      places.forEach((place) => {
-        var mapPlace = new MapPlace({place: place});
-        this.mapPlacesIndex[place.id] = mapPlace;
-        this.pointsTree.insert(
-          {
-            x: place.lng + 180,
-            y: place.lat + 90,
-            w: 0.00001,
-            h: 0.00001,
-            mapPlace: mapPlace
-          }
-        );
+      var mapPlaces = places.map((place) => {
+        return new MapPlace({place: place});
       });
-      this.events.trigger("placesChanged");
+      this.mapPlacesIndex.insertPlaces(mapPlaces);
 
+      this.checkSelected();
+      this.events.emit("placesChanged");
     })
+  }
+
+  loadPrices() {
 
   }
+
+  checkSelected() {
+    if (SearchFormStore.data.origin.mode == "place" && this.selectedOriginId != SearchFormStore.data.origin.value.id) {
+      this.deselectPlace(this.selectedOriginId);
+      this.selectPlace(SearchFormStore.data.origin.value.id, "origin");
+      this.selectedOriginId = SearchFormStore.data.origin.value.id;
+    }
+    if (SearchFormStore.data.destination.mode == "place" && this.selectedDestinationId != SearchFormStore.data.destination.value.id) {
+      this.deselectPlace(this.selectedDestinationId);
+      this.selectPlace(SearchFormStore.data.destination.value.id, "destination");
+      this.selectedDestinationId = SearchFormStore.data.destination.value.id;
+    }
+  }
+
+  selectPlace(id, direction) {
+    var mapPlace = this.mapPlacesIndex.getById(id);
+    this.mapPlacesIndex.editPlace(mapPlace.set("flag",direction));
+  }
+  deselectPlace(id) {
+    if (id) {
+      var mapPlace = this.mapPlacesIndex.getById(id);
+      this.mapPlacesIndex.editPlace(mapPlace.set("flag",""));
+    }
+  }
+
   // mutates places
   mapPlacesToLabels (mapPlaces, fromLatLngToDivPixel) {
     this.labelsBoundsTree.clear();
     if (!mapPlaces || mapPlaces.length <= 0) return [];
     mapPlaces.sort((a,b) => {
+      if (a.flag && !b.flag) {
+        return -1;
+      }
+      if (!a.flag && b.flag) {
+        return 1;
+      }
+
       return a.place.sp_score < b.place.sp_score;
     });
     //mapPlaces = mapPlaces.slice(0,300);
@@ -125,11 +136,7 @@ class MapPlacesStore {
     return labels;
   }
   getMapPlacesInBounds(latLngBounds, fromLatLngToDivPixelFunc) {
-    var treeSelector = boundsToSelector(latLngBounds);
-    var mapPlaces = [];
-    this.pointsTree.retrieve(treeSelector, function(item) {
-      mapPlaces.push(item.mapPlace);
-    });
+    var mapPlaces = this.mapPlacesIndex.getByBounds(latLngBounds);
     return this.mapPlacesToLabels(mapPlaces, fromLatLngToDivPixelFunc);
   }
 

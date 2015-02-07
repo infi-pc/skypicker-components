@@ -28,17 +28,19 @@ var PlaceLabel = React.createClass({
 
 
   onRightClick: function (e) {
-    SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.place}));
+    SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.mapPlace.place}));
   },
   onClick: function (e) {
-    SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.place}));
+    SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.mapPlace.place}));
   },
   render: function () {
+    var mapPlace = this.props.mapPlace;
+
     var fullLabel, image;
     if (this.props.showFullLabel) {
       fullLabel = (
         <div>
-          <span className="city-label-title">{this.props.place.shortName}</span><br/>
+          <span className="city-label-title">{mapPlace.place.shortName}</span><br/>
           <span>199 US$</span>
         </div>
       );
@@ -46,7 +48,10 @@ var PlaceLabel = React.createClass({
     } else {
       image = <img src="/images/markers/citySmall.png" />
     }
-    if (this.state.active) {
+    if (mapPlace.flag == "origin") {
+      image = <img src="/images/markers/cityWithPrice.png" />
+    }
+    if (mapPlace.flag == "destination") {
       image = <img src="/images/markers/cityWithPrice.png" />
     }
     return (
