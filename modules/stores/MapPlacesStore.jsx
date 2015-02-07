@@ -58,6 +58,14 @@ class MapPlacesStore {
     })
   }
 
+  findPriceStats(flights) {
+    var res = {};
+    flights.forEach((flight) => {
+      if (!res.maxPrice || res.maxPrice < flight.price) res.maxPrice = flight.price;
+      if (!res.minPrice || res.minPrice > flight.price) res.minPrice = flight.price;
+    });
+    return res;
+  }
   loadPrices() {
     //TODO clean could be ommited on some cases (new data)
     this.mapPlacesIndex.cleanPrices();
@@ -71,13 +79,19 @@ class MapPlacesStore {
         outboundDate: SearchFormStore.data.dateFrom,
         inboundDate: SearchFormStore.data.dateTo
       }).then((flights) => {
+        var priceStats = this.findPriceStats(flights);
+
         flights.forEach((flight) => {
           var mapPlace = this.mapPlacesIndex.getById(flight.mapIdto);
           if (mapPlace) {
-            this.mapPlacesIndex.editPlace(mapPlace.set("price",flight.price));
+            var relativePrice = flight.price / priceStats.maxPrice; //TODO nicer function
+            this.mapPlacesIndex.editPlace(mapPlace.edit({"price":flight.price, "relativePrice": relativePrice}));
           }
         });
         this.events.emit("placesChanged");
+      }).catch((err) => {
+        //TODO nicer error handling
+        console.error(err);
       });
     }
   }

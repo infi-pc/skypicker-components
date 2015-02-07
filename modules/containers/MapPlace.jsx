@@ -6,6 +6,7 @@ class MapPlace  extends Immutable {
     this.place = plain.place;
     this.flag = plain.flag || ""; //origin, destination, stopover
     this.price = plain.price || null;
+    this.relativePrice = plain.relativePrice || null;
     Object.freeze(this);
   }
 

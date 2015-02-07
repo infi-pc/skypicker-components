@@ -25,6 +25,8 @@
 }
 .city-label .city-label-title {
   font-weight: bold;
+
+  text-shadow: 0px 1px 1px #fff, 1px 0px 1px #fff, 1px 1px 1px #fff, 1px 0px 1px #fff;
 }
 
 

@@ -38,7 +38,11 @@ var PlaceLabel = React.createClass({
     var style = this.props.style;
     var fullLabel, image, price;
     if (mapPlace.price) {
-      price = <span>{mapPlace.price}EUR</span>
+      var priceStyle = {
+        color: "hsla("+parseInt( (1-mapPlace.relativePrice) *115)+", 100%, 50%, 1)",
+        textShadow: "0px 1px 1px #000, 1px 0px 1px #000, 1px 1px 1px #000, 1px 0px 1px #000"
+      };
+      price = <span style={priceStyle}>{mapPlace.price}EUR</span>
     }
     if (this.props.showFullLabel) {
       fullLabel = (
