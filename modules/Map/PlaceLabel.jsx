@@ -1,38 +1,9 @@
-var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
-var SearchPlace = require('./../../modules/containers/SearchPlace.jsx');
-
+var PureRenderMixin = require('react').addons.PureRenderMixin;
 
 var PlaceLabel = React.createClass({
-  componentDidMount: function () {
-    google.maps.event.addDomListener(this.refs.label.getDOMNode(), 'mouseover', this.onMouseOver);
-    google.maps.event.addDomListener(this.refs.label.getDOMNode(), 'mouseout', this.onMouseOut);
-    google.maps.event.addDomListener(this.refs.label.getDOMNode(), 'contextmenu', this.onRightClick);
-    google.maps.event.addDomListener(this.refs.label.getDOMNode(), 'click', this.onClick);
-  },
 
-  componentWillUnmount: function () {
-    google.maps.event.clearListeners(this.refs.label.getDOMNode(), 'mouseover');
-    google.maps.event.clearListeners(this.refs.label.getDOMNode(), 'mouseout');
-    google.maps.event.clearListeners(this.refs.label.getDOMNode(), 'contextmenu');
-    google.maps.event.clearListeners(this.refs.label.getDOMNode(), 'click');
-    //google.maps.event.removeDomListener(this.refs.label.getDOMNode(), 'contextmenu', this.onRightClick);
-  },
-  onMouseOver: function () {
+  mixins: [PureRenderMixin],
 
-  },
-  onMouseOut: function () {
-
-  },
-  onRightClick: function (e) {
-    console.log("right click on label");
-    e.stopPropagation();
-    e.preventDefault();
-    SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));
-  },
-  onClick: function (e) {
-    e.stopPropagation();
-    SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));
-  },
   render: function () {
     var mapPlace = this.props.label.mapPlace;
     var style = this.props.style;
@@ -63,17 +34,6 @@ var PlaceLabel = React.createClass({
           {price}
         </div>
       );
-      image = <img src="/images/markers/city.png" />
-    } else {
-      image = <img src="/images/markers/citySmall.png" />
-    }
-
-
-    if (mapPlace.flag == "origin") {
-      image = <img src="/images/markers/cityWithPrice.png" />
-    }
-    if (mapPlace.flag == "destination") {
-      image = <img src="/images/markers/cityWithPrice.png" />
     }
 
     return (
@@ -83,7 +43,6 @@ var PlaceLabel = React.createClass({
       </div>
     )
   }
-
 });
 
 

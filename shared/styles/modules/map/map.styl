@@ -1,16 +1,28 @@
 
-.places-overlay
+.labels-overlay,
+.mouse-clicks-overlay,
+.points-overlay
   position: relative;
+  & > div
+    position: absolute;
 
-.places-overlay > div
+.points-overlay > img
   position: absolute;
+  margin-top: -6px;
+  margin-left: -6px;
 
+.mouse-click-field
+  margin-top: -8px;
+  margin-left: -8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer
+  /*background-color: rgba(255,0,0,0.5)*/
 
 .city-label
   margin-left: -7px;
   margin-top: -7px;
   z-index: 100;
-  cursor: pointer
   text-shadow: 0px 0px 1px #F1EFE8, 0px 0px 1px #F1EFE8, 0px 0px 2px #F1EFE8;
 
 .city-label > img
