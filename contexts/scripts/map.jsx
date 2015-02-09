@@ -8,7 +8,8 @@ function initialize() {
     {
       "featureType": "road",
       "stylers": [
-        { "visibility": "off" }
+        { "visibility": "on" },
+        { "color": "#e8e6dd" }
       ]
     },{
       "featureType": "poi",
@@ -19,7 +20,7 @@ function initialize() {
       "featureType": "landscape.natural",
       "stylers": [
         { "visibility": "simplified" },
-        { "color": "#f3f3f3" }
+        { "color": "#f1efe8" }
       ]
     },{
       "featureType": "administrative.locality",
@@ -41,7 +42,7 @@ function initialize() {
     },{
       "featureType": "water",
       "stylers": [
-        { "color": "#B3D1FF" }
+        { "color": "#9DC0EA" }
       ]
     }
   ];

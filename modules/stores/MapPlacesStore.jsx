@@ -185,8 +185,8 @@ class MapPlacesStore {
       var item = {
         x: position.x,
         y: position.y,
-        w: 60,
-        h: 30
+        w: 70,
+        h: 40
       };
 
       var collisions = 0;
