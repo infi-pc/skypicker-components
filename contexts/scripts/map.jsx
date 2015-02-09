@@ -63,9 +63,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
-SearchFormStore.events.on("change", function () {
-  document.getElementById('output').innerHTML = JSON.stringify(SearchFormStore.data);
-});
+//SearchFormStore.events.on("change", function () {
+//  document.getElementById('output').innerHTML = JSON.stringify(SearchFormStore.data);
+//});
 
 
 //var element = document.getElementById("map");

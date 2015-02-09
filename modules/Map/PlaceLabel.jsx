@@ -3,19 +3,6 @@ var SearchPlace = require('./../../modules/containers/SearchPlace.jsx');
 
 
 var PlaceLabel = React.createClass({
-
-  getDefaultProps: function () {
-    return {
-      showFullLabel: false
-    }
-  },
-  getInitialState: function () {
-    return {
-      active: false
-    }
-  },
-
-
   componentDidMount: function () {
     google.maps.event.addDomListener(this.refs.label.getDOMNode(), 'contextmenu', this.onRightClick);
   },
@@ -25,26 +12,24 @@ var PlaceLabel = React.createClass({
     //google.maps.event.removeDomListener(this.refs.label.getDOMNode(), 'contextmenu', this.onRightClick);
   },
 
-
-
   onRightClick: function (e) {
-    SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.mapPlace.place}));
+    SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));
   },
   onClick: function (e) {
-    SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.mapPlace.place}));
+    SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));
   },
   render: function () {
-    var mapPlace = this.props.mapPlace;
+    var mapPlace = this.props.label.mapPlace;
     var style = this.props.style;
     var fullLabel, image, price;
     if (mapPlace.price) {
       var priceStyle = {
-        color: "hsla("+parseInt( (1-mapPlace.relativePrice) *115)+", 100%, 50%, 1)",
+        color: "hsla("+parseInt( (1-this.props.label.relativePrice) *115)+", 100%, 50%, 1)",
         textShadow: "0px 1px 1px #000, 1px 0px 1px #000, 1px 1px 1px #000, 1px 0px 1px #000"
       };
       price = <span style={priceStyle}>{mapPlace.price}EUR</span>
     }
-    if (this.props.showFullLabel) {
+    if (this.props.label.showFullLabel) {
       fullLabel = (
         <div>
           <span className="city-label-title">{mapPlace.place.shortName}</span><br/>

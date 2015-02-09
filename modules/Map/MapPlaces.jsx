@@ -38,7 +38,7 @@ var MapPlaces = React.createClass({
         left: label.position.x
       };
       //TODO move all the shit inside, pass only label
-      return (<PlaceLabel key={label.mapPlace.place.id} style={labelStyle} mapPlace={label.mapPlace} showFullLabel={label.showFullLabel} />)
+      return (<PlaceLabel key={label.mapPlace.place.id} style={labelStyle} label={label} />)
     })
   },
   render: function () {

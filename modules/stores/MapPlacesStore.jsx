@@ -120,6 +120,27 @@ class MapPlacesStore {
     }
   }
 
+  /**
+   * min max price for shown places (labels)
+   * @param labels
+   * @return {{}}
+   */
+  findPriceStatsForLabels(labels) {
+    var res = {};
+    labels.forEach((label) => {
+      var price = label.mapPlace.price;
+      if (!res.maxPrice || res.maxPrice < price) res.maxPrice = price;
+      if (!res.minPrice || res.minPrice > price) res.minPrice = price;
+    });
+    return res;
+  }
+  /* !mutates labels */
+  calculateRelativePricesForLabels(labels) {
+    var priceStats = this.findPriceStatsForLabels(labels);
+    labels.forEach((label) => {
+      label.relativePrice = label.mapPlace.price / priceStats.maxPrice;
+    });
+  }
   // mutates places
   mapPlacesToLabels (mapPlaces, fromLatLngToDivPixel) {
     this.labelsBoundsTree.clear();
@@ -132,10 +153,22 @@ class MapPlacesStore {
         return 1;
       }
 
-      return a.place.sp_score < b.place.sp_score;
+      if (a.price && !b.price) {
+        return -1;
+      }
+      if (!a.price && b.price) {
+        return 1;
+      }
+      if (a.price && b.price) {
+        return (a.place.sp_score < b.place.sp_score)? 1 : -1;
+      }
+
+      return (a.place.sp_score < b.place.sp_score)? 1 : -1;
     });
     //mapPlaces = mapPlaces.slice(0,300);
     var labels = [];
+
+
     mapPlaces.forEach((mapPlace) => {
       var latLng = new google.maps.LatLng(mapPlace.place.lat, mapPlace.place.lng);
       var position = fromLatLngToDivPixel(latLng);
@@ -172,7 +205,9 @@ class MapPlacesStore {
   }
   getMapPlacesInBounds(latLngBounds, fromLatLngToDivPixelFunc) {
     var mapPlaces = this.mapPlacesIndex.getByBounds(latLngBounds);
-    return this.mapPlacesToLabels(mapPlaces, fromLatLngToDivPixelFunc);
+    var labels = this.mapPlacesToLabels(mapPlaces, fromLatLngToDivPixelFunc);
+    this.calculateRelativePricesForLabels(labels);
+    return labels;
   }
 
 }

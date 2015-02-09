@@ -5,7 +5,6 @@ var Map = React.createClass({
     return (
       <div>
         <div id="map-canvas"></div>
-        <div id="output-background"></div>
         <div id="output"></div>
       </div>
     );
