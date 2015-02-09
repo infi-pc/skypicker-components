@@ -13,4 +13,5 @@ window.SearchFormData = Wgts.SearchFormData = require('./../modules/containers/S
 window.SearchFormStore = Wgts.SearchFormStore = require('./../modules/stores/SearchFormStore.jsx');
 window.OptionsStore = Wgts.OptionsStore = require('./../modules/stores/OptionsStore.jsx');
 window.SearchFormAdapter = Wgts.SearchFormAdapter = require('./../modules/plainJsAdapters/SearchFormAdapter.jsx');
-
+//MAP
+window.MapOverlay = Wgts.MapOverlay = require('./../modules/Map/MapOverlay.jsx');

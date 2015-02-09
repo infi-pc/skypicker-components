@@ -1,46 +1,40 @@
 
-#map-canvas {
-  width: 100%;
-  height: 100%;
-}
-.places-overlay {
+.places-overlay
   position: relative;
-}
-.places-overlay > div {
-  position: absolute;
-}
 
-.city-label {
+.places-overlay > div
+  position: absolute;
+
+
+.city-label
   margin-left: -7px;
   margin-top: -7px;
   z-index: 100;
   cursor: pointer
-}
-.city-label > img{
+
+.city-label > img
   z-index: 101;
-}
-.city-label > div{
+
+.city-label > div
   position: absolute;
   top: -8px;
   left: 15px;
   white-space: nowrap;
   z-index: 102;
-}
-.city-label .city-label-title {
+
+.city-label .city-label-title
   font-weight: bold;
   color: #333;
   text-shadow: -1px 1px 1px #fff, 1px -1px 1px #fff, 1px 1px 1px #fff, -1px -1px 1px #fff;
-}
 
-
-.city-label.flag-origin .city-label-title, .city-label.flag-destination .city-label-title{
+.city-label.flag-origin .city-label-title, .city-label.flag-destination .city-label-title
   color: #000;
   font-size: 16px;
   /*text-shadow: -2px 2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff, -2px -2px 0px #fff;*/
-}
 
-#output {
+
+#output
   position: absolute;
   top: 20px;
   background-color: #fff;
-}
+

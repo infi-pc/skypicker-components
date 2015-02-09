@@ -111,12 +111,21 @@ class MapPlacesStore {
 
   selectPlace(id, direction) {
     var mapPlace = this.mapPlacesIndex.getById(id);
-    this.mapPlacesIndex.editPlace(mapPlace.set("flag",direction));
+    if (mapPlace) {
+      this.mapPlacesIndex.editPlace(mapPlace.set("flag",direction));
+    } else {
+      //TODO what put here?
+    }
+
   }
   deselectPlace(id) {
     if (id) {
       var mapPlace = this.mapPlacesIndex.getById(id);
-      this.mapPlacesIndex.editPlace(mapPlace.set("flag",""));
+      if (mapPlace) {
+        this.mapPlacesIndex.editPlace(mapPlace.set("flag", ""));
+      } else {
+        //TODO what put here?
+      }
     }
   }
 

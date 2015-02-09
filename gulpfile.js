@@ -134,7 +134,7 @@ gulp.task('export', function () {
   var styleFolder = "./shared/styles/modules";
   function copyCss() {
     gulp.src(styleFolder+'/**/*.styl', {base: styleFolder})
-      .pipe(gulp.dest(projectPath + '/app/bower_components/skypicker-components/shared/styles/modules'));
+      .pipe(gulp.dest(projectPath + '/node_modules/skypicker-components/shared/styles/modules'));
   }
 
   copyCss();
@@ -146,7 +146,7 @@ gulp.task('export', function () {
   var jsFolder = "./builds/skypicker";
   function copyJs() {
     gulp.src(jsFolder+'/**/*.js', {base: jsFolder})
-      .pipe(gulp.dest(projectPath + '/app/bower_components/skypicker-components/builds/skypicker'));
+      .pipe(gulp.dest(projectPath + '/node_modules/skypicker-components/builds/skypicker'));
   }
 
   copyJs();

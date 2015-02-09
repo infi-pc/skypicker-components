@@ -70,7 +70,8 @@ module.exports = {
 
         ],
         styles: [
-          "/styles/map.css"
+          "/styles/main.css",
+          "/styles/modules/skypicker.css"
         ],
         scripts: [
           "/builds/map.js"
