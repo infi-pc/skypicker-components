@@ -16,7 +16,7 @@ var PlaceLabel = React.createClass({
       if (!window.COLORS_LIGHTNESS) {
         window.COLORS_LIGHTNESS = 35;
       }
-      priceStyle.color = "hsla("+parseInt( (1-this.props.label.relativePrice) *115)+", 100%, "+window.COLORS_SATURATION+"%, 1)"
+      priceStyle.color = "hsla("+parseInt( (1-this.props.label.relativePrice) *115)+", 100%, "+window.COLORS_LIGHTNESS+"%, 1)"
       price = <span className="city-label-price" style={priceStyle}>{mapPlace.price}EUR</span>
     }
 
