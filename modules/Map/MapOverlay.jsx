@@ -22,7 +22,7 @@ function flatBounds(bounds) {
 function addPointsLayer(panes, map) {
   var div = document.createElement('div');
   // overlayLayer, overlayMouseTarget //https://developers.google.com/maps/documentation/javascript/customoverlays
-  panes.mapPane.appendChild(div);
+  panes.overlayLayer.appendChild(div);
   return React.render(React.createFactory(PointsLayer)(), div);
 }
 
@@ -46,9 +46,10 @@ MapOverlay.prototype = new google.maps.OverlayView();
 
 MapOverlay.prototype.onAdd = function () {
   var panes = this.getPanes();
+  addPointsLayer(panes, this.map);
   addLabelsLayer(panes, this.map);
   addMouseClickLayer(panes, this.map);
-  addPointsLayer(panes, this.map);
+
 
   google.maps.event.addListener(this.map, 'idle', ()=> {
     console.log("idle");
