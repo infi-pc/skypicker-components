@@ -23,11 +23,23 @@ class MapLabelsStore {
       maxDepth : 20
     });
 
-    this.labels = [];
+    this.labelsIndex = {};
 
     MapPlacesStore.events.on("change", () => {
       this.refreshLabels();
     })
+  }
+
+  /* it just return creates array of labels (cached) */
+  getLabels() {
+    if (this._lastLabelsIndexReference != this.labelsIndex) {
+      this._lastLabelsIndexReference = this.labelsIndex;
+      this._labels = [];
+      Object.keys(this.labelsIndex).forEach((key) => {
+        this._labels.push(this.labelsIndex[key]);
+      });
+    }
+    return this._labels;
   }
   /**
    * min max price for shown places (labels)
@@ -47,10 +59,12 @@ class MapLabelsStore {
   calculateRelativePricesForLabels(labels) {
     var priceStats = this.findPriceStatsForLabels(labels);
     labels.forEach((label) => {
-      label.relativePrice = (label.mapPlace.price - priceStats.minPrice) / (priceStats.maxPrice - priceStats.minPrice);
+      if (label.mapPlace.price && priceStats.minPrice && priceStats.maxPrice) {
+        label.relativePrice = (label.mapPlace.price - priceStats.minPrice) / (priceStats.maxPrice - priceStats.minPrice);
+      }
     });
   }
-  // mutates places!!!!
+  // mutates mapPlaces array!!!!
   mapPlacesToLabels (mapPlaces, fromLatLngToDivPixel) {
     this.labelsBoundsTree.clear();
     if (!mapPlaces || mapPlaces.length <= 0) return [];
@@ -113,12 +127,40 @@ class MapLabelsStore {
     return labels;
   }
 
+  actualizeLabels(plainLabels) {
+    var stats = {
+      newLabels: 0,
+      replacesLabels: 0,
+      keptLabels: 0
+    };
+    var newIndex = {};
+    plainLabels.forEach((plainLabel) => {
+      var id = plainLabel.mapPlace.place.id;
+      var oldLabel = this.labelsIndex[id];
+      if (oldLabel) {
+        var newLabel = oldLabel.edit(plainLabel);
+        if (newLabel != oldLabel) {
+          newIndex[id] = newLabel;
+          stats.replacesLabels++;
+        } else {
+          newIndex[id] = oldLabel;
+          stats.keptLabels++;
+        }
+      } else {
+        newIndex[id] = new MapLabel(plainLabel);
+        stats.newLabels++;
+      }
+    });
+    this.labelsIndex = newIndex;
+    console.log("stats: ", stats);
+  }
+
   refreshLabels() {
     if (this.latLngBounds && this.fromLatLngToDivPixelFunc) {
       var mapPlaces = MapPlacesStore.getByBounds(this.latLngBounds);
-      var labels = this.mapPlacesToLabels(mapPlaces, this.fromLatLngToDivPixelFunc);
-      this.calculateRelativePricesForLabels(labels);
-      this.labels = labels;
+      var plainLabels = this.mapPlacesToLabels(mapPlaces, this.fromLatLngToDivPixelFunc);
+      this.calculateRelativePricesForLabels(plainLabels);
+      this.actualizeLabels(plainLabels);
       this.events.emit("change");
     }
   }

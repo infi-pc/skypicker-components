@@ -63,7 +63,10 @@ class MapPlacesStore {
         flights.forEach((flight) => {
           var mapPlace = this.mapPlacesIndex.getById(flight.mapIdto);
           if (mapPlace) {
-            var relativePrice = flight.price / priceStats.maxPrice; //TODO nicer function
+            var relativePrice;
+            if (flight.price && priceStats.maxPrice) {
+              relativePrice = flight.price / priceStats.maxPrice; //TODO nicer function??
+            }
             this.mapPlacesIndex.editPlace(mapPlace.edit({"price":flight.price, "relativePrice": relativePrice}));
           }
         });

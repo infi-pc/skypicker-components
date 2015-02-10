@@ -4,7 +4,7 @@ var PureRenderMixin = require('react').addons.PureRenderMixin;
 
 var MouseClickTile = React.createClass({
 
-  //mixins: [PureRenderMixin],
+  mixins: [PureRenderMixin],
 
   componentDidMount: function () {
     google.maps.event.addDomListener(this.refs.tile.getDOMNode(), 'mouseover', this.onMouseOver);

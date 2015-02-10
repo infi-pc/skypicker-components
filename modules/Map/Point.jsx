@@ -1,4 +1,9 @@
+var PureRenderMixin = require('react').addons.PureRenderMixin;
+
 var Point = React.createClass({
+
+  mixins: [PureRenderMixin],
+
   render: function () {
     var image = "x";
     var mapPlace = this.props.label.mapPlace;

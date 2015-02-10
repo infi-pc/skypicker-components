@@ -14,7 +14,7 @@ var PointsLayer = React.createClass({
   componentDidMount: function () {
     MapLabelsStore.events.on("change", () => {
       this.setState({
-        labels: MapLabelsStore.labels
+        labels: MapLabelsStore.getLabels()
       });
     });
   },
