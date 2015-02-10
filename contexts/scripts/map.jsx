@@ -1,5 +1,10 @@
 window.react = require('react');
 window.MapOverlay = require('./../../modules/Map/MapOverlay.jsx');
+
+
+window.MapLabel = require('./../../modules/containers/MapLabel.jsx');
+
+
 var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
 
 

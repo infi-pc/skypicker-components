@@ -41,7 +41,6 @@ var PlaceLabel = React.createClass({
 
     return (
       <div ref="label" style={style} className={className}>
-        {image}
         {fullLabel}
       </div>
     )
