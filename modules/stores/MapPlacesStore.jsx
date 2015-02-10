@@ -16,14 +16,30 @@ class MapPlacesStore {
     this.selectedOriginId = null; //it is here so i can fastly deselect the last place
     this.selectedDestinationId = null;
 
+    this.getSearchFormData();
+
+
     SearchFormStore.events.on("change", () => {
-      this.loadPrices();
+      var changed = this.getSearchFormData();
+      if (changed) {
+        console.log("prices!!!!");
+        this.loadPrices();
+      }
       this.checkSelected();
       this.events.emit("change");
     });
     this.loadPlaces();
   }
 
+  getSearchFormData() {
+    if (this.origin != SearchFormStore.origin || this.outboundDate != SearchFormStore.dateFrom || this.inboundDate != SearchFormStore.dateTo) {
+      this.origin = SearchFormStore.origin;
+      this.outboundDate = SearchFormStore.dateFrom;
+      this.inboundDate = SearchFormStore.dateTo;
+      return true;
+    }
+    return false;
+  }
   loadPlaces() {
     var placesAPI = new PlacesAPI({lang: "en"});
     placesAPI.findPlaces({typeID: Place.TYPE_CITY}).then((places) => {

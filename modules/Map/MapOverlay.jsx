@@ -1,5 +1,6 @@
 var LabelsLayer = require('./LabelsLayer.jsx');
 var PointsLayer = require('./PointsLayer.jsx');
+var PointsSVGLayer = require('./PointsSVGLayer.jsx');
 var MouseClickLayer = require('./MouseClickLayer.jsx');
 var MapLabelsStore = require('./../stores/MapLabelsStore.jsx');
 
@@ -23,13 +24,23 @@ function addPointsLayer(panes, map) {
   var div = document.createElement('div');
   // overlayLayer, overlayMouseTarget //https://developers.google.com/maps/documentation/javascript/customoverlays
   panes.overlayLayer.appendChild(div);
+  div.className = "overlay-container";
   return React.render(React.createFactory(PointsLayer)(), div);
+}
+
+function addPointsSVGLayer(panes, map) {
+  var div = document.createElement('div');
+  // overlayLayer, overlayMouseTarget //https://developers.google.com/maps/documentation/javascript/customoverlays
+  panes.overlayLayer.appendChild(div);
+  div.className = "overlay-container";
+  return React.render(React.createFactory(PointsSVGLayer)(), div);
 }
 
 function addLabelsLayer(panes, map) {
   var div = document.createElement('div');
   // overlayLayer, overlayMouseTarget //https://developers.google.com/maps/documentation/javascript/customoverlays
   panes.overlayLayer.appendChild(div);
+  div.className = "overlay-container";
   return React.render(React.createFactory(LabelsLayer)(), div);
 }
 
@@ -37,6 +48,7 @@ function addMouseClickLayer(panes, map) {
   var div = document.createElement('div');
   // overlayLayer, overlayMouseTarget //https://developers.google.com/maps/documentation/javascript/customoverlays
   panes.overlayMouseTarget.appendChild(div);
+  div.className = "overlay-container";
   return React.render(React.createFactory(MouseClickLayer)(), div);
 }
 
