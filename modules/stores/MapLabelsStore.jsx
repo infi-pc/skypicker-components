@@ -47,7 +47,7 @@ class MapLabelsStore {
   calculateRelativePricesForLabels(labels) {
     var priceStats = this.findPriceStatsForLabels(labels);
     labels.forEach((label) => {
-      label.relativePrice = label.mapPlace.price / priceStats.maxPrice;
+      label.relativePrice = (label.mapPlace.price - priceStats.minPrice) / (priceStats.maxPrice - priceStats.minPrice);
     });
   }
   // mutates places!!!!
