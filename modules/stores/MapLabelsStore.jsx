@@ -1,4 +1,5 @@
 var MapPlacesStore = require('./MapPlacesStore.jsx');
+var MapLabel = require('./../containers/MapLabel.jsx');
 var EventEmitter = require('events').EventEmitter;
 var Quadtree = require('./../tools/quadtree.js');
 var Immutable = require('immutable');
@@ -38,7 +39,7 @@ class MapLabelsStore {
 
   setLabelOut(label) {
     this.labelsIndex = this.labelsIndex.set(label.getId(), label.edit({hover: false}));
-    this.events.emit("change"); 
+    this.events.emit("change");
   }
 
   /* it just return creates array of labels (cached) */
@@ -59,7 +60,7 @@ class MapLabelsStore {
     labels.forEach((label) => {
       var price = label.mapPlace.price;
       if (!res.maxPrice || res.maxPrice < price) res.maxPrice = price;
-      if (!res.minPrice || res.minPrice > price) res.minPrice = price;
+      if ( (!res.minPrice || res.minPrice > price) && price) res.minPrice = price;
     });
     return res;
   }

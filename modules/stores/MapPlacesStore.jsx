@@ -37,6 +37,7 @@ class MapPlacesStore {
     })
   }
 
+  /* not used now */
   findPriceStats(flights) {
     var res = {};
     flights.forEach((flight) => {
@@ -58,16 +59,10 @@ class MapPlacesStore {
         outboundDate: SearchFormStore.data.dateFrom,
         inboundDate: SearchFormStore.data.dateTo
       }).then((flights) => {
-        var priceStats = this.findPriceStats(flights);
-
         flights.forEach((flight) => {
           var mapPlace = this.mapPlacesIndex.getById(flight.mapIdto);
           if (mapPlace) {
-            var relativePrice;
-            if (flight.price && priceStats.maxPrice) {
-              relativePrice = flight.price / priceStats.maxPrice; //TODO nicer function??
-            }
-            this.mapPlacesIndex.editPlace(mapPlace.edit({"price":flight.price, "relativePrice": relativePrice}));
+            this.mapPlacesIndex.editPlace(mapPlace.edit({"price":flight.price}));
           }
         });
         this.events.emit("change");
