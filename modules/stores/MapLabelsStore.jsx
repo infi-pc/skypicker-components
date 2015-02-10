@@ -1,6 +1,7 @@
 var MapPlacesStore = require('./MapPlacesStore.jsx');
 var EventEmitter = require('events').EventEmitter;
 var Quadtree = require('./../tools/quadtree.js');
+var Immutable = require('immutable');
 
 function isCollide(a, b) {
   return !(
@@ -23,21 +24,28 @@ class MapLabelsStore {
       maxDepth : 20
     });
 
-    this.labelsIndex = {};
+    this.labelsIndex = Immutable.Map({});
 
     MapPlacesStore.events.on("change", () => {
       this.refreshLabels();
     })
   }
 
+  setLabelOver(label) {
+    this.labelsIndex = this.labelsIndex.set(label.getId(), label.edit({hover: true}));
+    this.events.emit("change");
+  }
+
+  setLabelOut(label) {
+    this.labelsIndex = this.labelsIndex.set(label.getId(), label.edit({hover: false}));
+    this.events.emit("change"); 
+  }
+
   /* it just return creates array of labels (cached) */
   getLabels() {
     if (this._lastLabelsIndexReference != this.labelsIndex) {
       this._lastLabelsIndexReference = this.labelsIndex;
-      this._labels = [];
-      Object.keys(this.labelsIndex).forEach((key) => {
-        this._labels.push(this.labelsIndex[key]);
-      });
+      this._labels = this.labelsIndex.toArray();
     }
     return this._labels;
   }
@@ -136,7 +144,7 @@ class MapLabelsStore {
     var newIndex = {};
     plainLabels.forEach((plainLabel) => {
       var id = plainLabel.mapPlace.place.id;
-      var oldLabel = this.labelsIndex[id];
+      var oldLabel = this.labelsIndex.get(id);
       if (oldLabel) {
         var newLabel = oldLabel.edit(plainLabel);
         if (newLabel != oldLabel) {
@@ -151,7 +159,7 @@ class MapLabelsStore {
         stats.newLabels++;
       }
     });
-    this.labelsIndex = newIndex;
+    this.labelsIndex = Immutable.Map(newIndex);
     console.log("stats: ", stats);
   }
 

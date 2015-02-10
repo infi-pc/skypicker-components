@@ -1,4 +1,5 @@
 var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
+var MapLabelsStore = require('./../../modules/stores/MapLabelsStore.jsx');
 var SearchPlace = require('./../../modules/containers/SearchPlace.jsx');
 var PureRenderMixin = require('react').addons.PureRenderMixin;
 
@@ -22,10 +23,10 @@ var MouseClickTile = React.createClass({
   },
 
   onMouseOver: function () {
-
+    MapLabelsStore.setLabelOver(this.props.label);
   },
   onMouseOut: function () {
-
+    MapLabelsStore.setLabelOut(this.props.label);
   },
   onRightClick: function (e) {
     console.log("right click on label");

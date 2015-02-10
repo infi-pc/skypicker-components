@@ -18,6 +18,10 @@ var Point = React.createClass({
       image = <img style={style} src="/images/markers/citySmall.png" />
     }
 
+    if (this.props.label.hover) {
+      image = <img style={style} src="/images/markers/cityWithPrice.png" />
+    }
+
     if (mapPlace.flag == "origin") {
       image = <img style={style} src="/images/markers/cityWithPrice.png" />
     }
