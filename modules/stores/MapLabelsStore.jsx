@@ -165,7 +165,7 @@ class MapLabelsStore {
       }
     });
     this.labelsIndex = Immutable.Map(newIndex);
-    console.log("stats: ", stats);
+    //console.log("stats: ", stats);
   }
 
   refreshLabels() {
@@ -186,7 +186,6 @@ class MapLabelsStore {
     if (!this.latLngBoundsEqual(this.latLngBounds, latLngBounds)) {
       this.latLngBounds = latLngBounds;
       this.fromLatLngToDivPixelFunc = fromLatLngToDivPixelFunc;
-      console.log(this.latLngBounds);
       this.refreshLabels();
     }
   }

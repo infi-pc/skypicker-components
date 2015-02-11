@@ -1,4 +1,12 @@
 
+
+
+
+/** Deprecated -  don't use */
+
+
+
+
 var tr = function (original,key,values) {
   var translates = window.globalTranslates;
   var translated;

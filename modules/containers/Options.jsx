@@ -3,12 +3,8 @@ var Radius = require("./Radius.jsx");
 class Options {
   constructor(plain) {
     plain = plain || {};
-    if (window.SKYPICKER_LNG) {
-      this.language = window.SKYPICKER_LNG.toLowerCase();
-    } else {
-      this.language = plain.language || "en";
-    }
-
+    this.language = plain.language || "en";
+    this.currency = plain.currency || "EUR";
     this.defaultRadius = plain.defaultRadius || new Radius(); //TODO radius??
     this.defaultMapCenter = plain.defaultMapCenter || null; //TODO map center
     Object.freeze(this);

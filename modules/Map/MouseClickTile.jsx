@@ -29,7 +29,6 @@ var MouseClickTile = React.createClass({
     MapLabelsStore.setLabelOut(this.props.label);
   },
   onRightClick: function (e) {
-    console.log("right click on label");
     e.stopPropagation();
     e.preventDefault();
     SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));

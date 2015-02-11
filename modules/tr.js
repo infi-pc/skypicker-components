@@ -1,6 +1,12 @@
 
 /* adapter to translate by one of chosen strategy */
 
+
+
+/** Deprecated -  don't use */
+
+
+
 var setupDoc = {
   "getTranslations": "to get text which are not translated on current page, take console.log(window.toTranslate)",
   "setupStrategy": "it is necessary set strategy in root of bundle"

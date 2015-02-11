@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var MapPlacesIndex = require('./MapPlacesIndex.jsx');
 var MapPlace = require('./../containers/MapPlace.jsx');
 var SearchFormStore  = require('./../stores/SearchFormStore.jsx');
+var OptionsStore  = require('./../stores/OptionsStore.jsx');
 
 var PlacesAPI = require('./../APIs/PlacesAPI.jsx');
 var FlightsAPI = require('./../APIs/FlightsAPI.jsx');
@@ -22,7 +23,6 @@ class MapPlacesStore {
     SearchFormStore.events.on("change", () => {
       var changed = this.getSearchFormData();
       if (changed) {
-        console.log("prices!!!!");
         this.loadPrices();
       }
       this.checkSelected();
@@ -41,7 +41,7 @@ class MapPlacesStore {
     return false;
   }
   loadPlaces() {
-    var placesAPI = new PlacesAPI({lang: "en"});
+    var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});
     placesAPI.findPlaces({typeID: Place.TYPE_CITY}).then((places) => {
       var mapPlaces = places.map((place) => {
         return new MapPlace({place: place});
@@ -68,7 +68,7 @@ class MapPlacesStore {
     //TODO also other origin types
     if (SearchFormStore.data.origin.mode == "place") {
       var origin = SearchFormStore.data.origin;
-      var flightsAPI = new FlightsAPI({lang: "en"});
+      var flightsAPI = new FlightsAPI({lang: OptionsStore.data.language});
       flightsAPI.findFlights({
         origin: origin.value.id,
         destination: "anywhere",

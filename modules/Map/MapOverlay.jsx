@@ -75,14 +75,14 @@ MapOverlay.prototype.onAdd = function () {
   });
 };
 
+//May be used later:
+
 MapOverlay.prototype.draw = function () {
-  console.log("draw");
-
-
+  //Do nothing, but it has to be here
 };
 
 MapOverlay.prototype.onRemove = function () {
-  console.log("remove");
+  //Do nothing, but it has to be here
 };
 
 module.exports = MapOverlay;

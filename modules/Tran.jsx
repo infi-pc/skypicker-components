@@ -1,5 +1,13 @@
 /** @jsx React.DOM */
 
+
+
+
+/** Deprecated -  don't use */
+
+
+
+
 var React = require('react');
 var tr = require('./tr.js');
 

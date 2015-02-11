@@ -29,7 +29,6 @@ var LabelsLayer = React.createClass({
     })
   },
   render: function () {
-    console.log("labels render");
     return (
       <div className="labels-overlay">
         {this.renderPlaces()}

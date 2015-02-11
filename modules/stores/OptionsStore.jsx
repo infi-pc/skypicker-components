@@ -4,6 +4,10 @@ var Options = require('./../containers/Options.jsx');
 class OptionsStore {
   constructor() {
     this.events = new EventEmitter();
+
+    //Maximum of listeners - here listens every translation and currency so there is a lot of them, but i hope not more than 1000
+    this.events.setMaxListeners(1000);
+
     this.data = new Options();
   }
   setValue(value) {
