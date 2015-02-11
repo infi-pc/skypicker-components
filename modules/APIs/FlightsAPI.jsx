@@ -55,12 +55,12 @@ class FlightsAPI {
 
     };
 
-    searchParams.dateFrom = request.outboundDate.from.format(formatSPApiDate);
-    searchParams.dateTo = request.outboundDate.to.format(formatSPApiDate);
-    if (request.returnDate) {
+    searchParams.dateFrom = request.outboundDate.getFrom().format(formatSPApiDate);
+    searchParams.dateTo = request.outboundDate.getTo().format(formatSPApiDate);
+    if (request.inboundDate && request.inboundDate.mode != "noReturn") {
       searchParams.typeFlight = "return";
-      searchParams.returnFrom = request.inboundDate.from.format(formatSPApiDate);
-      searchParams.returnTo = request.inboundDate.to.format(formatSPApiDate);
+      searchParams.returnFrom = request.inboundDate.getFrom().format(formatSPApiDate);
+      searchParams.returnTo = request.inboundDate.getTo().format(formatSPApiDate);
     } else {
       searchParams.typeFlight = "oneway";
       searchParams.returnFrom = "";

@@ -160,7 +160,6 @@ var CalendarFrame = React.createClass({
         { calendars }
         { this.renderNext() }
         <div className='clear-both'></div>
-        <DaysInWeek />
       </ div>
     )
   }
