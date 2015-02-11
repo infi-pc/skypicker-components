@@ -3,63 +3,63 @@
   width: 100%
   height: 100%
 
-.labels-overlay,
-.mouse-clicks-overlay,
-.points-overlay
-.points-svg-overlay
-  position: absolute;
-  width: 100%
-  height: 100%
-  & > div
+  .labels-overlay,
+  .mouse-clicks-overlay,
+  .points-overlay
+  .points-svg-overlay
     position: absolute;
+    width: 100%
+    height: 100%
+    & > div
+      position: absolute;
 
-.points-overlay > img
-  position: absolute;
-  margin-top: -6px;
-  margin-left: -6px;
-  width: auto !important
-  height: auto !important
+  .points-overlay > img
+    position: absolute;
+    margin-top: -6px;
+    margin-left: -6px;
+    width: auto !important
+    height: auto !important
 
-.mouse-click-field
-  margin-top: -8px;
-  margin-left: -8px;
-  width: 16px;
-  height: 16px;
-  cursor: pointer
-  /*background-color: rgba(255,0,0,0.5)*/
+  .mouse-click-field
+    margin-top: -8px;
+    margin-left: -8px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer
+    /*background-color: rgba(255,0,0,0.5)*/
 
-.city-label
-  margin-left: -7px;
-  margin-top: -7px;
-  z-index: 100;
-  text-shadow: 0px 0px 1px #F1EFE8, 0px 0px 1px #F1EFE8, 0px 0px 2px #F1EFE8;
+  .city-label
+    margin-left: -7px;
+    margin-top: -7px;
+    z-index: 100;
+    text-shadow: 0px 0px 1px #F1EFE8, 0px 0px 1px #F1EFE8, 0px 0px 2px #F1EFE8, 1px 1px 5px rgba(0,0,0,0.4);
 
-.city-label > img
-  z-index: 101;
+  .city-label > img
+    z-index: 101;
 
-.city-label > div
-  position: absolute;
-  top: -8px;
-  left: 15px;
-  white-space: nowrap;
-  z-index: 102;
+  .city-label > div
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    white-space: nowrap;
+    z-index: 102;
 
-.city-label .city-label-title
-  font-weight: bold;
-  color: #333;
+  .city-label .city-label-title
+    font-weight: bold;
+    color: #333;
 
-.city-label-price
-  font-size: 11px
-
-
-.city-label.flag-origin .city-label-title, .city-label.flag-destination .city-label-title
-  color: #000;
-  font-size: 16px;
-  /*text-shadow: -2px 2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff, -2px -2px 0px #fff;*/
+  .city-label-price
+    font-size: 11px
 
 
-#output
-  position: absolute;
-  top: 20px;
-  background-color: #fff;
+  .city-label.flag-origin .city-label-title, .city-label.flag-destination .city-label-title
+    color: #000;
+    font-size: 16px;
+    /*text-shadow: -2px 2px 0px #fff, 2px -2px 0px #fff, 2px 2px 0px #fff, -2px -2px 0px #fff;*/
+
+
+  #output
+    position: absolute;
+    top: 20px;
+    background-color: #fff;
 

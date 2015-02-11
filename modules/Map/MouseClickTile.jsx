@@ -32,10 +32,12 @@ var MouseClickTile = React.createClass({
     e.stopPropagation();
     e.preventDefault();
     SearchFormStore.setField("origin", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));
+    SearchFormStore.search();
   },
   onClick: function (e) {
     e.stopPropagation();
     SearchFormStore.setField("destination", new SearchPlace({mode: "place", value: this.props.label.mapPlace.place}));
+    SearchFormStore.search();
   },
 
   render: function () {

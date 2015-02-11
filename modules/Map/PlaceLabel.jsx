@@ -15,10 +15,14 @@ var PlaceLabel = React.createClass({
     var flagText = "";
     if (mapPlace.price) {
       var priceStyle = {};
-      if (!window.COLORS_LIGHTNESS) {
-        window.COLORS_LIGHTNESS = 35;
-      }
-      priceStyle.color = "hsla("+parseInt( (1-this.props.label.relativePrice) *115)+", 100%, "+window.COLORS_LIGHTNESS+"%, 1)";
+      //if (!window.COLORS_LIGHTNESS) {
+      //  window.COLORS_LIGHTNESS = 35;
+      //}
+      //HUE
+      //priceStyle.color = "hsla("+parseInt( (1-this.props.label.relativePrice) *115)+", 100%, "+window.COLORS_LIGHTNESS+"%, 1)";
+      //LIGHTNESS
+      //priceStyle.color = "hsla(115, 100%, "+parseInt( (1-this.props.label.relativePrice) *40)+"%, 1)";
+      //SATURATION
       //priceStyle.color = "hsla(115, "+parseInt( (1-this.props.label.relativePrice)*(1-this.props.label.relativePrice)*(1-this.props.label.relativePrice)*(1-this.props.label.relativePrice)*(1-this.props.label.relativePrice) *100)+"%, "+window.COLORS_LIGHTNESS+"%, 1)";
       price = <span className="city-label-price" style={priceStyle}><Price>{mapPlace.price}</Price></span>
     }
