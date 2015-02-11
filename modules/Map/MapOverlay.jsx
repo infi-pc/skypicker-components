@@ -62,9 +62,13 @@ MapOverlay.prototype.onAdd = function () {
   addLabelsLayer(panes, this.map);
   addMouseClickLayer(panes, this.map);
 
+  google.maps.event.addListener(this.map, 'zoom_changed', ()=> {
+    var overlayProjection = this.getProjection();
+    var bounds = flatBounds(this.map.getBounds());
+    MapLabelsStore.setMapData(bounds, overlayProjection.fromLatLngToDivPixel.bind(overlayProjection));
+  });
 
   google.maps.event.addListener(this.map, 'idle', ()=> {
-    console.log("idle");
     var overlayProjection = this.getProjection();
     var bounds = flatBounds(this.map.getBounds());
     MapLabelsStore.setMapData(bounds, overlayProjection.fromLatLngToDivPixel.bind(overlayProjection));

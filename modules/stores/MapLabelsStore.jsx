@@ -42,6 +42,10 @@ class MapLabelsStore {
     this.events.emit("change");
   }
 
+  clean() {
+    this.labelsIndex = Immutable.Map({});
+    this.events.emit("change");
+  }
   /* it just return creates array of labels (cached) */
   getLabels() {
     if (this._lastLabelsIndexReference != this.labelsIndex) {
@@ -174,10 +178,17 @@ class MapLabelsStore {
     }
   }
 
+  latLngBoundsEqual(oldBounds, newBounds) {
+    if (!oldBounds) return false;
+    return oldBounds.wLng == newBounds.wLng && oldBounds.eLng == newBounds.eLng && oldBounds.sLat == newBounds.sLat && oldBounds.nLat == newBounds.nLat;
+  }
   setMapData(latLngBounds, fromLatLngToDivPixelFunc) {
-    this.latLngBounds = latLngBounds;
-    this.fromLatLngToDivPixelFunc = fromLatLngToDivPixelFunc;
-    this.refreshLabels();
+    if (!this.latLngBoundsEqual(this.latLngBounds, latLngBounds)) {
+      this.latLngBounds = latLngBounds;
+      this.fromLatLngToDivPixelFunc = fromLatLngToDivPixelFunc;
+      console.log(this.latLngBounds);
+      this.refreshLabels();
+    }
   }
 }
 module.exports = new MapLabelsStore();

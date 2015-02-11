@@ -32,10 +32,10 @@ class MapPlacesStore {
   }
 
   getSearchFormData() {
-    if (this.origin != SearchFormStore.origin || this.outboundDate != SearchFormStore.dateFrom || this.inboundDate != SearchFormStore.dateTo) {
-      this.origin = SearchFormStore.origin;
-      this.outboundDate = SearchFormStore.dateFrom;
-      this.inboundDate = SearchFormStore.dateTo;
+    if (this.origin != SearchFormStore.data.origin || this.outboundDate != SearchFormStore.data.dateFrom || this.inboundDate != SearchFormStore.data.dateTo) {
+      this.origin = SearchFormStore.data.origin;
+      this.outboundDate = SearchFormStore.data.dateFrom;
+      this.inboundDate = SearchFormStore.data.dateTo;
       return true;
     }
     return false;
