@@ -155,7 +155,7 @@ var SearchForm = React.createClass({
           active: null
         });
       }
-      SearchFormStore.setValue(this.state.data.changeField(fieldName, value));
+      SearchFormStore.setValue(this.state.data.changeField(fieldName, value), changeType == "select");
 
     }
   },

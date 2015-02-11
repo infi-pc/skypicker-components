@@ -18,9 +18,8 @@ class MapPlacesStore {
     this.selectedDestinationId = null;
 
     this.getSearchFormData();
-
-
-    SearchFormStore.events.on("change", () => {
+    
+    SearchFormStore.events.on("select", () => {
       var changed = this.getSearchFormData();
       if (changed) {
         this.loadPrices();

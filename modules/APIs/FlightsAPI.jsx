@@ -57,10 +57,22 @@ class FlightsAPI {
 
     searchParams.dateFrom = request.outboundDate.getFrom().format(formatSPApiDate);
     searchParams.dateTo = request.outboundDate.getTo().format(formatSPApiDate);
-    if (request.inboundDate && request.inboundDate.mode != "noReturn") {
-      searchParams.typeFlight = "return";
-      searchParams.returnFrom = request.inboundDate.getFrom().format(formatSPApiDate);
-      searchParams.returnTo = request.inboundDate.getTo().format(formatSPApiDate);
+    if (request.inboundDate) {
+      if (request.inboundDate.mode == "interval" || request.inboundDate.mode == "single"  || request.inboundDate.mode == "anytime" ) {
+        searchParams.typeFlight = "return";
+        searchParams.returnFrom = request.inboundDate.getFrom().format(formatSPApiDate);
+        searchParams.returnTo = request.inboundDate.getTo().format(formatSPApiDate);
+      } else if (request.inboundDate.mode == "timeToStay") {
+        searchParams.typeFlight = "return";
+        searchParams.daysInDestinationFrom = request.inboundDate.getMinStayDays();
+        searchParams.daysInDestinationTo = request.inboundDate.getMaxStayDays();
+        searchParams.returnFrom = "";
+        searchParams.returnTo = "";
+      } else {
+        searchParams.typeFlight = "oneway";
+        searchParams.returnFrom = "";
+        searchParams.returnTo = "";
+      }
     } else {
       searchParams.typeFlight = "oneway";
       searchParams.returnFrom = "";
@@ -86,7 +98,7 @@ class FlightsAPI {
         if (!error) {
           deferred.resolve(res.body.data);
         } else {
-          deferred.reject(new Error(res.error));
+          deferred.reject(new Error(error));
         }
       });
     return deferred.promise;
