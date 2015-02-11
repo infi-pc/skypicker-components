@@ -23,19 +23,19 @@ var PlaceLabel = React.createClass({
       price = <span className="city-label-price" style={priceStyle}><Price>{mapPlace.price}</Price></span>
     }
 
-    if (mapPlace.flag == "origin") {
-      flagText = <span className="flag-text">From: </span>;
-      className += " flag-"+mapPlace.flag;
-    }
-    if (mapPlace.flag == "destination") {
-      flagText = <span className="flag-text">To: </span>;
-      className += " flag-"+mapPlace.flag;
-    }
+    //if (mapPlace.flag == "origin") {
+    //  flagText- = <span className="flag-text">From: </span>;
+    //  className += " flag-"+mapPlace.flag;
+    //}
+    //if (mapPlace.flag == "destination") {
+    //  flagText = <span className="flag-text">To: </span>;
+    //  className += " flag-"+mapPlace.flag;
+    //}
 
     if (this.props.label.showFullLabel) {
       fullLabel = (
         <div>
-          <span className="city-label-title">{flagText} {labelText}</span><br/>
+          <span className="city-label-title">{labelText}</span><br/>
           {price}
         </div>
       );
