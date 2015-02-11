@@ -28,9 +28,7 @@ var PointsLayer = React.createClass({
   render: function () {
     return (
       <div className="points-svg-overlay">
-        <svg height="5000" width="5000">
-          {this.renderPoints()}
-        </svg>
+        {this.renderPoints()}
       </div>
     )
   }

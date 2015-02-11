@@ -58,7 +58,7 @@ MapOverlay.prototype = new google.maps.OverlayView();
 
 MapOverlay.prototype.onAdd = function () {
   var panes = this.getPanes();
-  addPointsLayer(panes, this.map);
+  addPointsSVGLayer(panes, this.map);
   addLabelsLayer(panes, this.map);
   addMouseClickLayer(panes, this.map);
 
