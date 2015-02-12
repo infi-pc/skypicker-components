@@ -25,8 +25,10 @@ module.exports = React.createClass({
       className += " map-loader-loading";
     }
     return (
-      <div className={className}>
-        Loading prices
+      <div className="map-loader-wrapper">
+        <div className={className}>
+          <span>Loading map prices</span>
+        </div>
       </div>
     )
   }
