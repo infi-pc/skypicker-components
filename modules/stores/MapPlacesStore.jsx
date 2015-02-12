@@ -65,12 +65,12 @@ class MapPlacesStore {
     return res;
   }
   loadPrices() {
+    this.loading = true;
     this.mapPlacesIndex.cleanPrices();
     var searched = {}; // this is for preventing race condition
     searched.origin = SearchFormStore.data.origin;
     searched.outboundDate = SearchFormStore.data.dateFrom;
     searched.inboundDate = SearchFormStore.data.dateTo;
-
     //TODO also other origin types
     if (SearchFormStore.data.origin.mode == "place") {
       var origin = SearchFormStore.data.origin;
@@ -85,6 +85,7 @@ class MapPlacesStore {
         if (searched.origin.value.id != SearchFormStore.data.origin.value.id || searched.outboundDate != SearchFormStore.data.dateFrom || searched.inboundDate != SearchFormStore.data.dateTo) {
           return; //discard data
         }
+        this.loading = false;
         flights.forEach((flight) => {
           var mapPlace = this.mapPlacesIndex.getById(flight.mapIdto);
           if (mapPlace) {

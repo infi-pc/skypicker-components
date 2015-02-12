@@ -101,7 +101,7 @@ class MapLabelsStore {
 
       return (a.place.sp_score < b.place.sp_score)? 1 : -1;
     });
-    //mapPlaces = mapPlaces.slice(0,300);
+    mapPlaces = mapPlaces.slice(0,400);
     var labels = [];
 
 

@@ -20,12 +20,7 @@ var LabelsLayer = React.createClass({
   renderPlaces: function () {
     var labels = this.state.labels;
     return labels.map((label) => {
-      var labelStyle = {
-        top: label.position.y,
-        left: label.position.x
-      };
-      //TODO move all the shit inside, pass only label
-      return (<PlaceLabel key={label.mapPlace.place.id} style={labelStyle} label={label} />)
+      return (<PlaceLabel key={label.mapPlace.place.id} label={label} />)
     })
   },
   render: function () {

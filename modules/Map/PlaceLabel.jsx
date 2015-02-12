@@ -6,14 +6,18 @@ var PlaceLabel = React.createClass({
   mixins: [PureRenderMixin],
 
   render: function () {
-    var mapPlace = this.props.label.mapPlace;
-    var style = this.props.style;
+    var label = this.props.label;
+    var mapPlace = label.mapPlace;
+    var style = {
+      top: label.position.y,
+      left: label.position.x
+    };
     var fullLabel;
     var price;
     var labelText = mapPlace.place.shortName;
     var className = "city-label";
     var flagText = "";
-    if (mapPlace.price) {
+    if (mapPlace.price && mapPlace.flag != "origin") {
       var priceStyle = {};
       //if (!window.COLORS_LIGHTNESS) {
       //  window.COLORS_LIGHTNESS = 35;
@@ -25,18 +29,21 @@ var PlaceLabel = React.createClass({
       //SATURATION
       //priceStyle.color = "hsla(115, "+parseInt( (1-this.props.label.relativePrice)*(1-this.props.label.relativePrice)*(1-this.props.label.relativePrice)*(1-this.props.label.relativePrice)*(1-this.props.label.relativePrice) *100)+"%, "+window.COLORS_LIGHTNESS+"%, 1)";
       price = <span className="city-label-price" style={priceStyle}><Price>{mapPlace.price}</Price></span>
+    } else {
+      style.marginTop = 2;
     }
 
     if (mapPlace.flag == "origin") {
       //flagText = <span className="flag-text">From: </span>;
       className += " flag-"+mapPlace.flag;
-    }
-    if (mapPlace.flag == "destination") {
+      style.marginTop = price ? -9 : -2;
+    } else if (mapPlace.flag == "destination") {
       //flagText = <span className="flag-text">To: </span>;
       className += " flag-"+mapPlace.flag;
+      style.marginTop = price ? -9 : -2;
     }
 
-    if (this.props.label.showFullLabel) {
+    if (label.showFullLabel) {
       fullLabel = (
         <div>
           <span className="city-label-title">{labelText}</span><br/>
