@@ -33,11 +33,13 @@ class MapLabelsStore {
   }
 
   setLabelOver(label) {
-    this.labelsIndex = this.labelsIndex.set(label.getId(), label.edit({hover: true}));
+    this.hoverLabel = label.edit({hover: true});
+    this.labelsIndex = this.labelsIndex.set(label.getId(), this.hoverLabel);
     this.events.emit("change");
   }
 
   setLabelOut(label) {
+    this.hoverLabel = null;
     this.labelsIndex = this.labelsIndex.set(label.getId(), label.edit({hover: false}));
     this.events.emit("change");
   }

@@ -43,7 +43,14 @@ var PlaceLabel = React.createClass({
       style.marginTop = price ? -9 : -2;
     }
 
-    if (label.showFullLabel) {
+    if (mapPlace.flag) {
+      style.zIndex = 2;
+    } else if (label.hover) {
+      style.zIndex = 3;
+    } else {
+      style.zIndex = 1;
+    }
+    if (label.showFullLabel || mapPlace.flag || label.hover) {
       fullLabel = (
         <div>
           <span className="city-label-title">{labelText}</span><br/>

@@ -27,7 +27,7 @@ var PointsLayer = React.createClass({
   },
   render: function () {
     return (
-      <div className="points-overlay">
+      <div className="points-overlay map-overlay">
         {this.renderPoints()}
       </div>
     )

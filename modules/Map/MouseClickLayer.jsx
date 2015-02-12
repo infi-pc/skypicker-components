@@ -27,7 +27,7 @@ var MouseClickLayer = React.createClass({
   },
   render: function () {
     return (
-      <div className="mouse-clicks-overlay">
+      <div className="mouse-clicks-overlay map-overlay">
         {this.renderPoints()}
       </div>
     )
