@@ -155,7 +155,7 @@ var SearchForm = React.createClass({
           active: null
         });
       }
-      SearchFormStore.setValue(this.state.data.changeField(fieldName, value), changeType == "select");
+      SearchFormStore.setValue(this.state.data.changeField(fieldName, value), changeType);
 
     }
   },
@@ -176,7 +176,7 @@ var SearchForm = React.createClass({
     if (fieldName == "origin" || fieldName == "destination") {
       return (e) => {
         var addState = {};
-        SearchFormStore.setValue(this.state.data.changeField(fieldName, new SearchPlace(e.target.value)));
+        SearchFormStore.setValue(this.state.data.changeField(fieldName, new SearchPlace(e.target.value)), "changeText");
         this.setState(addState);
       }
     } else {

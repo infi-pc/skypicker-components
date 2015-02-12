@@ -17,11 +17,15 @@ class MapPlacesStore {
     this.selectedOriginId = null; //it is here so i can fastly deselect the last place
     this.selectedDestinationId = null;
 
-    this.getSearchFormData();
-    
-    SearchFormStore.events.on("select", () => {
-      var changed = this.getSearchFormData();
-      if (changed) {
+    this.setNewSearchFormData();
+
+    SearchFormStore.events.on("change", (changeType) => {
+      if (changeType != "select") {
+        this.setNewSearchFormData(); //just set new data for next reference if something changed
+        return; //is searches new prices only for "select" type of change
+      }
+      if (this.hasSearchFormDataChanged()) {
+        this.setNewSearchFormData();
         this.loadPrices();
       }
       this.checkSelected();
@@ -30,14 +34,13 @@ class MapPlacesStore {
     this.loadPlaces();
   }
 
-  getSearchFormData() {
-    if (this.origin != SearchFormStore.data.origin || this.outboundDate != SearchFormStore.data.dateFrom || this.inboundDate != SearchFormStore.data.dateTo) {
-      this.origin = SearchFormStore.data.origin;
-      this.outboundDate = SearchFormStore.data.dateFrom;
-      this.inboundDate = SearchFormStore.data.dateTo;
-      return true;
-    }
-    return false;
+  setNewSearchFormData() {
+    this.origin = SearchFormStore.data.origin;
+    this.outboundDate = SearchFormStore.data.dateFrom;
+    this.inboundDate = SearchFormStore.data.dateTo;
+  }
+  hasSearchFormDataChanged() {
+    return this.origin != SearchFormStore.data.origin || this.outboundDate != SearchFormStore.data.dateFrom || this.inboundDate != SearchFormStore.data.dateTo
   }
   loadPlaces() {
     var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});
@@ -62,8 +65,12 @@ class MapPlacesStore {
     return res;
   }
   loadPrices() {
-    //TODO clean could be ommited on some cases (new data)
     this.mapPlacesIndex.cleanPrices();
+    var searched = {}; // this is for preventing race condition
+    searched.origin = SearchFormStore.data.origin;
+    searched.outboundDate = SearchFormStore.data.dateFrom;
+    searched.inboundDate = SearchFormStore.data.dateTo;
+
     //TODO also other origin types
     if (SearchFormStore.data.origin.mode == "place") {
       var origin = SearchFormStore.data.origin;
@@ -74,6 +81,10 @@ class MapPlacesStore {
         outboundDate: SearchFormStore.data.dateFrom,
         inboundDate: SearchFormStore.data.dateTo
       }).then((flights) => {
+        //
+        if (searched.origin.value.id != SearchFormStore.data.origin.value.id || searched.outboundDate != SearchFormStore.data.dateFrom || searched.inboundDate != SearchFormStore.data.dateTo) {
+          return; //discard data
+        }
         flights.forEach((flight) => {
           var mapPlace = this.mapPlacesIndex.getById(flight.mapIdto);
           if (mapPlace) {

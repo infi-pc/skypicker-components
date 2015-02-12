@@ -68,23 +68,20 @@ class SearchFormStore {
   /**
    *
    * @param value
-   * @param final - final means that the change is to be propagated to other stores, for example MapPlacesStore
+   * @param changeType - type of change - default is "select" which is also most common and for example triggers search on map
    * @return {boolean}
    */
-  setValue(value, final) {
+  setValue(value, changeType) {
     var changed = false;
     if (this.data != value) {
       this.data = value;
-      this.events.emit('change'); // change is after all changes
-      if (final) {
-        this.events.emit('select'); // select is after all important changes
-      }
+      this.events.emit('change',changeType); // change is after all changes
       changed = true;
     }
     return changed;
   }
-  setField(fieldName, value, final) {
-    return this.setValue(this.data.changeField(fieldName, value), final);
+  setField(fieldName, value, changeType) {
+    return this.setValue(this.data.changeField(fieldName, value), changeType);
   }
 
   completeField(fieldName) {
