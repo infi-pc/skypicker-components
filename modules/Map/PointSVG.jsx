@@ -17,7 +17,7 @@ var Point = React.createClass({
 
     if (this.props.label.hover) {
       color = "#4cbd5f";
-      size = this.props.label.showFullLabel ? 18 : 10
+      size = this.props.label.showFullLabel ? 18 : 12
     } else {
       if (this.props.label.mapPlace.price) {
         color = "#2D75CD";
@@ -28,11 +28,11 @@ var Point = React.createClass({
 
     if (mapPlace.flag == "origin") {
       color = "#bd4c4c";
-      size = this.props.label.showFullLabel ? 18 : 10
+      size = this.props.label.showFullLabel ? 18 : 12
     }
     if (mapPlace.flag == "destination") {
       color = "#4cbd5f";
-      size = this.props.label.showFullLabel ? 18 : 10
+      size = this.props.label.showFullLabel ? 18 : 12
     }
 
     var style = {

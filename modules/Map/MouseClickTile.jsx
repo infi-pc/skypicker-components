@@ -45,6 +45,18 @@ var MouseClickTile = React.createClass({
       top: this.props.label.position.y,
       left: this.props.label.position.x
     };
+
+    if (this.props.label.showFullLabel) {
+      style.marginTop = -8;
+      style.marginLeft = -8;
+      style.width = 16;
+      style.height = 16;
+    } else {
+      style.marginTop = -5;
+      style.marginLeft = -5;
+      style.width = 10;
+      style.height = 10;
+    }
     return (
       <div ref="tile" className="mouse-click-field" style={style}></div>
     )
