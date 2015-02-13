@@ -29,9 +29,10 @@ var Price = React.createClass({
     var eurPrice = this.props.children;
     var currency = this.state.currency.toLowerCase();
     var priceInCurrency;
-    if (window.Skypicker) {
+    if (window.Skypicker && window.Skypicker.config.currencies[currency] && window.Skypicker.config.currencies[currency].rate) {
       priceInCurrency = (eurPrice / window.Skypicker.config.currencies[currency].rate).toFixed(window.Skypicker.config.currencies[currency].round);
     } else {
+      currency = "eur";
       priceInCurrency = eurPrice;
     }
     return (
