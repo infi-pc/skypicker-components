@@ -16,12 +16,12 @@ var strategy = null;
 
 
 
-var tr = function (original, key, values) {
+var tr = function (original, key, values, namespace) {
   if (!strategy) {
     console.error("Translation strategy is not set\n "+setupDoc["setupStrategy"]);
     return original;
   }
-  return strategy(original, key, values);
+  return strategy(original, key, values, namespace);
 };
 
 tr.setStrategy = function (newStrategy) {

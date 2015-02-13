@@ -15,7 +15,7 @@ class MapPlacesStore {
     this.events = new EventEmitter();
 
     SearchFormStore.events.on("change", (changeType) => {
-      if (changeType == "select") {
+      if (changeType == "select" || changeType == "selectRadius") {
         this.loadPrices();
         this.events.emit("change");
       }
@@ -66,12 +66,10 @@ class MapPlacesStore {
 
     this.loading = true;
     this.mapPlacesIndex.cleanPrices();
-    //TODO also other origin types
-    if (SearchFormStore.data.origin.mode == "place") {
-      var origin = SearchFormStore.data.origin;
+    if (SearchFormStore.data.origin.mode == "place" || SearchFormStore.data.origin.mode == "radius") {
       var flightsAPI = new FlightsAPI({lang: OptionsStore.data.language});
       flightsAPI.findFlights({
-        origin: origin.value.id,
+        origin: SearchFormStore.data.origin,
         destination: "anywhere",
         outboundDate: SearchFormStore.data.dateFrom,
         inboundDate: SearchFormStore.data.dateTo

@@ -42,11 +42,8 @@ class FlightsAPI {
     skypickerApiUrl = "https://api.skypicker.com/flights";
     searchParams = {
       v: 2,
-      flyFrom: request.origin,
-      to: request.destination,
       //flyDays: [],
       //directFlights: 0,
-
       sort: "price",
       asc: 1,
       locale: this.settings.lang,
@@ -54,6 +51,30 @@ class FlightsAPI {
       daysInDestinationTo: ""
 
     };
+
+    if (typeof request.origin == "string") {
+      searchParams.flyFrom = request.origin;
+    } else if (request.origin.mode == "place") {
+      searchParams.flyFrom = request.origin.value.id;
+    } else if (request.origin.mode == "anywhere") {
+      searchParams.flyFrom = "anywhere";
+    } else if (request.origin.mode === "radius") {
+      searchParams.radiusFrom = request.origin.value.radius;
+      searchParams.latitudeFrom = request.origin.value.lat;
+      searchParams.longitudeFrom = request.origin.value.lng;
+    }
+
+    if (typeof request.destination == "string") {
+      searchParams.to = request.destination;
+    } else if (request.destination.mode == "place") {
+      searchParams.to = request.destination.value.id;
+    } else if (request.destination.mode == "anywhere") {
+      searchParams.to = "anywhere";
+    } else if (request.destination.mode === "radius") {
+      searchParams.radiusTo = request.destination.value.radius;
+      searchParams.latitudeTo = request.destination.value.lat;
+      searchParams.longitudeTo = request.destination.value.lng;
+    }
 
     searchParams.dateFrom = request.outboundDate.getFrom().format(formatSPApiDate);
     searchParams.dateTo = request.outboundDate.getTo().format(formatSPApiDate);
