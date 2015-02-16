@@ -28,7 +28,7 @@ module.exports = React.createClass({
     return (
       <div className="map-loader-wrapper">
         <div className={className}>
-          <span><Translate tKey="loading_map_prices">Loading map prices</Translate> <i className="spinner fa fa-spinner"></i></span>
+          <span><Translate tKey="map.loading_map_prices">Loading map prices</Translate> <i className="spinner fa fa-spinner fa-spin"></i></span>
         </div>
       </div>
     )
