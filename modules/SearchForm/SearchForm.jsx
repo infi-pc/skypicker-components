@@ -9,6 +9,8 @@ var SearchDate = require('./../containers/SearchDate.jsx');
 var SearchPlace = require('./../containers/SearchPlace.jsx');
 var tr = require('./../tr.js');
 var Tran = require('./../Tran.jsx');
+var ToggleActive = require('./ToggleActive.jsx');
+var PassengersField = require('./PassengersField.jsx');
 
 var moment = require("moment");
 
@@ -184,8 +186,9 @@ var SearchForm = React.createClass({
     }
   },
 
-  changePassengers: function (number) {
-    SearchFromStore.setValue({passengers: number});
+  changePassengers: function (event) {
+    var number = event.target.value;
+    SearchFormStore.setField("passengers", number);
   },
 
   toggleActive: function (type) {
@@ -270,10 +273,6 @@ var SearchForm = React.createClass({
 
   },
   renderInput: function(type) {
-    var faIconClass = "fa fa-caret-down";
-    if (type == this.state.active) {
-      faIconClass = "fa fa-caret-up"
-    }
     var className = type;
     if (this.state.data[type].error) {
       className += " error"
@@ -303,9 +302,7 @@ var SearchForm = React.createClass({
             />
           </span>
           <i className="fa fa-spinner"></i>
-          <b className="toggle" onClick={this.toggleActive(type)}>
-            <i className={faIconClass}></i>
-          </b>
+          <ToggleActive active={type == this.state.active} onToggle={this.toggleActive(type)}></ToggleActive>
         </div>
         {this.renderModal(type)}
       </fieldset>
@@ -314,16 +311,12 @@ var SearchForm = React.createClass({
   render: function() {
     return (
       <form id="search">
-
         {this.renderInput("origin")}
         {this.renderInput("destination")}
         {this.renderInput("dateFrom")}
         {this.renderInput("dateTo")}
-        <select value={this.state.data.passengers}>
-        {[1,2,3,4,5,6,7,8,9].map((num) => {
-          return (<option onChange={this.changePassengers} value={num}>{num}</option>)
-        })}
-        </select>
+        <PassengersField onChange={this.changePassengers} value={this.state.data.passengers}/>
+
         <button onClick={this.search} id="search-flights" ref="submitButton" className="btn-search"><span><Tran tKey="search">Search</Tran></span><i className="fa fa-search"></i></button>
       </form>
     );

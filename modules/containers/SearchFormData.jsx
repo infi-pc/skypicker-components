@@ -30,13 +30,15 @@ class SearchFormData {
     Object.freeze(this);
   }
 
+  //TODO change to extended from Immutable
   /* immutable */
   changeField(type, value) {
     var newPlain = {
       dateFrom: this.dateFrom,
       dateTo: this.dateTo,
       origin: this.origin,
-      destination: this.destination
+      destination: this.destination,
+      passengers: this.passengers
     };
     newPlain[type] = value;
     if (type == "dateTo" || type == "dateFrom") {
