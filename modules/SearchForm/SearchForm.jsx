@@ -184,6 +184,10 @@ var SearchForm = React.createClass({
     }
   },
 
+  changePassengers: function (number) {
+    SearchFromStore.setValue({passengers: number});
+  },
+
   toggleActive: function (type) {
     return () => {
       if (type == this.state.active) {
@@ -315,6 +319,11 @@ var SearchForm = React.createClass({
         {this.renderInput("destination")}
         {this.renderInput("dateFrom")}
         {this.renderInput("dateTo")}
+        <select value={this.state.data.passengers}>
+        {[1,2,3,4,5,6,7,8,9].map((num) => {
+          return (<option onChange={this.changePassengers} value={num}>{num}</option>)
+        })}
+        </select>
         <button onClick={this.search} id="search-flights" ref="submitButton" className="btn-search"><span><Tran tKey="search">Search</Tran></span><i className="fa fa-search"></i></button>
       </form>
     );

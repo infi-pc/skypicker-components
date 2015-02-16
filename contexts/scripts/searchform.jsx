@@ -1,4 +1,4 @@
-window.translationStrategy = require('./../../modules/translationStrategies/waTr.js');
+window.translationStrategy = require('./../../modules/translationStrategies/spTr.js');
 window.tr = require('./../../modules/tr.js');
 tr.setStrategy(translationStrategy);
 
