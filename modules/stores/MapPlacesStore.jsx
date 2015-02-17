@@ -72,7 +72,8 @@ class MapPlacesStore {
         origin: SearchFormStore.data.origin,
         destination: "anywhere",
         outboundDate: SearchFormStore.data.dateFrom,
-        inboundDate: SearchFormStore.data.dateTo
+        inboundDate: SearchFormStore.data.dateTo,
+        passengers: passengers
       }).then((flights) => {
         if (!this.compareImportantSearchFormData(thisSearchFormData, SearchFormStore.data)) {
           return;

@@ -29,6 +29,7 @@ class FlightsAPI {
         destination: string (id), default: "anywhere"
         outboundDate: SearchDate
         inboundDate: SearchDate | null
+        passengers: number, default: 1
         flyDays: (not used now)
         //daysInDestination: {from: int, to: int}, default: null
         directFlights: (not used now)
@@ -107,6 +108,12 @@ class FlightsAPI {
     if (request.oneForCity) {
       searchParams.oneforcity = 1; // oneforcity: request.oneForCity ? "1" : "",
     }
+
+
+    searchParams.adults = request.passengers || 1;
+    searchParams.children = 0;
+    searchParams.infants = 0;
+
 
     var deferred = Q.defer();
     superagent
