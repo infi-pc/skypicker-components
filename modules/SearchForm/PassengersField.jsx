@@ -30,7 +30,11 @@ module.exports = React.createClass({
     return (
       <fieldset ref="typePassengers" className="passengers">
         <div className="head">
-          <label for="passengers"><Translate tKey="emails.common.passengers">Passengers</Translate>:</label>
+          <label for="passengers">
+            <span><Translate tKey="emails.common.passengers">Passengers</Translate>:</span>
+            <i className="icon fa fa-user"></i>
+          </label>
+
           <div className="passenger-select-wrapper">
             <select name="passengers" ref="passengers" onChange={this.props.onChange} value={this.props.value}>
               {[1,2,3,4,5,6,7,8,9].map((num) => {
