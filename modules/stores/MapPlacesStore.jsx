@@ -37,7 +37,7 @@ class MapPlacesStore {
   }
   compareImportantSearchFormData(a, b) {
     if (a && b) {
-      return this.compareOrigins(a,b) && a.dateFrom == b.dateFrom && a.dateTo == b.dateTo
+      return this.compareOrigins(a,b) && a.dateFrom == b.dateFrom && a.dateTo == b.dateTo && a.passengers == b.passengers
     } else {
       /* both null => true, else => false */
       return !a && !b;
@@ -73,7 +73,7 @@ class MapPlacesStore {
         destination: "anywhere",
         outboundDate: SearchFormStore.data.dateFrom,
         inboundDate: SearchFormStore.data.dateTo,
-        passengers: passengers
+        passengers: SearchFormStore.data.passengers
       }).then((flights) => {
         if (!this.compareImportantSearchFormData(thisSearchFormData, SearchFormStore.data)) {
           return;
