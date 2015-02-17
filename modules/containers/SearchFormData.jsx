@@ -26,7 +26,7 @@ class SearchFormData {
     this.dateTo = plain.dateTo || new SearchDate({from: moment().add(1, "months")});
     this.origin = plain.origin || new SearchPlace("", true);
     this.destination = plain.destination || new SearchPlace({mode: ""}, true);
-    this.passengers = plain.passengers || 1;
+    this.passengers = parseInt(plain.passengers) || 1;
     Object.freeze(this);
   }
 
