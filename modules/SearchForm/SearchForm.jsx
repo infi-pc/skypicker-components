@@ -188,7 +188,7 @@ var SearchForm = React.createClass({
 
   changePassengers: function (event) {
     var number = event.target.value;
-    SearchFormStore.setField("passengers", number, "select"); 
+    SearchFormStore.setField("passengers", number, "select");
   },
 
   toggleActive: function (type) {
