@@ -22,6 +22,7 @@ var contextsPort = 9001;
 var livereloadPort = 35730;
 
 var globalShim = require('browserify-global-shim').configure({
+  'q': 'Q',
   'moment': 'moment',
   'react': 'React',
   'jQuery': '$'
