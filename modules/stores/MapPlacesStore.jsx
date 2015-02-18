@@ -20,7 +20,6 @@ class MapPlacesStore {
         this.events.emit("change");
       }
     });
-    this.loadPlaces();
   }
 
   compareOrigins(a, b) {

@@ -17,3 +17,4 @@ window.SearchFormAdapter = Wgts.SearchFormAdapter = require('./../modules/plainJ
 //MAP
 window.MapOverlay = Wgts.MapOverlay = require('./../modules/Map/MapOverlay.jsx');
 window.MapLoader = Wgts.MapLoader = require('./../modules/Map/MapLoader.jsx');
+window.MapPlacesStore = Wgts.MapPlacesStore = require('./../modules/stores/MapPlacesStore.jsx');
