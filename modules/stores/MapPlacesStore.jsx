@@ -16,7 +16,15 @@ class MapPlacesStore {
 
     SearchFormStore.events.on("change", (changeType) => {
       if (changeType == "select" || changeType == "selectRadius") {
-        this.loadPrices();
+        //if places are not loaded, i can't load prices, so wait until it is loaded
+        if (this.placesAreLoading) {
+          //console.log("waiting for load places");
+          this.placesAreLoading.then(() => {
+            this.loadPrices();
+          })
+        } else {
+          this.loadPrices();
+        }
         this.events.emit("change");
       }
     });
@@ -34,6 +42,7 @@ class MapPlacesStore {
       return !a.origin && !b.origin;
     }
   }
+
   compareImportantSearchFormData(a, b) {
     if (a && b) {
       return this.compareOrigins(a,b) && a.dateFrom == b.dateFrom && a.dateTo == b.dateTo && a.passengers == b.passengers
@@ -43,17 +52,17 @@ class MapPlacesStore {
     }
 
   }
+
   loadPlaces() {
     var placesAPI = new PlacesAPI({lang: OptionsStore.data.language});
-    placesAPI.findPlaces({typeID: Place.TYPE_CITY}).then((places) => {
+    this.placesAreLoading = placesAPI.findPlaces({typeID: Place.TYPE_CITY}).then((places) => {
       var mapPlaces = places.map((place) => {
         return new MapPlace({place: place});
       });
       this.mapPlacesIndex.insertPlaces(mapPlaces);
-
-      this.checkSelected();
+      this.placesAreLoading = null;
       this.events.emit("change");
-    })
+    });
   }
 
   loadPrices() {
