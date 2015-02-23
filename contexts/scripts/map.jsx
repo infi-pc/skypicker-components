@@ -4,8 +4,13 @@ window.MapOverlay = require('./../../modules/Map/MapOverlay.jsx');
 
 window.MapLabel = require('./../../modules/containers/MapLabel.jsx');
 
+var Options = require('./../../modules/containers/Options.jsx');
 
 var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
+var MapPlacesStore = require('./../../modules/stores/MapPlacesStore.jsx');
+var OptionsStore = require('./../../modules/stores/OptionsStore.jsx');
+
+
 
 
 function initialize() {
@@ -13,8 +18,8 @@ function initialize() {
     {
       "featureType": "road",
       "stylers": [
-        { "visibility": "on" },
-        { "color": "#e8e6dd" }
+        { "color": "#e1ddd4" },
+        { "visibility": "off" }
       ]
     },{
       "featureType": "poi",
@@ -33,23 +38,27 @@ function initialize() {
         { "visibility": "off" }
       ]
     },{
-      "featureType": "administrative.country",
-      "elementType": "labels",
+      "featureType": "administrative",
+      "elementType": "labels.text.fill",
       "stylers": [
+        { "visibility": "on" },
+        { "color": "#dbdadb" }
+      ]
+    },{
+      "featureType": "administrative",
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        { "color": "#ffffff" },
         { "visibility": "off" }
       ]
     },{
-      "featureType": "administrative.country",
-      "elementType": "borders",
+      "featureType": "administrative",
+      "elementType": "geometry",
       "stylers": [
-        { "color": "#cccccc" }
+        { "color": "#dbdadb" }
       ]
     },{
-      "featureType": "water",
-      "stylers": [
-        { "color": "#9DC0EA" }
-      ]
-    }
+      "featureType": "water"  }
   ];
   var mapOptions = {
     center: {
@@ -67,6 +76,11 @@ function initialize() {
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 
+OptionsStore.setValue(new Options({
+  language: "cs".toLowerCase(),
+  currency: "czk"
+}));
+MapPlacesStore.loadPlaces();
 
 
 //SearchFormStore.events.on("change", function () {

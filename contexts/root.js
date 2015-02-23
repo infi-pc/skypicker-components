@@ -8,6 +8,7 @@ module.exports = {
       "/scripts/jquery-2.1.1.js",
       "/scripts/react-0.12.1/build/react-with-addons.js",
       "/scripts/moment-with-locales.js",
+      "/scripts/q.js",
 
       "//maps.googleapis.com/maps/api/js?key=AIzaSyAyTAYTOgwyK88nltrL2n0ow2J6MXPlK-s"
       //"/scripts/bundle.js", //TODO require
