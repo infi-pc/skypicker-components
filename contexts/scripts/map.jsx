@@ -6,7 +6,11 @@ window.MapLabel = require('./../../modules/containers/MapLabel.jsx');
 
 var Options = require('./../../modules/containers/Options.jsx');
 
-var SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
+window.Place = require('./../../modules/containers/Place.jsx');
+window.SearchPlace = require('./../../modules/containers/SearchPlace.jsx');
+
+
+var SearchFormStore = window.SearchFormStore = require('./../../modules/stores/SearchFormStore.jsx');
 var MapPlacesStore = require('./../../modules/stores/MapPlacesStore.jsx');
 var OptionsStore = require('./../../modules/stores/OptionsStore.jsx');
 

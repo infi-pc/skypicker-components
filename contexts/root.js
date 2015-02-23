@@ -10,7 +10,10 @@ module.exports = {
       "/scripts/moment-with-locales.js",
       "/scripts/q.js",
 
-      "//maps.googleapis.com/maps/api/js?key=AIzaSyAyTAYTOgwyK88nltrL2n0ow2J6MXPlK-s"
+      //"//maps.googleapis.com/maps/api/js?key=AIzaSyAyTAYTOgwyK88nltrL2n0ow2J6MXPlK-s"
+
+      "//maps.google.com/maps/api/js?v=3&sensor=false",
+      "//www.google.com/jsapi"
       //"/scripts/bundle.js", //TODO require
       //"/scripts/main.js"  //TODO add to init
     ],

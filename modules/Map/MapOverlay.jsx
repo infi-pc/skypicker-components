@@ -4,6 +4,9 @@ var PointsSVGLayer = require('./PointsSVGLayer.jsx');
 var MouseClickLayer = require('./MouseClickLayer.jsx');
 var MapLabelsStore = require('./../stores/MapLabelsStore.jsx');
 
+var CountryBorders = require('./CountryBorders.jsx');
+var RadiusLayer = require('./RadiusLayer.jsx');
+
 var MapOverlay = function (map) {
   this.map = map;
   this.setMap(map);
@@ -61,6 +64,8 @@ MapOverlay.prototype.onAdd = function () {
   addPointsSVGLayer(panes, this.map);
   addLabelsLayer(panes, this.map);
   addMouseClickLayer(panes, this.map);
+  new CountryBorders(this.map);
+  new RadiusLayer(this.map);
 
   google.maps.event.addListener(this.map, 'zoom_changed', ()=> {
     var overlayProjection = this.getProjection();
