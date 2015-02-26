@@ -78,7 +78,17 @@ module.exports = {
           "/builds/map.js"
         ],
         template: "templates/map.jsx"
-      }
+      },
+      "grouped results": {
+        styles: [
+          "/styles/main.css",
+          "/styles/modules/skypicker.css"
+        ],
+        scripts: [
+          "/builds/groupedResults.js"
+        ],
+        template: "templates/groupedResults.jsx"
+      },
     }
   }
 };
