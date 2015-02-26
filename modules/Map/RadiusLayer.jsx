@@ -20,7 +20,7 @@ class RadiusLayer {
         lat: lat,
         lng: lng
       })
-    }), "select");
+    }), ["select","map"]);
     SearchFormStore.search();
   }
 }

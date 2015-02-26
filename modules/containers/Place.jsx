@@ -50,11 +50,12 @@ class Place {
   getTypeId() {
     return this.type
   }
-  //fillFromApiObject(apiObj) {
-  //  Object.keys(apiObj).forEach((key) => {
-  //    this[key] = apiObj[key];
-  //  });
-  //}
+  getCenter() {
+
+  }
+  getBorders() {
+
+  }
 }
 
 Place.TYPE_AIRPORT = 0;

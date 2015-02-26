@@ -14,8 +14,8 @@ class MapPlacesStore {
     this.mapPlacesIndex = new MapPlacesIndex();
     this.events = new EventEmitter();
 
-    SearchFormStore.events.on("change", (changeType) => {
-      if (changeType == "select" || changeType == "selectRadius") {
+    SearchFormStore.events.on("change", (changeTags) => {
+      if (changeTags.indexOf("select") != -1) {
         //if places are not loaded, i can't load prices, so wait until it is loaded
         if (this.placesAreLoading) {
           //console.log("waiting for load places");

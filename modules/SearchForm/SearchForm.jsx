@@ -157,7 +157,12 @@ var SearchForm = React.createClass({
           active: null
         });
       }
-      SearchFormStore.setValue(this.state.data.changeField(fieldName, value), changeType);
+
+      var changeTags = [];
+      if (changeType == "select" || changeType == "selectRadius") {
+        changeTags = ["select", "form"];
+      }
+      SearchFormStore.setValue(this.state.data.changeField(fieldName, value), changeTags);
 
     }
   },

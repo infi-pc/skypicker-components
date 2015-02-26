@@ -99,10 +99,6 @@ class CountryBorders{
         } else {
           defer.reject(new Error(data.getMessage()));
         }
-
-        //this.drawCountryBorders(data);
-        //this.refreshHighlights();
-        //this.centerMap();
       });
     }});
     return defer.promise;

@@ -68,20 +68,26 @@ class SearchFormStore {
   /**
    *
    * @param value
-   * @param changeType - type of change - default is "select" which is also most common and for example triggers search on map
+   * @param tags - tags with type of change - (String or [String,...])- default is "select" which is also most common and for example triggers search on map
    * @return {boolean}
    */
-  setValue(value, changeType) {
+  setValue(value, tags) {
+    if (!tags) {
+      tags = [];
+    }
+    if (typeof(tags)=="String") {
+      tags = [tags];
+    }
     var changed = false;
     if (this.data != value) {
       this.data = value;
-      this.events.emit('change',changeType); // change is after all changes
+      this.events.emit('change',tags); // change is after all changes
       changed = true;
     }
     return changed;
   }
-  setField(fieldName, value, changeType) {
-    return this.setValue(this.data.changeField(fieldName, value), changeType);
+  setField(fieldName, value, tags) {
+    return this.setValue(this.data.changeField(fieldName, value), tags);
   }
 
   completeField(fieldName) {
