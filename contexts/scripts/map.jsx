@@ -70,7 +70,13 @@ function initialize() {
       lng: 15
     },
     zoom: 5,
-    styles: styles
+    styles: styles,
+    panControl: false,
+    zoomControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    streetViewControl: false,
+    overviewMapControl: false
   };
   var map = new google.maps.Map(document.getElementById('map-canvas'),
     mapOptions);

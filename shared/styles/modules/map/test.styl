@@ -1,0 +1,66 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+#header
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%
+  background-color rgba(250,250,250,0.50)
+  .btn-default
+    color: #646464 //646464
+    border: 1px solid #7BACDB
+
+  z-index 5000
+  .header-bar
+    width: 100%;
+    /*background-color rgba(250,250,250,0.97)*/
+    /*border-bottom solid 1px rgb(230,230,230)*/
+    height: 45px
+    .right-menu
+      float: right
+      margin-right: 7px;
+      a
+        display inline-block
+        padding: 2px 20px;
+        margin: 13px 0px;
+        border-left 1px solid #7BACDB
+        &:first-child
+          border-left none
+    .logo
+      height: 34px;
+      margin: 8px 17px;
+
+  .form-bar
+    width: 100%;
+    /*background-color rgba(250,250,250,0.7)*/
+    /*border-bottom solid 1px #ddd*/
+    color: 515151
+    form.form-inline
+      margin: 0px;
+      padding: 10px 7px;
+      white-space: nowrap;
+      label
+
+        margin-right: 8px;
+        margin-left: 12px;
+      button
+        margin-left 12px
+
+      .form-control.passengers
+        width: 60px
+
+#results
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+  width: 500px;
+
+  z-index 4000
+  .inner-results
+    margin-top: 99px
+    height: 100%
+    width: 100%
+    background-color: rgba(250, 250, 250, 0.50);

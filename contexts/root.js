@@ -75,7 +75,9 @@ module.exports = {
         ],
         styles: [
           "/styles/main.css",
-          "/styles/modules/skypicker.css"
+          "/styles/modules/skypicker.css",
+          "/styles/bootstrap.css"
+          //"/styles/bootstrap-theme.css"
         ],
         scripts: [
           "/builds/map.js"
