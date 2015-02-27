@@ -4,6 +4,8 @@ window.SearchForm = require('./../../modules/SearchForm/SearchForm.jsx');
 window.translationStrategy = require('./../../modules/translationStrategies/spTr.js');
 window.tr = require('./../../modules/tr.js');
 
+var APIManager = require("./../../modules/APIManager.jsx");
+
 tr.setStrategy(translationStrategy);
 
 (function() {

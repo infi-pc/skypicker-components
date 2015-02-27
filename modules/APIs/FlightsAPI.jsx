@@ -14,15 +14,10 @@ var handleError = function (err) {
 
 
 class FlightsAPI {
-  /*
-    options:
-    {
-      lang: string (eg. "cs")
-    }
-   */
+
   constructor() {
     this.options = {
-      lang: "en",
+      language: "en",
       format: "mapped" // or "original"
     };
   }
@@ -57,7 +52,7 @@ class FlightsAPI {
       //directFlights: 0,
       sort: "price",
       asc: 1,
-      locale: this.options.lang,
+      locale: this.options.language,
       daysInDestinationFrom: "",
       daysInDestinationTo: ""
 

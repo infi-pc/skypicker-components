@@ -38,6 +38,10 @@ class Place {
     this.typeString = Place.typeIdToString(this.type);
     Object.freeze(this);
   }
+
+
+
+  /* Do not use getters!!! it is here just for backward compatibility */
   getName() {
     return this.value;
   }
@@ -50,11 +54,6 @@ class Place {
   getTypeId() {
     return this.type
   }
-  //fillFromApiObject(apiObj) {
-  //  Object.keys(apiObj).forEach((key) => {
-  //    this[key] = apiObj[key];
-  //  });
-  //}
 }
 
 Place.TYPE_AIRPORT = 0;

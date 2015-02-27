@@ -3,6 +3,10 @@ var tr = require('./../modules/tr.js');
 tr.setStrategy(translationStrategy);
 var React = require("react");
 
+//just include it to setup
+var APIManager = require("./../modules/APIManager.jsx");
+
+
 window.Wgts = {}; //That's namespace if there will be some name collision
 
 window.Place = Wgts.Place = require('./../modules/containers/Place.jsx');
