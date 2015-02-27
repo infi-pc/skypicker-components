@@ -44,7 +44,7 @@ module.exports = React.createClass({
       });
     }).catch((err) => {
       //TODO nicer error handling
-      console.error(err);
+      console.error(err, err.stack);
     });
   },
   componentDidMount: function() {

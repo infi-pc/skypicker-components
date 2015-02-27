@@ -1,24 +1,32 @@
 var LegInfo = require("./LegInfo.jsx");
 
 module.exports = React.createClass({
-  className: "GroupedResults",
+  className: "PriceGroup",
+
+  getInitialState: function () {
+    return {
+      selectedOutboundId: null
+    }
+  },
   splitFlightToLegs: function (flight) {
     var outbound = {singleFlights: []};
     var inbound = {singleFlights: []};
     flight.route.forEach((route) => {
       if (route.return) {
-        inbound.push(route);
+        inbound.singleFlights.push(route);
       } else {
-        outbound.push(route);
+        outbound.singleFlights.push(route);
       }
     });
 
     outbound.id = outbound.singleFlights.reduce((res, flight) => {
-      return res.push(flight.id);
+      //debugger;
+      return res.concat([flight.id]);
     }, []).join("|");
 
     inbound.id = inbound.singleFlights.reduce((res, flight) => {
-      return res.push(flight.id);
+      //debugger;
+      return res.concat([flight.id]);
     }, []).join("|");
 
     return {
@@ -39,7 +47,7 @@ module.exports = React.createClass({
         flight: legPairs.flight
       });
     });
-    return outboundLegsPrimary;
+    return Object.keys(outboundLegsPrimary).map((key) => outboundLegsPrimary[key]);
   },
 
   render: function () {
@@ -51,16 +59,33 @@ module.exports = React.createClass({
     });
     var mergedOutbounds = this.mergeLegsToOutbounds(legPairs);
 
+    var inboundLegs = "";
+    if (this.state.selectedOutboundId) {
+
+    } else {
+      inboundLegs = <span>select outbound flight first</span>
+    }
+
     return (
-      <div>
-        <div>{price}</div>
+      <div className="price-group">
+        <div className="price-group--header">{price}</div>
         <div className="outbound-legs">
-          {mergedOutbounds.map((mergedOutbound) => {
-            return <LegInfo leg={mergedOutbound.leg}></LegInfo>
-          })}
+          <div className="legs-header">
+            Outbound
+          </div>
+          <div className="legs-body">
+            {mergedOutbounds.map((mergedOutbound) => {
+              return <LegInfo leg={mergedOutbound.leg}></LegInfo>
+            })}
+          </div>
         </div>
         <div className="inbound-legs">
-
+          <div className="legs-header">
+            Inbound
+          </div>
+          <div className="legs-body">
+            {inboundLegs}
+          </div>
         </div>
       </div>
     )

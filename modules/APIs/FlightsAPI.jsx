@@ -122,15 +122,22 @@ class FlightsAPI {
       //.set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Accept', 'application/json')
       .on('error', handleError)
-      .end(function(error, res){
+      .end((error, res) => {
         if (!error) {
-          deferred.resolve(res.body.data);
+          if (this.settings.format == "original") {
+            deferred.resolve(res.body.data);
+          } else {
+            deferred.resolve(this.mapToJourneys(res.body.data));
+          }
         } else {
           deferred.reject(new Error(error));
         }
       });
     return deferred.promise;
-  };
+  }
+  mapToJourneys(apiFlights) {
+    return apiFlights;
+  }
 }
 
 module.exports = FlightsAPI;

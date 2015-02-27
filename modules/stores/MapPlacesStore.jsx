@@ -75,7 +75,7 @@ class MapPlacesStore {
     this.loading = true;
     this.mapPlacesIndex.cleanPrices();
     if (SearchFormStore.data.origin.mode == "place" || SearchFormStore.data.origin.mode == "radius") {
-      var flightsAPI = new FlightsAPI({lang: OptionsStore.data.language});
+      var flightsAPI = new FlightsAPI({lang: OptionsStore.data.language, format: "original"});
       flightsAPI.findFlights({
         origin: SearchFormStore.data.origin,
         destination: "anywhere",
