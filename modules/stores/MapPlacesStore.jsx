@@ -5,7 +5,7 @@ var SearchFormStore  = require('./../stores/SearchFormStore.jsx');
 var OptionsStore  = require('./../stores/OptionsStore.jsx');
 
 var PlacesAPI = require('./../APIs/PlacesAPI.jsx');
-var FlightsAPI = require('./../APIs/FlightsAPI.jsx');
+var flightsAPI = require('./../APIs/flightsAPI.jsx');
 var Place = require('./../containers/Place.jsx');
 
 
@@ -75,14 +75,13 @@ class MapPlacesStore {
     this.loading = true;
     this.mapPlacesIndex.cleanPrices();
     if (SearchFormStore.data.origin.mode == "place" || SearchFormStore.data.origin.mode == "radius") {
-      var flightsAPI = new FlightsAPI({lang: OptionsStore.data.language, format: "original"});
       flightsAPI.findFlights({
         origin: SearchFormStore.data.origin,
         destination: "anywhere",
         outboundDate: SearchFormStore.data.dateFrom,
         inboundDate: SearchFormStore.data.dateTo,
         passengers: SearchFormStore.data.passengers
-      }).then((flights) => {
+      }, {format: "original"}).then((flights) => {
         if (!this.compareImportantSearchFormData(thisSearchFormData, SearchFormStore.data)) {
           return;
         }

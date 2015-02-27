@@ -6,6 +6,7 @@ var moment  = require("moment");
 
 var formatSPApiDate = "DD/MM/YYYY";
 
+
 //TODO check if on error is called exactly when error in callback or not, then Add it to promise
 var handleError = function (err) {
   console.error(err);
@@ -14,13 +15,22 @@ var handleError = function (err) {
 
 class FlightsAPI {
   /*
-    Settings:
+    options:
     {
       lang: string (eg. "cs")
     }
    */
-  constructor(settings) {
-    this.settings = settings;
+  constructor() {
+    this.options = {
+      lang: "en",
+      format: "mapped" // or "original"
+    };
+  }
+
+  changeOptions(newOptions) {
+    Object.keys(newOptions).forEach((key) => {
+      this.options[key] = newOptions[key];
+    })
   }
   /*
       Request:
@@ -47,7 +57,7 @@ class FlightsAPI {
       //directFlights: 0,
       sort: "price",
       asc: 1,
-      locale: this.settings.lang,
+      locale: this.options.lang,
       daysInDestinationFrom: "",
       daysInDestinationTo: ""
 
@@ -124,7 +134,7 @@ class FlightsAPI {
       .on('error', handleError)
       .end((error, res) => {
         if (!error) {
-          if (this.settings.format == "original") {
+          if (this.options.format == "original") {
             deferred.resolve(res.body.data);
           } else {
             deferred.resolve(this.mapToJourneys(res.body.data));
@@ -140,5 +150,5 @@ class FlightsAPI {
   }
 }
 
-module.exports = FlightsAPI;
+module.exports = new FlightsAPI();
 

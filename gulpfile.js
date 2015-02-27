@@ -72,7 +72,6 @@ function browserifyfunc(watch, enableLivereload, inputFile, outputDir, outputFil
   b.transform(strictify);
 
   b.transform(globalShim);
-  //b.require("./modules/containers/SearchDate.js", {expose: 'SearchDate'});
 
   return rebundle(b);
 }

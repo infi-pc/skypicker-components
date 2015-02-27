@@ -1,6 +1,6 @@
 var React = require('react');
 var SearchFormStore = require('../stores/SearchFormStore.jsx');
-var FlightsAPI = require('../APIs/FlightsAPI.jsx');
+var flightsAPI = require('../APIs/flightsAPI.jsx');
 var OptionsStore  = require('./../stores/OptionsStore.jsx');
 var PriceGroup = require('./PriceGroup.jsx');
 
@@ -30,7 +30,6 @@ module.exports = React.createClass({
     });
   },
   loadFlights: function () {
-    var flightsAPI = new FlightsAPI({lang: OptionsStore.data.language});
     flightsAPI.findFlights({
       origin: SearchFormStore.data.origin,
       destination: SearchFormStore.data.destination,
