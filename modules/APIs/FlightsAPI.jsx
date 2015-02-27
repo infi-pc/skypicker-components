@@ -18,7 +18,7 @@ class FlightsAPI {
   constructor() {
     this.options = {
       language: "en",
-      format: "mapped" // or "original"
+      format: "original" // "mapped" or "original"
     };
   }
 
@@ -141,6 +141,7 @@ class FlightsAPI {
     return deferred.promise;
   }
   mapToJourneys(apiFlights) {
+    throw new Error("not implemented yet");
     return apiFlights;
   }
 }
