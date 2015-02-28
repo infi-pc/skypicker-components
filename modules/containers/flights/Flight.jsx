@@ -1,9 +1,16 @@
-var Immutable = require('./../immutable.jsx');
+var Immutable = require('immutable');
 
-class Flight extends Immutable {
-  constructor(plain) {
-    this.class = Flight;
-    Object.freeze(this);
+var Def = Immutable.Record({
+  id: null,
+  number: null,
+  departure: null,
+  arrival: null,
+  airline: null
+});
+
+class Flight extends Def {
+  duration() {
+    //return moment(this.get('arrival').when.utc.diff(this.departure.when.utc)).utc();
   }
 }
 

@@ -1,11 +1,11 @@
 // new version, not tested, not finished, should be finished later
 var Q = require('q');
-
 var superagent  = require("superagent");
 var moment  = require("moment");
+var flightsApiToJourney = require("./mappers/flightsApiToJourney.jsx");
+
 
 var formatSPApiDate = "DD/MM/YYYY";
-
 
 //TODO check if on error is called exactly when error in callback or not, then Add it to promise
 var handleError = function (err) {
@@ -18,7 +18,7 @@ class FlightsAPI {
   constructor() {
     this.options = {
       language: "en",
-      format: "original" // "mapped" or "original"
+      format: "mapped" // "mapped" or "original"
     };
   }
 
@@ -129,20 +129,23 @@ class FlightsAPI {
       .on('error', handleError)
       .end((error, res) => {
         if (!error) {
-          if (this.options.format == "original") {
-            deferred.resolve(res.body.data);
-          } else {
-            deferred.resolve(this.mapToJourneys(res.body.data));
+          try {
+            if (this.options.format == "original") {
+              deferred.resolve(res.body.data);
+            } else {
+              debugger;
+              var formatted = res.body.data.map(flight => flightsApiToJourney(flight));
+              deferred.resolve(formatted);
+            }
+          } catch (error) {
+            deferred.reject(error);
           }
         } else {
-          deferred.reject(new Error(error));
+          //Totally weird error handling by superagent
+          deferred.reject(error);
         }
       });
     return deferred.promise;
-  }
-  mapToJourneys(apiFlights) {
-    throw new Error("not implemented yet");
-    return apiFlights;
   }
 }
 

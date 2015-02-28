@@ -1,13 +1,18 @@
-var Immutable = require('./../immutable.jsx');
+var Immutable = require('immutable');
+var Trip = require('./Trip.jsx');
 
-class Journey extends Immutable {
-  constructor(plain) {
-    this.price = plain.price;
+var Def = Immutable.Record({
+  id: null,
+  source: null,
+  trips: Immutable.Map({
+    outbound: new Trip(),
+    inbound: new Trip()
+  }),
+  prices: {}
+});
 
+class Journey extends Def {
 
-    this.class = Journey;
-    Object.freeze(this);
-  }
 }
 
 module.exports = Journey;

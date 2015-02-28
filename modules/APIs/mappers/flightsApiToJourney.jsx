@@ -1,10 +1,18 @@
 var Journey = require('./../../containers/flights/Journey.jsx');
 var Flight = require('./../../containers/flights/Flight.jsx');
 var Trip = require('./../../containers/flights/Trip.jsx');
+var Immutable = require('immutable');
 
 module.exports = function (obj) {
   var outboundTrip = [];
   var inboundTrip = [];
+
+  var journey = new Journey({
+    id: obj['id'],
+    source: obj['source']
+  });
+  journey.setIn(['prices'], ['default'], obj['price']);
+
 
   obj.route.forEach(function(flightObj) {
 
@@ -44,18 +52,12 @@ module.exports = function (obj) {
       }
     });
 
-    journey.trips[flightObj['return']].flights.push(flight);
+    var direction = flightObj['return']?"inbound":"outbound";
 
+    journey = journey.updateIn(['trips', direction, 'flights'], flights => flights.push(flight));
   });
 
-  var journey = new Journey({
-    id: obj['id'],
-    source: obj['source'],
-    prices: {
-      default: obj['price']
-    },
-    trips: []
-  });
+
 
   return journey;
 };
