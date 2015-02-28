@@ -5,27 +5,28 @@ var OptionsStore  = require('./../stores/OptionsStore.jsx');
 var PriceGroup = require('./PriceGroup.jsx');
 
 module.exports = React.createClass({
-  className: "GroupedResults",
+  displayName: "GroupedResults",
 
   getInitialState: function () {
     return {
       priceGroups: []
-    }
+    };
   },
-
-  groupFlights: function (flights) {
+  /* group journeys by price */
+  groupJourneys: function (journeys) {
+    debugger;
     var priceGroupsIndex = {};
-    flights.forEach((flight) => {
-      var index = ""+flight.price;
+    journeys.forEach((journey) => {
+      var index = ""+journey.getPrice();
       if (!priceGroupsIndex[index]) {
         priceGroupsIndex[index] = [];
       }
-      priceGroupsIndex[index].push(flight);
+      priceGroupsIndex[index].push(journey);
     });
     return Object.keys(priceGroupsIndex).map((key) => {
       return {
-        price: priceGroupsIndex[key][0].price,
-        flights: priceGroupsIndex[key]
+        price: priceGroupsIndex[key][0].getPrice(),
+        journeys: priceGroupsIndex[key]
       }
     });
   },
@@ -36,10 +37,9 @@ module.exports = React.createClass({
       outboundDate: SearchFormStore.data.dateFrom,
       inboundDate: SearchFormStore.data.dateTo,
       passengers: SearchFormStore.data.passengers
-    }).then((flights) => {
-      console.log(flights);
+    }).then((journeys) => {
       this.setState({
-        priceGroups: this.groupFlights(flights)
+        priceGroups: this.groupJourneys(journeys)
       });
     }).catch((err) => {
       //TODO nicer error handling
@@ -55,7 +55,7 @@ module.exports = React.createClass({
     return (
       <div>
       {this.state.priceGroups.map((priceGroup) => {
-        return (<PriceGroup price={priceGroup.price} flights={priceGroup.flights}></PriceGroup>)
+        return (<PriceGroup price={priceGroup.price} journeys={priceGroup.journeys}></PriceGroup>)
       })}
       </div>
     );

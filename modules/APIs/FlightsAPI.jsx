@@ -133,7 +133,6 @@ class FlightsAPI {
             if (this.options.format == "original") {
               deferred.resolve(res.body.data);
             } else {
-              debugger;
               var formatted = res.body.data.map(flight => flightsApiToJourney(flight));
               deferred.resolve(formatted);
             }

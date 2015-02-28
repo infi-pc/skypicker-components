@@ -1,63 +1,59 @@
-var LegInfo = require("./LegInfo.jsx");
+var TripInfo = require("./TripInfo.jsx");
 
 module.exports = React.createClass({
-  className: "PriceGroup",
+  displayName: "PriceGroup",
 
   getInitialState: function () {
     return {
       selectedOutboundId: null
     }
   },
-  splitFlightToLegs: function (flight) {
-    var outbound = {singleFlights: []};
-    var inbound = {singleFlights: []};
-    flight.route.forEach((route) => {
-      if (route.return) {
-        inbound.singleFlights.push(route);
-      } else {
-        outbound.singleFlights.push(route);
+  // splitJourneysToLegs: function (journey) {
+  //   var outbound = {singleFlights: []};
+  //   var inbound = {singleFlights: []};
+  //   flight.route.forEach((route) => {
+  //     if (route.return) {
+  //       inbound.singleFlights.push(route);
+  //     } else {
+  //       outbound.singleFlights.push(route);
+  //     }
+  //   });
+
+  //   outbound.id = outbound.singleFlights.reduce((res, flight) => {
+  //     return res.concat([flight.id]);
+  //   }, []).join("|");
+
+  //   inbound.id = inbound.singleFlights.reduce((res, flight) => {
+  //     return res.concat([flight.id]);
+  //   }, []).join("|");
+
+  //   return {
+  //     outbound: outbound,
+  //     inbound: inbound,
+  //     flight: flight
+  //   }+
+  // },
+
+  mergeTripsToOutbounds: function (journeys) {
+    var master = {};
+    journeys.forEach((journey) => {
+      var id = journey.get("trips").get("outbound").getId()
+      if (!master[id]) {
+        master[id] = {outbound: journey.get("trips").get("outbound"), inbounds: []};
       }
-    });
-
-    outbound.id = outbound.singleFlights.reduce((res, flight) => {
-      //debugger;
-      return res.concat([flight.id]);
-    }, []).join("|");
-
-    inbound.id = inbound.singleFlights.reduce((res, flight) => {
-      //debugger;
-      return res.concat([flight.id]);
-    }, []).join("|");
-
-    return {
-      outbound: outbound,
-      inbound: inbound,
-      flight: flight
-    }
-  },
-
-  mergeLegsToOutbounds: function (legPairs) {
-    var outboundLegsPrimary = {};
-    legPairs.forEach((legPair)=> {
-      if (!outboundLegsPrimary[legPair.outbound.id]) {
-        outboundLegsPrimary[legPair.outbound.id] = {leg: legPair.outbound, inboundLegs: []};
-      }
-      outboundLegsPrimary[legPair.outbound.id].inboundLegs.push({
-        leg: legPair.inbound,
-        flight: legPairs.flight
+      master[id].inbounds.push({
+        trip: journey.trips.get("inbound"),
+        journey: journey
       });
     });
-    return Object.keys(outboundLegsPrimary).map((key) => outboundLegsPrimary[key]);
+    return Object.keys(master).map((key) => master[key]);
   },
 
   render: function () {
     var price = this.props.price;
-    var flights = this.props.flights;
+    var journeys = this.props.journeys;
 
-    var legPairs = flights.map((flight) => {
-     return this.splitFlightToLegs(flight);
-    });
-    var mergedOutbounds = this.mergeLegsToOutbounds(legPairs);
+    var mergedOutbounds = this.mergeTripsToOutbounds(journeys);
 
     var inboundLegs = "";
     if (this.state.selectedOutboundId) {
@@ -74,8 +70,8 @@ module.exports = React.createClass({
             Outbound
           </div>
           <div className="legs-body">
-            {mergedOutbounds.map((mergedOutbound) => {
-              return <LegInfo leg={mergedOutbound.leg}></LegInfo>
+            {mergedOutbounds.map((pair) => {
+              return <TripInfo trip={pair.outbound}></TripInfo>
             })}
           </div>
         </div>

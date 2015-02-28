@@ -8,11 +8,13 @@ var Def = Immutable.Record({
     outbound: new Trip(),
     inbound: new Trip()
   }),
-  prices: {}
+  prices: Immutable.Map({})
 });
 
 class Journey extends Def {
-
+  getPrice() {
+    return this.getIn(["prices", "default"]);
+  }
 }
 
 module.exports = Journey;

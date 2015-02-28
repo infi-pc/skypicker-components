@@ -11,7 +11,8 @@ module.exports = function (obj) {
     id: obj['id'],
     source: obj['source']
   });
-  journey.setIn(['prices'], ['default'], obj['price']);
+
+  journey = journey.setIn(['prices', 'default'], obj['price']);
 
 
   obj.route.forEach(function(flightObj) {
