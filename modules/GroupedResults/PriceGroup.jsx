@@ -34,15 +34,16 @@ module.exports = React.createClass({
   //   }+
   // },
 
-  mergeTripsToOutbounds: function (journeys) {
+  mergeTripsToMaster: function (journeys, masterDirection) {
+    var slaveDirection = masterDirection == "outbound" ? "inbound" : "outbound";
     var master = {};
     journeys.forEach((journey) => {
-      var id = journey.get("trips").get("outbound").getId()
+      var id = journey.get("trips").get(masterDirection).getId()
       if (!master[id]) {
-        master[id] = {outbound: journey.get("trips").get("outbound"), inbounds: []};
+        master[id] = {master: journey.get("trips").get(masterDirection), slaves: []};
       }
-      master[id].inbounds.push({
-        trip: journey.trips.get("inbound"),
+      master[id].slaves.push({
+        trip: journey.trips.get(slaveDirection),
         journey: journey
       });
     });
@@ -53,14 +54,8 @@ module.exports = React.createClass({
     var price = this.props.price;
     var journeys = this.props.journeys;
 
-    var mergedOutbounds = this.mergeTripsToOutbounds(journeys);
-
-    var inboundLegs = "";
-    if (this.state.selectedOutboundId) {
-
-    } else {
-      inboundLegs = <span>select outbound flight first</span>
-    }
+    var mergedOutbounds = this.mergeTripsToMaster(journeys, "outbound");
+    var mergedInbounds = this.mergeTripsToMaster(journeys, "inbound");
 
     return (
       <div className="price-group">
@@ -70,9 +65,13 @@ module.exports = React.createClass({
             Outbound
           </div>
           <div className="legs-body">
-            {mergedOutbounds.map((pair) => {
-              return <TripInfo trip={pair.outbound}></TripInfo>
-            })}
+            <table>
+              <tbody>
+                {mergedOutbounds.map((pair) => {
+                  return <TripInfo key={pair.master.getId()} trip={pair.master}></TripInfo>
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
         <div className="inbound-legs">
@@ -80,7 +79,13 @@ module.exports = React.createClass({
             Inbound
           </div>
           <div className="legs-body">
-            {inboundLegs}
+            <table>
+              <tbody>
+                {mergedInbounds.map((pair) => {
+                  return <TripInfo key={pair.master.getId()} trip={pair.master}></TripInfo>
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

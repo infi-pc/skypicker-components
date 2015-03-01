@@ -14,7 +14,6 @@ module.exports = React.createClass({
   },
   /* group journeys by price */
   groupJourneys: function (journeys) {
-    debugger;
     var priceGroupsIndex = {};
     journeys.forEach((journey) => {
       var index = ""+journey.getPrice();
@@ -28,6 +27,8 @@ module.exports = React.createClass({
         price: priceGroupsIndex[key][0].getPrice(),
         journeys: priceGroupsIndex[key]
       }
+    }).sort((a, b) => {
+      return a.price > b.price ? 1 : -1
     });
   },
   loadFlights: function () {
@@ -55,7 +56,7 @@ module.exports = React.createClass({
     return (
       <div>
       {this.state.priceGroups.map((priceGroup) => {
-        return (<PriceGroup price={priceGroup.price} journeys={priceGroup.journeys}></PriceGroup>)
+        return (<PriceGroup key={"_"+priceGroup.price} price={priceGroup.price} journeys={priceGroup.journeys}></PriceGroup>)
       })}
       </div>
     );

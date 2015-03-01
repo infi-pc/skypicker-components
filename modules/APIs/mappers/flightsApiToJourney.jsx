@@ -21,7 +21,8 @@ module.exports = function (obj) {
       id: flightObj['id'],
       number: flightObj['flight_no'],
 
-      departure: {
+      //TODO thing about use of Place and TimeInPlace objects
+      departure: Immutable.fromJS({
         where: {
           id: flightObj['mapIdfrom'],
           code: flightObj['flyFrom'],
@@ -33,8 +34,8 @@ module.exports = function (obj) {
           local: moment.utc(flightObj['dTime'] * 1000),
           utc: moment.utc(flightObj['dTimeUTC'] * 1000)
         }
-      },
-      arrival: {
+      }),
+      arrival: Immutable.fromJS({
         where: {
           id: flightObj['mapIdto'],
           code: flightObj['flyTo'],
@@ -46,11 +47,11 @@ module.exports = function (obj) {
           local: moment.utc(flightObj['aTime'] * 1000),
           utc: moment.utc(flightObj['aTimeUTC'] * 1000)
         }
-      },
-      airline: {
+      }),
+      airline: Immutable.fromJS({
         code: flightObj['airline']
         //name: airlines[flightObj['airline']] && airlines[flightObj['airline']].name
-      }
+      })
     });
 
     var direction = flightObj['return']?"inbound":"outbound";

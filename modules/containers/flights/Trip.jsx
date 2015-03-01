@@ -6,25 +6,25 @@ var Def = Immutable.Record({
 
 class Trip extends Def {
   getId() {
-    return this.flights.reduce((res, flight) => {
+    return this.get("flights").reduce((res, flight) => {
       return res.concat([flight.id]);
     }, []).join("|");
   }
 
   getStops() {
-    return this.flights.count() - 1;
+    return this.get("flights").count() - 1;
   }
 
   getDeparture() {
-    return this.flights.first().get("departure");
+    return this.get("flights").first().get("departure");
   }
 
   getArrival() {
-    return this.flights.last().arrival;
+    return this.get("flights").last().arrival;
   }
 
   getDuration() {
-    return moment.duration(this.getArrival().when.utc.diff(this.getDeparture().when.utc));
+    return moment.duration(this.getArrival().get("when").get("utc").diff(this.getDeparture().get("when").get("utc")));
   }
 }
 
