@@ -2,6 +2,29 @@ var TripInfo = require("./TripInfo.jsx");
 var Immutable = require("immutable");
 var Map = Immutable.Map;
 
+
+var LinkButton = React.createClass({
+  render: function () {
+    var sharedJourney = this.props.sharedJourney;
+    var baseUrl = "https://en.skypicker.com/booking"; //TODO change it
+    if (sharedJourney) {
+      var url = baseUrl + "?flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
+      return (
+        <a href={url}>Book flight for {sharedJourney.getPrice()} {sharedJourney.get("id")}</a>
+      );
+    } else {
+      var id = this.props.selected.get("outbound").master.getId() + "|" +  this.props.selected.get("inbound").master.getId()
+      var url = baseUrl + "?flightsId=" + id  + "&price=" + this.props.groupPrice;
+      console.log(url);
+      return (
+        <a href={url}>Check price and book flight</a>
+      );
+    }
+  }
+});
+
+
+
 module.exports = React.createClass({
   displayName: "PriceGroup",
 
@@ -28,14 +51,6 @@ module.exports = React.createClass({
         .set("inbound",merged.inbounds[0])
     );
   },
-  //selectInboundFunc: function (pair) {
-  //  return () => {
-  //    console.log(pair);
-  //    this.setState({
-  //      selectedInbound: pair
-  //    })
-  //  }
-  //},
 
   mergeTrips: function (journeys) {
     return {
@@ -61,10 +76,6 @@ module.exports = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (!newProps.journeys) {
-      debugger;
-      console.error("WTF?");
-    }
     if (newProps.journeys != this.props.journeys) {
       var merged = this.mergeTrips(newProps.journeys);
       this.setState({
@@ -74,8 +85,34 @@ module.exports = React.createClass({
     }
   },
 
+  findSharedJourney(outbound, inbound) {
+    var sharedJourney = null;
+    outbound.slaves.forEach((outboundsSlaveInbound) => {
+      inbound.slaves.forEach((inboundsSlaveOutbound) => {
+        if (outboundsSlaveInbound.journey == inboundsSlaveOutbound.journey) {
+          sharedJourney = outboundsSlaveInbound.journey;
+        }
+      })
+    });
+    return sharedJourney;
+  },
+
+  isInCounterpart(thisId,thisDirection) {
+    var thatDirection = thisDirection == "outbound" ? "inbound" : "outbound";
+    var isThere = false;
+    this.state.selected.get(thatDirection).slaves.forEach((slave) => {
+      if (thisId == slave.trip.getId()) {
+        isThere = true;
+      }
+    });
+    return isThere;
+  },
+
   render: function () {
     var price = this.props.price;
+    var sharedJourney = this.findSharedJourney(this.state.selected.get("outbound"), this.state.selected.get("inbound"));
+
+
     return (
       <div className="price-group">
         <div className="price-group--header">{price}</div>
@@ -92,7 +129,7 @@ module.exports = React.createClass({
                   if (this.state.selected.get("outbound")) {
                     selected = id == this.state.selected.get("outbound").master.getId();
                   }
-                  return <TripInfo selected={selected} key={"out-"+id} onSelect={this.selectFunc(pair,"outbound")} trip={pair.master}></TripInfo>
+                  return <TripInfo selected={selected} hidden={!this.isInCounterpart(id, "outbound")} key={"out-"+id} onSelect={this.selectFunc(pair,"outbound")} trip={pair.master}></TripInfo>
                 })}
               </tbody>
             </table>
@@ -111,14 +148,14 @@ module.exports = React.createClass({
                   if (this.state.selected.get("inbound")) {
                     selected = id == this.state.selected.get("inbound").master.getId();
                   }
-                  return <TripInfo selected={selected} key={"in-"+id} onSelect={this.selectFunc(pair,"inbound")} trip={pair.master}></TripInfo>
+                  return <TripInfo selected={selected} hidden={!this.isInCounterpart(id, "inbound")} key={"in-"+id} onSelect={this.selectFunc(pair,"inbound")} trip={pair.master}></TripInfo>
                 })}
               </tbody>
             </table>
           </div>
         </div>
         <div>
-          {this.state.selected.get("outbound")} {this.state.selected.get("inbound")}
+          <LinkButton sharedJourney={sharedJourney} groupPrice={price} selected={this.state.selected}></LinkButton>
         </div>
       </div>
     )

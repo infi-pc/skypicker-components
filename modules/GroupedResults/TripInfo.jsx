@@ -29,6 +29,9 @@ module.exports = React.createClass({
     if (this.props.selected) {
       className += " selected";
     }
+    if (this.props.hidden) {
+      className += " hidden";
+    }
     return (
       <tr className={className} onClick={this.select}>
         <td><div className="fake-radio"></div></td>

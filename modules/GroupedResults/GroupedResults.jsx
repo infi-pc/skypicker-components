@@ -48,7 +48,7 @@ module.exports = React.createClass({
     });
   },
   componentDidMount: function() {
-    SearchFormStore.events.on("change", () => {
+    SearchFormStore.events.on("search", (type) => {
       this.loadFlights();
     })
   },
