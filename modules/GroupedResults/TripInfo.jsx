@@ -14,7 +14,11 @@ var DateFormat = React.createClass({
 
 module.exports = React.createClass({
   displayName: "TripInfo",
+  select: function () {
+    this.props.onSelect(this.props.trip);
+  },
   render: function () {
+    var className = "trip-info";
     var trip = this.props.trip;
     var stops;
     if (trip.getStops() >= 1) {
@@ -22,8 +26,11 @@ module.exports = React.createClass({
     } else {
       stops = "Direct flight";
     }
+    if (this.props.selected) {
+      className += " selected";
+    }
     return (
-      <tr className="trip-info">
+      <tr className={className} onClick={this.select}>
         <td><div className="fake-radio"></div></td>
         <td>{trip.getId()} ---- </td>
         <td><DateFormat dateInPlace={trip.getDeparture().get("when")}></DateFormat></td>

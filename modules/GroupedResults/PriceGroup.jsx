@@ -1,38 +1,48 @@
 var TripInfo = require("./TripInfo.jsx");
+var Immutable = require("immutable");
+var Map = Immutable.Map;
 
 module.exports = React.createClass({
   displayName: "PriceGroup",
 
   getInitialState: function () {
+    var merged = this.mergeTrips(this.props.journeys);
     return {
-      selectedOutboundId: null
+      merged: merged,
+      selected: this.firstSelected(Map(), merged)
     }
   },
-  // splitJourneysToLegs: function (journey) {
-  //   var outbound = {singleFlights: []};
-  //   var inbound = {singleFlights: []};
-  //   flight.route.forEach((route) => {
-  //     if (route.return) {
-  //       inbound.singleFlights.push(route);
-  //     } else {
-  //       outbound.singleFlights.push(route);
-  //     }
-  //   });
 
-  //   outbound.id = outbound.singleFlights.reduce((res, flight) => {
-  //     return res.concat([flight.id]);
-  //   }, []).join("|");
+  selectFunc: function (pair, direction) {
+    return () => {
+      this.setState({
+        selected: this.state.selected.set(direction,pair)
+      })
+    }
+  },
 
-  //   inbound.id = inbound.singleFlights.reduce((res, flight) => {
-  //     return res.concat([flight.id]);
-  //   }, []).join("|");
+  firstSelected: function (selected, merged) {
+    return (
+      selected
+        .set("outbound",merged.outbounds[0])
+        .set("inbound",merged.inbounds[0])
+    );
+  },
+  //selectInboundFunc: function (pair) {
+  //  return () => {
+  //    console.log(pair);
+  //    this.setState({
+  //      selectedInbound: pair
+  //    })
+  //  }
+  //},
 
-  //   return {
-  //     outbound: outbound,
-  //     inbound: inbound,
-  //     flight: flight
-  //   }+
-  // },
+  mergeTrips: function (journeys) {
+    return {
+      outbounds: this.mergeTripsToMaster(this.props.journeys, "outbound"),
+      inbounds: this.mergeTripsToMaster(this.props.journeys, "inbound")
+    }
+  },
 
   mergeTripsToMaster: function (journeys, masterDirection) {
     var slaveDirection = masterDirection == "outbound" ? "inbound" : "outbound";
@@ -50,13 +60,22 @@ module.exports = React.createClass({
     return Object.keys(master).map((key) => master[key]);
   },
 
+  componentWillReceiveProps: function (newProps) {
+    if (!newProps.journeys) {
+      debugger;
+      console.error("WTF?");
+    }
+    if (newProps.journeys != this.props.journeys) {
+      var merged = this.mergeTrips(newProps.journeys);
+      this.setState({
+        merged: merged,
+        selected: this.firstSelected(this.state.selected, merged)
+      });
+    }
+  },
+
   render: function () {
     var price = this.props.price;
-    var journeys = this.props.journeys;
-
-    var mergedOutbounds = this.mergeTripsToMaster(journeys, "outbound");
-    var mergedInbounds = this.mergeTripsToMaster(journeys, "inbound");
-
     return (
       <div className="price-group">
         <div className="price-group--header">{price}</div>
@@ -67,8 +86,13 @@ module.exports = React.createClass({
           <div className="legs-body">
             <table>
               <tbody>
-                {mergedOutbounds.map((pair) => {
-                  return <TripInfo key={pair.master.getId()} trip={pair.master}></TripInfo>
+                {this.state.merged.outbounds.map((pair) => {
+                  var id = pair.master.getId();
+                  var selected = false;
+                  if (this.state.selected.get("outbound")) {
+                    selected = id == this.state.selected.get("outbound").master.getId();
+                  }
+                  return <TripInfo selected={selected} key={"out-"+id} onSelect={this.selectFunc(pair,"outbound")} trip={pair.master}></TripInfo>
                 })}
               </tbody>
             </table>
@@ -81,12 +105,20 @@ module.exports = React.createClass({
           <div className="legs-body">
             <table>
               <tbody>
-                {mergedInbounds.map((pair) => {
-                  return <TripInfo key={pair.master.getId()} trip={pair.master}></TripInfo>
+                {this.state.merged.inbounds.map((pair) => {
+                  var id = pair.master.getId();
+                  var selected = false;
+                  if (this.state.selected.get("inbound")) {
+                    selected = id == this.state.selected.get("inbound").master.getId();
+                  }
+                  return <TripInfo selected={selected} key={"in-"+id} onSelect={this.selectFunc(pair,"inbound")} trip={pair.master}></TripInfo>
                 })}
               </tbody>
             </table>
           </div>
+        </div>
+        <div>
+          {this.state.selected.get("outbound")} {this.state.selected.get("inbound")}
         </div>
       </div>
     )
