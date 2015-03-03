@@ -4,6 +4,8 @@ var flightsAPI = require('../APIs/flightsAPI.jsx');
 var OptionsStore  = require('./../stores/OptionsStore.jsx');
 var PriceGroup = require('./PriceGroup.jsx');
 
+
+
 module.exports = React.createClass({
   displayName: "GroupedResults",
 
@@ -57,7 +59,7 @@ module.exports = React.createClass({
     return (
       <div>
       {this.state.priceGroups.map((priceGroup) => {
-        return (<PriceGroup key={"_"+priceGroup.price} priceGroup={priceGroup}></PriceGroup>)
+        return (<PriceGroup key={priceGroup.price+"_"+priceGroup.isReturn} priceGroup={priceGroup}></PriceGroup>)
       })}
       </div>
     );

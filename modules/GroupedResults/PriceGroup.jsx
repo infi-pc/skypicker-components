@@ -1,7 +1,7 @@
 var TripInfo = require("./TripInfo.jsx");
 var Immutable = require("immutable");
 var Map = Immutable.Map;
-
+var Price = require("./../components/Price.jsx");
 
 var LinkButton = React.createClass({
   render: function () {
@@ -10,14 +10,13 @@ var LinkButton = React.createClass({
     if (sharedJourney) {
       var url = baseUrl + "?flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
       return (
-        <a href={url}>Book flight for {sharedJourney.getPrice()} {sharedJourney.get("id")}</a>
+        <a href={url} className="btn">Book flight for <Price>{sharedJourney.getPrice()}</Price></a>
       );
     } else {
       var id = this.props.selected.get("outbound").master.getId() + "|" +  this.props.selected.get("inbound").master.getId()
-      var url = baseUrl + "?flightsId=" + id  + "&price=" + this.props.groupPrice;
-      console.log(url);
+      var url = baseUrl + "?flightsId=" + id;
       return (
-        <a href={url}>Check price and book flight</a>
+        <a href={url} className="btn">Check price and book flight</a>
       );
     }
   }
@@ -207,10 +206,10 @@ module.exports = React.createClass({
 
     return (
       <div className="price-group">
-        <div className="price-group--header">{price}</div>
+        <div className="price-group--header"><Price>{price}</Price></div>
         {this.renderOutbounds()}
         {isReturn?this.renderInbounds():""}
-        <div>
+        <div className="price-group--footer">
           <LinkButton sharedJourney={sharedJourney} groupPrice={price} selected={this.state.selected}></LinkButton>
         </div>
       </div>

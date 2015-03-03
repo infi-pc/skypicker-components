@@ -12,7 +12,8 @@ module.exports = React.createClass({
   select: function () {
     this.props.onSelect(this.props.trip);
   },
-  toggleDetails: function () {
+  toggleDetails: function (e) {
+    e.stopPropagation();
     this.setState({
       details: !this.state.details
     })
@@ -30,7 +31,7 @@ module.exports = React.createClass({
       className += " selected";
     }
     if (this.props.hidden) {
-      className += " hidden";
+      className += " not-available";
     }
 
     var circleClass;
@@ -53,7 +54,7 @@ module.exports = React.createClass({
         <div className="field arrival-date"><DateFormat dateInPlace={trip.getArrival().get("when")}></DateFormat></div>
         <div className="field arrival">{trip.getArrival().getIn(["where", "code"])}</div>
         <div className="field stops">{stops}</div>
-        <div className="field details" onClick={this.toggleDetails}>Details</div>
+        <div className="field details" onClick={this.toggleDetails}>Details <i className={"fa "+ (this.state.details ? "fa-caret-up" : "fa-caret-down")}></i></div>
         {details}
       </div>
     )
