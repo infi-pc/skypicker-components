@@ -2,6 +2,7 @@ var TripInfo = require("./TripInfo.jsx");
 var Immutable = require("immutable");
 var Map = Immutable.Map;
 var Price = require("./../components/Price.jsx");
+var Translate = require("./../Translate.jsx");
 
 var LinkButton = React.createClass({
   render: function () {
@@ -10,7 +11,7 @@ var LinkButton = React.createClass({
     if (sharedJourney) {
       var url = baseUrl + "?flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
       return (
-        <a href={url} className="btn">Book flight for <Price>{sharedJourney.getPrice()}</Price></a>
+        <a href={url} className="btn"><Translate tKey="result.book_flight_for">Book flight for</Translate> <Price>{sharedJourney.getPrice()}</Price></a>
       );
     } else {
       var id = this.props.selected.get("outbound").master.getId() + "|" +  this.props.selected.get("inbound").master.getId()
@@ -178,10 +179,10 @@ module.exports = React.createClass({
     return (
       <div className="inbound-legs">
         <div className="legs-header">
-          Inbound
+          <Translate tKey="result.return"></Translate>
         </div>
         <div className="legs-body">
-              {this.renderLeg("inbound")}
+          {this.renderLeg("inbound")}
         </div>
       </div>
     )
@@ -190,10 +191,10 @@ module.exports = React.createClass({
     return (
       <div className="outbound-legs">
         <div className="legs-header">
-          Outbound
+          <Translate tKey="result.departure"></Translate>
         </div>
         <div className="legs-body">
-            {this.renderLeg("outbound")}
+          {this.renderLeg("outbound")}
         </div>
       </div>
     )

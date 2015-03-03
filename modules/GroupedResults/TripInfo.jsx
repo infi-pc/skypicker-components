@@ -1,6 +1,6 @@
 var TripDetails = require('./TripDetails.jsx');
 var DateFormat = require('./DateFormat.jsx');
-
+var Translate = require('./../Translate.jsx');
 
 module.exports = React.createClass({
   displayName: "TripInfo",
@@ -23,9 +23,9 @@ module.exports = React.createClass({
     var trip = this.props.trip;
     var stops;
     if (trip.getStops() >= 1) {
-      stops = trip.getStops() + " "+"stops";
+      stops = <Translate tKey="result.stops" value={ {stops: trip.getStops()} }></Translate>;
     } else {
-      stops = "Direct flight";
+      stops = <Translate tKey="common.direct_flight"></Translate>;
     }
     if (this.props.selected) {
       className += " selected";
@@ -54,7 +54,7 @@ module.exports = React.createClass({
         <div className="field arrival-date"><DateFormat dateInPlace={trip.getArrival().get("when")}></DateFormat></div>
         <div className="field arrival">{trip.getArrival().getIn(["where", "code"])}</div>
         <div className="field stops">{stops}</div>
-        <div className="field details" onClick={this.toggleDetails}>Details <i className={"fa "+ (this.state.details ? "fa-caret-up" : "fa-caret-down")}></i></div>
+        <div className="field details" onClick={this.toggleDetails}><Translate tKey="result.details"></Translate> <i className={"fa "+ (this.state.details ? "fa-caret-up" : "fa-caret-down")}></i></div>
         {details}
       </div>
     )
