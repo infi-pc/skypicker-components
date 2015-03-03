@@ -26,6 +26,10 @@ class Trip extends Def {
   getDuration() {
     return moment.duration(this.getArrival().get("when").get("utc").diff(this.getDeparture().get("when").get("utc")));
   }
+
+  countFlights() {
+    return this.get("flights").count();
+  }
 }
 
 module.exports = Trip;

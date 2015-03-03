@@ -9,8 +9,29 @@ var Def = Immutable.Record({
 });
 
 class Flight extends Def {
-  duration() {
-    //return moment(this.get('arrival').when.utc.diff(this.departure.when.utc)).utc();
+
+  getId() {
+    return this.get("id");
+  }
+
+  getStops() {
+    return 0;
+  }
+
+  getDeparture() {
+    return this.get("departure");
+  }
+
+  getArrival() {
+    return this.get("arrival");
+  }
+
+  getDuration() {
+    return moment.duration(this.getArrival().get("when").get("utc").diff(this.getDeparture().get("when").get("utc")));
+  }
+
+  countFlights() {
+    return 1;
   }
 }
 

@@ -56,6 +56,9 @@ module.exports = function (obj) {
 
     var direction = flightObj['return']?"inbound":"outbound";
 
+    if (!journey.get('trips').get(direction)) {
+      journey = journey.setIn(['trips',direction], new Trip())
+    }
     journey = journey.updateIn(['trips', direction, 'flights'], flights => flights.push(flight));
   });
 

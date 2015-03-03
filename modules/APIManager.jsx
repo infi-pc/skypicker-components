@@ -5,7 +5,7 @@ var OptionsStore = require('./stores/OptionsStore.jsx');
 class APIManager {
   constructor() {
     OptionsStore.events.on("change", () => {
-      flightsAPI.setOptions({language: OptionsStore.data.language});
+      flightsAPI.changeOptions({language: OptionsStore.data.language});
     })
   }
 }

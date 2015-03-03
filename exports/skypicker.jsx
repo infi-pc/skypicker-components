@@ -22,3 +22,5 @@ window.SearchFormAdapter = Wgts.SearchFormAdapter = require('./../modules/plainJ
 window.MapOverlay = Wgts.MapOverlay = require('./../modules/Map/MapOverlay.jsx');
 window.MapLoader = Wgts.MapLoader = require('./../modules/Map/MapLoader.jsx');
 window.MapPlacesStore = Wgts.MapPlacesStore = require('./../modules/stores/MapPlacesStore.jsx');
+//RESULTS
+window.GroupedResults = Wgts.GroupedResults = require('./../modules/GroupedResults/GroupedResults.jsx');
