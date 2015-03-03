@@ -23,7 +23,7 @@ module.exports = React.createClass({
     var trip = this.props.trip;
     var stops;
     if (trip.getStops() >= 1) {
-      stops = <Translate tKey="result.stops" value={ {stops: trip.getStops()} }></Translate>;
+      stops = <Translate tKey="result.stops" values={ {stops: trip.getStops()} }></Translate>;
     } else {
       stops = <Translate tKey="common.direct_flight"></Translate>;
     }
