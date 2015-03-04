@@ -9,6 +9,11 @@ var Def = Immutable.Record({
 });
 
 class Journey extends Def {
+
+  getId() {
+    return this.get("id");
+  }
+
   getPrice() {
     return this.getIn(["prices", "default"]);
   }

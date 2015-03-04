@@ -67,7 +67,7 @@ module.exports = React.createClass({
   selectFunc: function (pair, direction) {
     return () => {
       var selected = this.state.selected.set(direction, pair);
-      if (!this.isInCounterpart(pair, selected.get(oppositeDirection(direction)))) {
+      if (!pair.get("oneWay") && !this.isInCounterpart(pair, selected.get(oppositeDirection(direction)))) {
         selected = this.firstFromPairSelected(selected, this.state.merged, direction);
       }
       this.setState({
@@ -93,11 +93,24 @@ module.exports = React.createClass({
   },
 
   firstSelected: function (selected, merged) {
-    return (
-      selected
+    var preselected = this.props.preselected;
+    if (preselected) {
+      merged.outbounds.forEach((pair) => {
+        if (pair.hasJourney(preselected)) {
+          selected = selected.set("outbound", pair);
+        }
+      });
+      merged.inbounds.forEach((pair) => {
+        if (pair.hasJourney(preselected)) {
+          selected = selected.set("inbound", pair);
+        }
+      });
+      return selected
+    } else {
+      return selected
         .set("outbound",merged.outbounds[0])
         .set("inbound",merged.inbounds[0])
-    );
+    }
   },
 
   mergeTrips: function () {
@@ -143,8 +156,8 @@ module.exports = React.createClass({
   },
 
   componentWillReceiveProps: function (newProps) {
-    if (newProps.journeys != this.props.priceGroup.journeys) {
-      var merged = this.mergeTrips(newProps.journeys);
+    if (newProps.priceGroup != this.props.priceGroup) {
+      var merged = this.mergeTrips(newProps.priceGroup.journeys);
       this.setState({
         merged: merged,
         selected: this.firstSelected(this.state.selected, merged)
@@ -170,7 +183,7 @@ module.exports = React.createClass({
   isInCounterpart(thisPair,oppositePair) {
     var thisId = thisPair.get("master").getId();
     var isThere = false;
-    oppositePair.slaves.forEach((slave) => {
+    oppositePair.get("slaves").forEach((slave) => {
       if (thisId == slave.get("trip").getId()) {
         isThere = true;
       }
@@ -255,7 +268,7 @@ module.exports = React.createClass({
 
 
     return (
-      <div className="price-group">
+      <div className={"price-group" + (this.props.preselected?" preselected":"")}>
         <div className="price-group--header"><Price>{price}</Price></div>
         {this.renderOutbounds()}
         {isReturn?this.renderInbounds():""}

@@ -10,6 +10,18 @@ var Def = Immutable.Record({
 
 class MasterSlavesPair extends Def {
 
+  hasJourney(journeyToFind) {
+    var hasJourney = false;
+    if (journeyToFind == this.get("journey")) {
+      hasJourney = true;
+    }
+    this.get("slaves").forEach((slave) => {
+      if (slave.get("journey") == journeyToFind) {
+        hasJourney = true;
+      }
+    });
+    return hasJourney;
+  }
 }
 
 module.exports = MasterSlavesPair;

@@ -5,6 +5,7 @@ var OptionsStore  = require('./../stores/OptionsStore.jsx');
 var PriceGroup = require('./PriceGroup.jsx');
 
 
+var priceGroupKey = (priceGroup) => priceGroup.price+"_"+priceGroup.isReturn;
 
 module.exports = React.createClass({
   displayName: "GroupedResults",
@@ -20,20 +21,43 @@ module.exports = React.createClass({
     journeys.forEach((journey) => {
       var index = ""+journey.getPrice()+"_"+journey.isReturn();
       if (!priceGroupsIndex[index]) {
-        priceGroupsIndex[index] = [];
+        priceGroupsIndex[index] = {
+          price: journey.getPrice(),
+          isReturn: journey.isReturn(),
+          journeys: []
+        };
       }
-      priceGroupsIndex[index].push(journey);
+      priceGroupsIndex[index].journeys.push(journey);
     });
     return Object.keys(priceGroupsIndex).map((key) => {
-      return {
-        price: priceGroupsIndex[key][0].getPrice(),
-        isReturn: priceGroupsIndex[key][0].isReturn(),
-        journeys: priceGroupsIndex[key]
-      }
+      return priceGroupsIndex[key];
     }).sort((a, b) => {
       return a.price > b.price ? 1 : -1
     });
   },
+
+  findPreselectedJourney: function (journeys, id) {
+    var preselectedJourney = null;
+    journeys.forEach((journey) => {
+      if (journey.getId() == id) {
+        preselectedJourney = journey;
+      }
+    });
+    return preselectedJourney;
+  },
+
+  findPreselectedGroup: function (groups, journeyToFind) {
+    var preselectedGroup = null;
+    groups.forEach((group) => {
+      group.journeys.forEach((journey) => {
+        if (journeyToFind == journey) {
+          preselectedGroup = group;
+        }
+      })
+    });
+    return preselectedGroup;
+  },
+
   loadFlights: function () {
     flightsAPI.findFlights({
       origin: SearchFormStore.data.origin,
@@ -42,25 +66,56 @@ module.exports = React.createClass({
       inboundDate: SearchFormStore.data.dateTo,
       passengers: SearchFormStore.data.passengers
     }).then((journeys) => {
+      var preselectedJourney = this.findPreselectedJourney(journeys, this.props.preselectedId);
+      var priceGroups = this.groupJourneys(journeys);
+      var preselectedGroup = this.findPreselectedGroup(priceGroups, preselectedJourney);
       this.setState({
-        priceGroups: this.groupJourneys(journeys)
+        priceGroups: priceGroups,
+        preselectedJourney: preselectedJourney,
+        preselectedGroup: preselectedGroup
       });
     }).catch((err) => {
       //TODO nicer error handling
       console.error(err, err.stack);
     });
   },
+
+  componentDidUpdate: function() {
+    if (this.state.preselectedJourney && this.state.preselectedGroup) {
+      var thisNode = this.getDOMNode();
+      var groupNode = this.refs[priceGroupKey(this.state.preselectedGroup)].getDOMNode();
+      var rect = groupNode.getBoundingClientRect();
+      thisNode.scrollTop = rect.top;
+
+      this.setState({
+        preselectedJourney: null,
+        preselectedGroup: null
+      });
+    }
+  },
+
   componentDidMount: function() {
     SearchFormStore.events.on("search", (type) => {
       this.loadFlights();
     })
   },
+
   render: function() {
     return (
-      <div>
-      {this.state.priceGroups.map((priceGroup) => {
-        return (<PriceGroup key={priceGroup.price+"_"+priceGroup.isReturn} priceGroup={priceGroup}></PriceGroup>)
-      })}
+      <div className="grouped-results">
+        <div ref="scroll">
+          {this.state.priceGroups.map((priceGroup) => {
+            //TODO pass state.preselectedJourney into group - also just for
+            return (
+              <PriceGroup
+                preselected={(this.state.preselectedGroup == priceGroup)?this.state.preselectedJourney:null}
+                ref={priceGroupKey(priceGroup)}
+                key={priceGroupKey(priceGroup)}
+                priceGroup={priceGroup}>
+              </PriceGroup>
+            )
+          })}
+        </div>
       </div>
     );
   }
