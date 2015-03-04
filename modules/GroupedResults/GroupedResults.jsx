@@ -59,16 +59,22 @@ module.exports = React.createClass({
   },
 
   loadFlights: function () {
-    flightsAPI.findFlights({
+    this.setState({
+      loading: true
+    });
+    var promise = flightsAPI.findFlights({
       origin: SearchFormStore.data.origin,
       destination: SearchFormStore.data.destination,
       outboundDate: SearchFormStore.data.dateFrom,
       inboundDate: SearchFormStore.data.dateTo,
       passengers: SearchFormStore.data.passengers
-    }).then((journeys) => {
+    });
+    promise.then((journeys) => {
+      if (promise != this.lastPromise) return;
       var preselectedJourney = this.findPreselectedJourney(journeys, this.props.preselectedId);
       var priceGroups = this.groupJourneys(journeys);
       var preselectedGroup = this.findPreselectedGroup(priceGroups, preselectedJourney);
+      this.toScroll = true;
       this.setState({
         priceGroups: priceGroups,
         preselectedJourney: preselectedJourney,
@@ -78,19 +84,18 @@ module.exports = React.createClass({
       //TODO nicer error handling
       console.error(err, err.stack);
     });
+    this.lastPromise = promise;
   },
 
   componentDidUpdate: function() {
-    if (this.state.preselectedJourney && this.state.preselectedGroup) {
-      var thisNode = this.getDOMNode();
-      var groupNode = this.refs[priceGroupKey(this.state.preselectedGroup)].getDOMNode();
-      var rect = groupNode.getBoundingClientRect();
-      thisNode.scrollTop = rect.top;
-
-      this.setState({
-        preselectedJourney: null,
-        preselectedGroup: null
-      });
+    if (typeof this.toScroll != "undefined") {
+      if (this.state.preselectedJourney && this.state.preselectedGroup) {
+        var thisNode = this.getDOMNode();
+        var groupNode = this.refs[priceGroupKey(this.state.preselectedGroup)].getDOMNode();
+        var rect = groupNode.getBoundingClientRect();
+        thisNode.scrollTop = rect.top - 300 /* magic constant :) just move it a little bit higher */;
+      }
+      this.toScroll = undefined;
     }
   },
 
@@ -108,7 +113,7 @@ module.exports = React.createClass({
             //TODO pass state.preselectedJourney into group - also just for
             return (
               <PriceGroup
-                preselected={(this.state.preselectedGroup == priceGroup)?this.state.preselectedJourney:null}
+                preselected={(this.state.preselectedGroup === priceGroup)?this.state.preselectedJourney:null}
                 ref={priceGroupKey(priceGroup)}
                 key={priceGroupKey(priceGroup)}
                 priceGroup={priceGroup}>

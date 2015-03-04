@@ -249,11 +249,15 @@ module.exports = React.createClass({
       </div>
     )
   },
-  renderOutbounds: function () {
+  renderOutbounds: function (isReturn) {
+    var headerText = "";
+    if (isReturn) {
+      headerText = <Translate tKey="result.departure"></Translate>
+    }
     return (
       <div className="outbound-legs">
         <div className="legs-header">
-          <Translate tKey="result.departure"></Translate>
+          {headerText}
         </div>
         <div className="legs-body">
           {this.renderLeg("outbound")}
@@ -265,12 +269,10 @@ module.exports = React.createClass({
     var price = this.props.priceGroup.price;
     var isReturn = this.props.priceGroup.isReturn;
     var sharedJourney = this.findSharedJourney(this.state.selected.get("outbound"), this.state.selected.get("inbound"));
-
-
     return (
       <div className={"price-group" + (this.props.preselected?" preselected":"")}>
         <div className="price-group--header"><Price>{price}</Price></div>
-        {this.renderOutbounds()}
+        {this.renderOutbounds(isReturn)}
         {isReturn?this.renderInbounds():""}
         <div className="price-group--footer">
           <LinkButton sharedJourney={sharedJourney} groupPrice={price} selected={this.state.selected}></LinkButton>

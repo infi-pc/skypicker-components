@@ -137,9 +137,10 @@ class SearchFormStore {
 
 
     if (promises.length > 0) {
-      var lastData = this.data;
+      var searchPromise = Q.all(promises);
+      this.lastSearchPromise = searchPromise;
       return Q.all(promises).then((results) => {
-        if (lastData != this.data) return; //if some other search has outran me
+        if (searchPromise != this.lastSearchPromise) return; //if some other search has outran me
         var newData = this.data;
         results.forEach((result) => {
           newData = newData.changeField(result.direction, result.value);
