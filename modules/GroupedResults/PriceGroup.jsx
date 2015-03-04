@@ -1,5 +1,6 @@
 var TripInfo = require("./TripInfo.jsx");
 var Immutable = require("immutable");
+var MasterSlavePair = require("./../containers/flights/MasterSlavesPair.jsx");
 var Map = Immutable.Map;
 var Price = require("./../components/Price.jsx");
 var Translate = require("./../Translate.jsx");
@@ -35,20 +36,19 @@ var LinkButton = React.createClass({
  3) Disable bad combinations
 
 
- Pair format:
-  master: Trip
-  journey: Journey (if it is return, it is null)
-  slaves: [
-    {
-      trip: Trip
-      journey: Journey (common journey)
-    }
-    ...
-  ]
-  oneWay: boolean
+
+  pair = MasterSlavePair
+  selected = Map({
+    outbound: MasterSlavePair
+    inbound: MasterSlavePair
+  })
+  merged = {
+    inbounds: [MasterSlavePair,...]
+    outbounds: [MasterSlavePair,...]
+  }
  */
 
-
+var oppositeDirection = (direction) => direction == "outbound" ? "inbound" : "outbound";
 
 
 module.exports = React.createClass({
@@ -56,17 +56,39 @@ module.exports = React.createClass({
 
   getInitialState: function () {
     var merged = this.mergeTrips(this.props.priceGroup.journeys);
+    var selected = this.firstSelected(Map(), merged);
+    selected = this.firstFromPairSelected(selected,merged,"outbound");
     return {
       merged: merged,
-      selected: this.firstSelected(Map(), merged)
+      selected: selected
     }
   },
 
   selectFunc: function (pair, direction) {
     return () => {
+      var selected = this.state.selected.set(direction, pair);
+      if (!this.isInCounterpart(pair, selected.get(oppositeDirection(direction)))) {
+        selected = this.firstFromPairSelected(selected, this.state.merged, direction);
+      }
       this.setState({
-        selected: this.state.selected.set(direction,pair)
+        selected: selected
       })
+    }
+  },
+
+  firstFromPairSelected(selected, merged, changedDirection) {
+    var changingDirection = changedDirection == "outbound" ? "inbound" : "outbound";
+    var pair = selected.get(changedDirection);
+    if (pair.get("oneWay")) {
+      return selected;
+    } else {
+      var newSelected = selected;
+      merged[changingDirection+"s"].forEach((checkingPair) => {
+        if (checkingPair.master.getId() ==  pair.slaves.first().get("trip").getId()) {
+          newSelected = newSelected.set(changingDirection,checkingPair);
+        }
+      });
+      return newSelected
     }
   },
 
@@ -93,26 +115,26 @@ module.exports = React.createClass({
         //Returns
         var id = journey.get("trips").get(masterDirection).getId();
         if (!pairs[id]) {
-          pairs[id] = {
+          pairs[id] = new MasterSlavePair({
             master: journey.get("trips").get(masterDirection),
-            journey: null /*multiple journeys in slaves*/,
-            slaves: [],
             oneWay: false
-          };
+          });
         }
-        pairs[id].slaves.push({
-          trip: journey.trips.get(slaveDirection),
-          journey: journey
+        pairs[id] = pairs[id].updateIn(["slaves"], (slaves) => {
+          return slaves.push(Map({
+            trip: journey.trips.get(slaveDirection),
+            journey: journey
+          }))
         });
       } else {
         //One ways
         if (journey.get("trips").get(masterDirection)) {
           var id = journey.get("trips").get(masterDirection).getId();
-          pairs[id] = {
+          pairs[id] = new MasterSlavePair({
             master: journey.get("trips").get(masterDirection),
             journey: journey ,
             oneWay: true
-          };
+          });
         }
       }
 
@@ -145,31 +167,58 @@ module.exports = React.createClass({
     return sharedJourney;
   },
 
-  isInCounterpart(thisMaster,thisDirection) {
-    var thisId = thisMaster.getId();
-    var thatDirection = thisDirection == "outbound" ? "inbound" : "outbound";
+  isInCounterpart(thisPair,oppositePair) {
+    var thisId = thisPair.get("master").getId();
     var isThere = false;
-    this.state.selected.get(thatDirection).slaves.forEach((slave) => {
-      if (thisId == slave.trip.getId()) {
+    oppositePair.slaves.forEach((slave) => {
+      if (thisId == slave.get("trip").getId()) {
         isThere = true;
       }
     });
     return isThere;
   },
+
+  //isInCounterpart(thisMaster,thisDirection) {
+  //  var thisId = thisMaster.getId();
+  //  var thatDirection = thisDirection == "outbound" ? "inbound" : "outbound";
+  //  var isThere = false;
+  //  this.state.selected.get(thatDirection).slaves.forEach((slave) => {
+  //    if (thisId == slave.get("trip").getId()) {
+  //      isThere = true;
+  //    }
+  //  });
+  //  return isThere;
+  //},
   renderLeg: function (direction) {
 
     return (
       <div className="legs-content">
         {this.state.merged[direction+"s"].map((pair) => {
-          var id = pair.master.getId();
+          var id = pair.get("master").getId();
           var selected = false;
           if (this.state.selected.get(direction)) {
             selected = id == this.state.selected.get(direction).master.getId();
           }
-          if (pair.oneWay) {
-            return <TripInfo selected={selected} key={"oneway-"+id} onSelect={this.selectFunc(pair,direction)} trip={pair.master}></TripInfo>
+          if (pair.get("oneWay")) {
+            return (
+              <TripInfo
+                selected={selected}
+                key={"oneway-"+id}
+                onSelect={this.selectFunc(pair,direction)}
+                trip={pair.get("master")}>
+              </TripInfo>
+            )
           } else {
-            return <TripInfo selected={selected} hidden={!this.isInCounterpart(pair.master, direction)} key={direction+"-"+id} onSelect={this.selectFunc(pair,direction)} trip={pair.master}></TripInfo>
+            var oppositePair = this.state.selected.get(oppositeDirection(direction));
+            return (
+              <TripInfo
+                selected={selected}
+                hidden={!this.isInCounterpart(pair, oppositePair)}
+                key={direction+"-"+id}
+                onSelect={this.selectFunc(pair,direction)}
+                trip={pair.get("master")}>
+              </TripInfo>
+            )
           }
         })}
       </div>
