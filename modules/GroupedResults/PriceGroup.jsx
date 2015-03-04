@@ -153,14 +153,14 @@ module.exports = React.createClass({
   },
 
   findSharedJourney(outbound, inbound) {
-    if (outbound.oneWay) {
-      return outbound.journey;
+    if (outbound.get("oneWay")) {
+      return outbound.get("journey");
     }
     var sharedJourney = null;
-    outbound.slaves.forEach((outboundsSlaveInbound) => {
-      inbound.slaves.forEach((inboundsSlaveOutbound) => {
-        if (outboundsSlaveInbound.journey == inboundsSlaveOutbound.journey) {
-          sharedJourney = outboundsSlaveInbound.journey;
+    outbound.get("slaves").forEach((outboundsSlaveInbound) => {
+      inbound.get("slaves").forEach((inboundsSlaveOutbound) => {
+        if (outboundsSlaveInbound.get("journey") == inboundsSlaveOutbound.get("journey")) {
+          sharedJourney = outboundsSlaveInbound.get("journey");
         }
       })
     });
