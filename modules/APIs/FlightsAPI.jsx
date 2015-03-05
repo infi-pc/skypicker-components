@@ -43,8 +43,13 @@ class FlightsAPI {
         oneForCity: bool, default: false
       }
    */
-  findFlights(request) {
+  findFlights(request, modifiedOptions) {
     var searchParams, skypickerApiUrl;
+    modifiedOptions = modifiedOptions || {};
+    var options = {
+      language: modifiedOptions.language || this.options.language,
+      format: modifiedOptions.format || this.options.format
+    };
     skypickerApiUrl = "https://api.skypicker.com/flights";
     searchParams = {
       v: 2,
@@ -52,7 +57,7 @@ class FlightsAPI {
       //directFlights: 0,
       sort: "price",
       asc: 1,
-      locale: this.options.language,
+      locale: options.language,
       daysInDestinationFrom: "",
       daysInDestinationTo: ""
 
@@ -130,7 +135,7 @@ class FlightsAPI {
       .end((error, res) => {
         if (!error) {
           try {
-            if (this.options.format == "original") {
+            if (options.format == "original") {
               deferred.resolve(res.body.data);
             } else {
               var formatted = res.body.data.map(flight => flightsApiToJourney(flight));
