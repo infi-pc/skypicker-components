@@ -78,7 +78,8 @@ module.exports = React.createClass({
       this.setState({
         priceGroups: priceGroups,
         preselectedJourney: preselectedJourney,
-        preselectedGroup: preselectedGroup
+        preselectedGroup: preselectedGroup,
+        loading: false
       });
     }).catch((err) => {
       //TODO nicer error handling
@@ -106,8 +107,14 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var loader = "";
+    if (this.state.loading) {
+      loader = <div className="grouped-results--loading"><i className="fa fa-spinner fa-spin"></i></div>
+    }
+    //TODO loader should not be in scrollable area - move it to common wrap and scroll only results
     return (
       <div className="grouped-results">
+        {loader}
         <div ref="scroll">
           {this.state.priceGroups.map((priceGroup) => {
             //TODO pass state.preselectedJourney into group - also just for
