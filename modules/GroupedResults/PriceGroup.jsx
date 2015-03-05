@@ -8,7 +8,7 @@ var Translate = require("./../Translate.jsx");
 var LinkButton = React.createClass({
   render: function () {
     var sharedJourney = this.props.sharedJourney;
-    var baseUrl = "https://en.skypicker.com/booking"; //TODO change it
+    var baseUrl = "/booking";
     if (sharedJourney) {
       var url = baseUrl + "?flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
       return (
