@@ -5,7 +5,7 @@ module.exports = React.createClass({
     var utc = this.props.dateInPlace.get("utc");
     var title = "In UTC time: " + utc.format("LLL");
     return (
-      <span title={title}><b>{local.format("MMM D")}</b> {local.format("ddd")} <b>{local.format("LT")}</b></span>
+      <span title={title}><strong>{local.format("MMM D")}</strong> {local.format("ddd")} <strong>{local.format("LT")}</strong></span>
     )
   }
 });
