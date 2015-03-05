@@ -6,8 +6,7 @@ module.exports = React.createClass({
     var trip = this.props.trip;
     return trip.flights.map((flight) => {
       return (
-        <div>
-          <div className="field radio"></div>
+        <div className="trip-details--flight">
           <div className="field departure">
             <DateFormat dateInPlace={flight.getDeparture().get("when")}></DateFormat>
             <br />
