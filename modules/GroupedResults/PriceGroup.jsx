@@ -57,7 +57,10 @@ module.exports = React.createClass({
   getInitialState: function () {
     var merged = this.mergeTrips(this.props.priceGroup.journeys);
     var selected = this.firstSelected(Map(), merged);
-    selected = this.firstFromPairSelected(selected,merged,"outbound");
+    if (!this.isInCounterpart(selected.get("inbound"), selected.get("outbound"))) {
+      selected = this.firstFromPairSelected(selected,merged,"outbound");
+    }
+
     return {
       merged: merged,
       selected: selected
