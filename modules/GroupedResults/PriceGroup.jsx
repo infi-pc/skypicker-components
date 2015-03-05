@@ -118,9 +118,19 @@ module.exports = React.createClass({
 
   mergeTrips: function () {
     return {
-      outbounds: this.mergeTripsToPairs(this.props.priceGroup.journeys, "outbound"),
-      inbounds: this.mergeTripsToPairs(this.props.priceGroup.journeys, "inbound")
+      outbounds: this.sortPairsByDate(this.mergeTripsToPairs(this.props.priceGroup.journeys, "outbound")),
+      inbounds: this.sortPairsByDate(this.mergeTripsToPairs(this.props.priceGroup.journeys, "inbound"))
     }
+  },
+
+  sortPairsByDate: function (pairs) {
+    return pairs.sort((a, b) => {
+      if (a.master.getDeparture().get("when").get("local") > b.master.getDeparture().get("when").get("local")) {
+        return 1;
+      } else {
+        return -1;
+      }
+    })
   },
 
   mergeTripsToPairs: function (journeys, masterDirection) {
