@@ -89,14 +89,16 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function() {
-    if (typeof this.toScroll != "undefined") {
+    if (this.toScroll) {
+      var thisNode = this.getDOMNode();
       if (this.state.preselectedJourney && this.state.preselectedGroup) {
-        var thisNode = this.getDOMNode();
         var groupNode = this.refs[priceGroupKey(this.state.preselectedGroup)].getDOMNode();
         var rect = groupNode.getBoundingClientRect();
         thisNode.scrollTop = rect.top - 300 /* magic constant :) just move it a little bit higher */;
+      } else {
+        thisNode.scrollTop = 0;
       }
-      this.toScroll = undefined;
+      this.toScroll = false;
     }
   },
 
