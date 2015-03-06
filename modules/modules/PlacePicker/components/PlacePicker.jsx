@@ -4,10 +4,10 @@ var testShit = null;
 
 var React = require('react');
 React.initializeTouchEvents(true);
-var tr = require('./../../../tr.js');
+var tr = require('./../../../tools/tr.js');
 
 var Places = require('./Places.jsx');
-var ModalMenuMixin = require('./../../../ModalMenuMixin.jsx');
+var ModalMenuMixin = require('./../../../mixins/ModalMenuMixin.jsx');
 var Place = require('./../../../containers/Place.jsx');
 var SearchPlace = require('./../../../containers/SearchPlace.jsx');
 var Radius = require('./../../../containers/Radius.jsx');

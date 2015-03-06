@@ -1,5 +1,5 @@
-var LatLon = require('./tools/latlon.js');
-var OptionsStore = require('./stores/OptionsStore.jsx');
+var LatLon = require('./latlon.js');
+var OptionsStore = require('./../stores/OptionsStore.jsx');
 
 
 var options = {

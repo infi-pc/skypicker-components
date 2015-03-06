@@ -1,6 +1,6 @@
 
 var Place = require('./Place.jsx');
-var tr = require('./../tr.js');
+var tr = require('./../tools/tr.js');
 var Immutable = require('./immutable.jsx');
 
 var defaultValues = {

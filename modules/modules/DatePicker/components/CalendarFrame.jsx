@@ -6,7 +6,7 @@ var moment = require('moment');
 var CalendarDay = require("./CalendarDay.jsx");
 var DaysInWeek = require("./SelectDaysInWeek.jsx");
 var Calendar = require("./../../../components/Calendar.jsx");
-var DateTools = require("./../../../DateTools.js");
+var DateTools = require("./../../../tools/DateTools.js");
 
 var CalendarFrame = React.createClass({
 

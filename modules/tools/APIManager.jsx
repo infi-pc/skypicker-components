@@ -1,6 +1,6 @@
 
-var flightsAPI = require('./APIs/flightsAPI.jsx');
-var OptionsStore = require('./stores/OptionsStore.jsx');
+var flightsAPI = require('./../APIs/FlightsAPI.jsx');
+var OptionsStore = require('./../stores/OptionsStore.jsx');
 
 class APIManager {
   constructor() {

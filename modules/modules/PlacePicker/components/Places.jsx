@@ -1,6 +1,6 @@
 var PlacesAPI = require('./../../../APIs/PlacesAPICached.jsx');
 var PlaceRow = require('./PlaceRow.jsx');
-var Geolocation = require('./../../../Geolocation.jsx');
+var Geolocation = require('./../../../tools/Geolocation.jsx');
 var SearchPlace = require('./../../../containers/SearchPlace.jsx');
 var OptionsStore = require('./../../../stores/OptionsStore.jsx');
 var Place = require('./../../../containers/Place.jsx');

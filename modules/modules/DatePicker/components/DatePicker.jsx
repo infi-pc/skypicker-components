@@ -2,12 +2,12 @@
 
 var React = require('react');
 var SearchDate = require('./../../../containers/SearchDate.jsx');
-var ModalMenuMixin = require('./../../../ModalMenuMixin.jsx');
+var ModalMenuMixin = require('./../../../mixins/ModalMenuMixin.jsx');
 var CalendarFrame = require('./CalendarFrame.jsx');
 var MonthMatrix = require("./MonthMatrix.jsx");
 var Slider = require('./Slider.js');
-var tr = require('./../../../tr.js');
-var Tran = require('./../../../Tran.jsx');
+var tr = require('./../../../tools/tr.js');
+var Tran = require('./../../../components/Tran.jsx');
 var isIE = require('./../../../tools/isIE.js');
 
 

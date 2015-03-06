@@ -1,5 +1,5 @@
-window.translationStrategy = require('./../../modules/translationStrategies/spTr.js');
-window.tr = require('./../../modules/tr.js');
+window.translationStrategy = require('./../../modules/tools/spTr.js');
+window.tr = require('./../../modules/tools/tr.js');
 tr.setStrategy(translationStrategy);
 
 var React = require("react");

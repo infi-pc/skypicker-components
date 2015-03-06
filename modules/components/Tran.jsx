@@ -9,7 +9,7 @@
 
 
 var React = require('react');
-var tr = require('./tr.js');
+var tr = require('./../tools/tr.js');
 
 /* react component wrapper of tr function */
 

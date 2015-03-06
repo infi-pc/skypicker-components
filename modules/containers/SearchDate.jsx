@@ -3,7 +3,7 @@ var deepmerge = require("deepmerge");
 var Immutable = require("./Immutable.jsx");
 
 var urlDateFormat = "YYYY-MM-DD";
-var tr = require('./../tr.js');
+var tr = require('./../tools/tr.js');
 
 /*
 class SearchDate

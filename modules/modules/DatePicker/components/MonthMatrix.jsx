@@ -2,7 +2,7 @@
 
 var React = require('react');
 var moment = require('moment');
-var Tran = require('./../../../Tran.jsx');
+var Tran = require('./../../../components/Tran.jsx');
 
 var MonthMatrix = React.createClass({
 

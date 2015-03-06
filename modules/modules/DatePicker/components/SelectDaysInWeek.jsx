@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Tran = require('./../../../Tran.jsx');
+var Tran = require('./../../../components/Tran.jsx');
 
 var SelectDaysInWeek = React.createClass({
 

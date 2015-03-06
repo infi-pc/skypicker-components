@@ -1,4 +1,4 @@
-var DateTools = require("../../modules/DateTools.js");
+var DateTools = require("../../modules/tools/DateTools.js");
 var moment = require("moment");
 
 describe("dateTools", function() {

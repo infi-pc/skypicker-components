@@ -1,5 +1,5 @@
 window.translationStrategy = require('./../../modules/translationStrategies/waTr.js');
-window.tr = require('./../../modules/tr.js');
+window.tr = require('./../../modules/tools/tr.js');
 window.ShowDatePicker = require('./../../modules/plainJsAdapters/ShowDatePicker.jsx');
 window.SearchDate = require('./../../modules/containers/SearchDate.js');
 

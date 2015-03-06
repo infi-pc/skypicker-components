@@ -1,10 +1,10 @@
 window.GroupedResults = require('./../../modules/modules/GroupedResults/GroupedResults.jsx');
 window.SearchForm = require('./../../modules/modules/SearchForm/SearchForm.jsx');
 
-window.translationStrategy = require('./../../modules/translationStrategies/spTr.js');
-window.tr = require('./../../modules/tr.js');
+window.translationStrategy = require('./../../modules/tools/spTr.js');
+window.tr = require('./../../modules/tools/tr.js');
 
-var APIManager = require("./../../modules/APIManager.jsx");
+var APIManager = require("./../../modules/tools/APIManager.jsx");
 
 tr.setStrategy(translationStrategy);
 

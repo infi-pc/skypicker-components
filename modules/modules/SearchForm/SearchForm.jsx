@@ -7,8 +7,8 @@ var SearchFormStore = require('./../../stores/SearchFormStore.jsx');
 
 var SearchDate = require('./../../containers/SearchDate.jsx');
 var SearchPlace = require('./../../containers/SearchPlace.jsx');
-var tr = require('./../../tr.js');
-var Tran = require('./../../Tran.jsx');
+var tr = require('./../../tools/tr.js');
+var Tran = require('./../../components/Tran.jsx');
 var ToggleActive = require('./components/ToggleActive.jsx');
 var PassengersField = require('./components/PassengersField.jsx');
 
