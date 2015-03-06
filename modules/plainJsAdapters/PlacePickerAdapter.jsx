@@ -1,5 +1,5 @@
 
-var PlacePickerModal = require('./../../modules/PlacePicker/PlacePickerModal.jsx');
+var PlacePickerModal = require('./../modules/PlacePicker/PlacePickerModal.jsx');
 
 
 class PlacePickerAdapter {

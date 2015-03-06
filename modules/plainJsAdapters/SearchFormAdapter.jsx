@@ -1,4 +1,4 @@
-var SearchForm = require('./../SearchForm/SearchForm.jsx');
+var SearchForm = require('./../modules/SearchForm/SearchForm.jsx');
 
 /**
  * options.element - element to bind whole search form

@@ -1,5 +1,5 @@
 
-var DatePickerModal = require('./../../modules/DatePicker/DatePickerModal.jsx');
+var DatePickerModal = require('./../modules/DatePicker/DatePickerModal.jsx');
 var SearchDate = require('./../../modules/containers/SearchDate.jsx');
 /**
  * show modal datepicker (only one important function for DatePicker)

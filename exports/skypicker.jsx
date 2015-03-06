@@ -19,8 +19,8 @@ window.OptionsStore = Wgts.OptionsStore = require('./../modules/stores/OptionsSt
 window.Options = Wgts.Options = require('./../modules/containers/Options.jsx');
 window.SearchFormAdapter = Wgts.SearchFormAdapter = require('./../modules/plainJsAdapters/SearchFormAdapter.jsx');
 //MAP
-window.MapOverlay = Wgts.MapOverlay = require('./../modules/Map/MapOverlay.jsx');
-window.MapLoader = Wgts.MapLoader = require('./../modules/Map/MapLoader.jsx');
+window.MapOverlay = Wgts.MapOverlay = require('./../modules/modules/Map/MapOverlay.jsx');
+window.MapLoader = Wgts.MapLoader = require('./../modules/modules/Map/components/MapLoader.jsx');
 window.MapPlacesStore = Wgts.MapPlacesStore = require('./../modules/stores/MapPlacesStore.jsx');
 //RESULTS
-window.GroupedResults = Wgts.GroupedResults = require('./../modules/GroupedResults/GroupedResults.jsx');
+window.GroupedResults = Wgts.GroupedResults = require('./../modules/modules/GroupedResults/GroupedResults.jsx');

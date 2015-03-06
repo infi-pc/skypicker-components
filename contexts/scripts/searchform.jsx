@@ -4,7 +4,7 @@ tr.setStrategy(translationStrategy);
 
 var React = require("react");
 
-var SearchForm = require('./../../modules/SearchForm/SearchForm.jsx');
+var SearchForm = require('./../../modules/modules/SearchForm/SearchForm.jsx');
 
 
 var element = document.getElementById("search-form");
