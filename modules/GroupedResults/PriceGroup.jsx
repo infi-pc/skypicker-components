@@ -9,14 +9,18 @@ var LinkButton = React.createClass({
   render: function () {
     var sharedJourney = this.props.sharedJourney;
     var baseUrl = "/booking";
+    baseUrl += "?passengers=" + SearchFormStore.data.passengers;
+    if (this.props.affilId) {
+      baseUrl += "&affilid=" + this.props.affilId;
+    }
     if (sharedJourney) {
-      var url = baseUrl + "?flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
+      var url = baseUrl + "&flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
       return (
         <a href={url} className="btn"><Translate tKey="result.book_flight_for">Book flight for</Translate> <Price>{sharedJourney.getPrice()}</Price></a>
       );
     } else {
       var id = this.props.selected.get("outbound").master.getId() + "|" +  this.props.selected.get("inbound").master.getId()
-      var url = baseUrl + "?flightsId=" + id;
+      var url = baseUrl + "&flightsId=" + id;
       return (
         <a href={url} className="btn">Check price and book flight</a>
       );
@@ -231,7 +235,8 @@ module.exports = React.createClass({
                 selected={selected}
                 key={"oneway-"+id}
                 onSelect={this.selectFunc(pair,direction)}
-                trip={pair.get("master")}>
+                trip={pair.get("master")}
+              >
               </TripInfo>
             )
           } else {
@@ -242,7 +247,8 @@ module.exports = React.createClass({
                 hidden={!this.isInCounterpart(pair, oppositePair)}
                 key={direction+"-"+id}
                 onSelect={this.selectFunc(pair,direction)}
-                trip={pair.get("master")}>
+                trip={pair.get("master")}
+              >
               </TripInfo>
             )
           }
@@ -288,7 +294,13 @@ module.exports = React.createClass({
         {this.renderOutbounds(isReturn)}
         {isReturn?this.renderInbounds():""}
         <div className="price-group--footer">
-          <LinkButton sharedJourney={sharedJourney} groupPrice={price} selected={this.state.selected}></LinkButton>
+          <LinkButton
+            sharedJourney={sharedJourney}
+            groupPrice={price}
+            selected={this.state.selected}
+            affilId={this.props.affilId}
+          >
+          </LinkButton>
         </div>
       </div>
     )

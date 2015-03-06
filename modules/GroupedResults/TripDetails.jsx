@@ -1,4 +1,5 @@
 var DateFormat = require('./DateFormat.jsx');
+var Translate = require('./../Translate.jsx');
 
 module.exports = React.createClass({
   displayName: "TripDetails",
@@ -21,7 +22,7 @@ module.exports = React.createClass({
           </div>
 
           <div className="field other-info">
-            {flight.getIn(["airline", "code"])}
+            <Translate tKey="common.airline"></Translate>: {flight.getIn(["airline", "code"])}
           </div>
         </div>
       )

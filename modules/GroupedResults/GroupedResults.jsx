@@ -125,7 +125,9 @@ module.exports = React.createClass({
                 preselected={(this.state.preselectedGroup === priceGroup)?this.state.preselectedJourney:null}
                 ref={priceGroupKey(priceGroup)}
                 key={priceGroupKey(priceGroup)}
-                priceGroup={priceGroup}>
+                priceGroup={priceGroup}
+                affilId={this.props.affilId}
+              >
               </PriceGroup>
             )
           })}
