@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var ModalPicker = require("./../../ModalPicker.jsx");
+var ModalPicker = require("./../../components/ModalPicker.jsx");
 var SearchDate = require('./../../containers/SearchDate.jsx');
 var DatePicker = require('./components/DatePicker.jsx');
 var moment = require('moment');

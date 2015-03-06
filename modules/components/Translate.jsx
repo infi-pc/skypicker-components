@@ -1,5 +1,5 @@
 var React = require('react');
-var translate = require('./tools/translate.jsx');
+var translate = require('./../tools/translate.jsx');
 
 /* TODO finish it */
 

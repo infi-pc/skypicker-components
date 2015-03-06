@@ -1,6 +1,6 @@
 var PureRenderMixin = require('react').addons.PureRenderMixin;
 var MapPlacesStore = require('./../../../stores/MapPlacesStore.jsx');
-var Translate = require('./../../../Translate.jsx');
+var Translate = require('./../../../components/Translate.jsx');
 
 module.exports = React.createClass({
 

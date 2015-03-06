@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var ModalPicker = require("./../../ModalPicker.jsx");
+var ModalPicker = require("./../../components/ModalPicker.jsx");
 var PlacePicker = require("./components/PlacePicker.jsx");
 var SearchPlace = require("./../../containers/SearchPlace.jsx");
 var deepmerge = require('deepmerge');

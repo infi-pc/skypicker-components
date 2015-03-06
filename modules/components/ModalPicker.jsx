@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
 
-var isIE = require('./tools/isIE.js');
+var isIE = require('./../tools/isIE.js');
 var moment = require('moment');
-var Tran = require('./Tran.jsx');
+var Tran = require('./../Tran.jsx');
 var $ = require('jQuery');
 
 

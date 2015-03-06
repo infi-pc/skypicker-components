@@ -1,6 +1,6 @@
 var TripDetails = require('./TripDetails.jsx');
 var DateFormat = require('./DateFormat.jsx');
-var Translate = require('./../../../Translate.jsx');
+var Translate = require('./../../../components/Translate.jsx');
 
 module.exports = React.createClass({
   displayName: "TripInfo",

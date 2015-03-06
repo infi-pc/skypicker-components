@@ -1,5 +1,5 @@
 var React = require('react');
-var Translate = require('./../../../Translate.jsx');
+var Translate = require('./../../../components/Translate.jsx');
 
 module.exports = React.createClass({
 

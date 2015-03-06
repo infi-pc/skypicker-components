@@ -3,30 +3,9 @@ var Immutable = require("immutable");
 var MasterSlavePair = require("./../../../containers/flights/MasterSlavesPair.jsx");
 var Map = Immutable.Map;
 var Price = require("./../../../components/Price.jsx");
-var Translate = require("./../../../Translate.jsx");
+var Translate = require("./../../../components/Translate.jsx");
 
-var LinkButton = React.createClass({
-  render: function () {
-    var sharedJourney = this.props.sharedJourney;
-    var baseUrl = "/booking";
-    baseUrl += "?passengers=" + SearchFormStore.data.passengers;
-    if (this.props.affilId) {
-      baseUrl += "&affilid=" + this.props.affilId;
-    }
-    if (sharedJourney) {
-      var url = baseUrl + "&flightsId=" + sharedJourney.get("id") + "&price=" + sharedJourney.getPrice();
-      return (
-        <a href={url} className="btn"><Translate tKey="result.book_flight_for">Book flight for</Translate> <Price>{sharedJourney.getPrice()}</Price></a>
-      );
-    } else {
-      var id = this.props.selected.get("outbound").master.getId() + "|" +  this.props.selected.get("inbound").master.getId()
-      var url = baseUrl + "&flightsId=" + id;
-      return (
-        <a href={url} className="btn">Check price and book flight</a>
-      );
-    }
-  }
-});
+var LinkButton = require("./LinkButton.jsx");
 
 /*
  Master - Slave logic
